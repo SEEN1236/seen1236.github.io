@@ -3,267 +3,818 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEEN | Profile</title>
+    <title>SEEN // glass</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&family=JetBrains+Mono:wght@200&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; scrollbar-width: none; -ms-overflow-style: none; }
+        *::-webkit-scrollbar { display: none; }
 
         body {
-            margin: 0; min-height: 100vh; background: #050505; color: #fff;
+            min-height: 100vh;
+            background: #070708;
+            color: #f0f0f0;
             font-family: 'Inter', sans-serif;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            overflow-x: hidden; cursor: crosshair; user-select: none;
-            padding: 40px 0; box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        @media screen and (max-width: 768px) {
-            body { padding-top: 80px; justify-content: flex-start; }
-            .container { margin-top: 20px; gap: 15px; }
+        /* === BG EFFECTS === */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            left: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(ellipse, rgba(120,80,255,0.08) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            right: -20%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(ellipse, rgba(255,80,120,0.06) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .cursor-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(50,50,50,0.4) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none; z-index: 1; top: 0; left: 0;
-            transition: opacity 0.3s ease; opacity: 0; will-change: transform;
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* ซ่อนแสงในมือถือโดยเฉพาะ */
-        @media (pointer: coarse) {
-            .cursor-glow { display: none; }
+        .bg-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(120,80,255,0.06) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: breath 6s ease-in-out infinite;
+        }
+        @keyframes breath {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
         }
 
-        #timer-wrapper {
-            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            text-align: center; z-index: 10; margin-bottom: 20px;
+        /* === BENTO GRID === */
+        .bento {
+            max-width: 1060px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards;
+            margin: auto;
         }
-        #timer-wrapper.up { transform: translateY(-5vh) scale(0.7); opacity: 0.6; }
-        
-        .timer-label { font-size: 0.6rem; letter-spacing: 0.2rem; color: #555; }
-        .time-display { 
-            font-family: 'JetBrains Mono'; font-size: clamp(1.5rem, 6vw, 3rem); 
-            color: #fff; margin: 5px 0; white-space: nowrap;
-        }
-        .time-sub { font-size: 0.5rem; letter-spacing: 0.1rem; color: #444; }
-
-        .container {
-            display: flex; flex-direction: column; gap: 20px; z-index: 5; opacity: 0;
-            transition: opacity 1.5s ease, transform 1.5s ease;
-            transform: translateY(20px);
-            width: 90%; max-width: 800px; align-items: center;
-        }
-        .container.visible { opacity: 1; transform: translateY(0); }
-
-        .card-group { display: flex; gap: 20px; width: 100%; justify-content: center; flex-wrap: wrap; }
-
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 30px;
-            backdrop-filter: blur(15px); flex: 1;
-            min-width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border 0.4s ease;
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card:hover {
-            transform: scale(1.03);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 15px 45px rgba(255, 255, 255, 0.05);
+        /* === GLASS CARD === */
+        .item {
+            background: rgba(18, 18, 22, 0.6);
+            backdrop-filter: blur(24px) saturate(1.2);
+            -webkit-backdrop-filter: blur(24px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 1px 3px rgba(0,0,0,0.2),
+                0 20px 60px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
-        .avatar { width: 120px; height: 120px; border-radius: 15px; background-size: cover; border: 1px solid #333; margin-bottom: 15px; }
-        .label { color: #555; font-size: 0.7rem; text-transform: uppercase; }
-        .value { font-size: 1rem; color: #eee; margin: 5px 0 15px 0; }
-        
-        .nav { display: flex; gap: 15px; }
-        .nav a { cursor: crosshair; } 
-        
-        .nav img { 
-            width: 28px; opacity: 0.6; 
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; 
+        /* gloss overlay */
+        .item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255,255,255,0.04) 0%,
+                transparent 40%,
+                transparent 80%,
+                rgba(255,255,255,0.02) 100%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
         }
-        .nav img:hover { opacity: 1; transform: scale(1.2); }
+        .item:hover::before { opacity: 1; }
 
-        .download-btn {
-            display: inline-flex; align-items: center; gap: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff; text-decoration: none;
-            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1rem;
-            padding: 16px 35px; border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .item:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(22, 22, 28, 0.7);
+            transform: translateY(-2px);
+            box-shadow:
+                0 1px 3px rgba(0,0,0,0.2),
+                0 24px 80px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .item-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .col-2 { grid-column: span 2; }
+        .col-3 { grid-column: 1 / -1; }
+        .col-4 { grid-column: 1 / -1; }
+
+        /* === PROFILE === */
+        .profile-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+        .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background-size: cover;
+            flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            transition: border 0.3s;
+        }
+        .item:hover .avatar { border-color: rgba(255,255,255,0.15); }
+
+        .profile-info h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .profile-info .sub {
+            font-size: 13px;
+            color: rgba(255,255,255,0.35);
+            margin-top: 2px;
+        }
+        .profile-info .sub span {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .social-strip {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        .social-link {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+            background: rgba(255,255,255,0.03);
+            cursor: pointer;
+        }
+        .social-link:hover {
+            border-color: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-1px);
+        }
+        .social-strip img {
+            width: 15px;
+            height: 15px;
+            opacity: 0.35;
+            transition: opacity 0.25s;
+            pointer-events: none;
+        }
+        .social-link:hover img { opacity: 0.7; }
+
+        /* === TIMER === */
+        .timer-grid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .timer-unit { text-align: center; min-width: 60px; }
+        .timer-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 34px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f0f0f0, rgba(255,255,255,0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+        .timer-label {
+            font-size: 10px;
+            color: rgba(255,255,255,0.2);
+            margin-top: 4px;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .timer-sep {
+            color: rgba(255,255,255,0.1);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 300;
+            margin-bottom: 14px;
+        }
+
+        /* === STATS === */
+        .stat-big {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-big .unit {
+            font-size: 13px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.3);
+            margin-left: 3px;
+        }
+        .stat-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.2);
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+            position: relative;
+        }
+        .stat-icon {
+            font-size: 18px;
+            opacity: 0.1;
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            z-index: 1;
+        }
+
+        /* === TAGS === */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+            justify-content: center;
+        }
+        .tag {
+            padding: 5px 14px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            transition: all 0.25s;
+        }
+        .tag:hover {
+            border-color: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        /* === BIO === */
+        .bio-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 13px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 220px;
+        }
+        .bio-item:last-child { border-bottom: none; }
+        .bio-item .key { color: rgba(255,255,255,0.25); }
+        .bio-item .val { font-weight: 500; }
+
+        .dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .dot.green {
+            background: #4ade80;
+            box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+        }
+
+        /* === DOWNLOAD === */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 320px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.25s;
+            cursor: pointer;
+            width: 100%;
+            justify-content: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            margin-top: 10px; cursor: crosshair; 
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease, border 0.3s ease, box-shadow 0.4s ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .btn:hover {
+            border-color: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.06),
+                0 8px 30px rgba(0,0,0,0.3);
+        }
+        .btn svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            pointer-events: none;
+        }
+        .btn .hint {
+            color: rgba(255,255,255,0.2);
+            font-weight: 400;
+            font-size: 11px;
         }
 
-        .download-btn:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), 0 10px 30px rgba(0, 0, 0, 0.5);
+        /* === AVATAR MODAL === */
+        #avatar-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.25s ease;
+        }
+        #avatar-modal.active { display: flex; }
+        .avatar-overlay {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+        .avatar-full {
+            width: 60vh;
+            height: 60vh;
+            max-width: 500px;
+            max-height: 500px;
+            border-radius: 20px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            animation: zoomIn 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .avatar-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: rgba(255,255,255,0.3);
+            font-size: 22px;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .avatar-close:hover { color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 600px) {
+            .avatar-full { width: 80vw; height: 80vw; max-width: 80vw; max-height: 80vw; border-radius: 16px; }
+        }
+
+        /* === MODAL === */
+        #modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+        #modal.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-box {
+            background: rgba(18, 18, 22, 0.85);
+            backdrop-filter: blur(30px) saturate(1.2);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 28px;
+            width: 300px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .modal-box h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .modal-box .btn + .btn { margin-top: 8px; }
+        .modal-close {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.15);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 14px 0 0;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: rgba(255,255,255,0.4); }
+
+        /* === FOOTER === */
+        .footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 24px 0 0;
+            font-size: 11px;
+            color: rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            letter-spacing: 0.5px;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 900px) {
+            body { padding: 20px 12px; }
+            .bento { gap: 12px; grid-template-columns: 1fr 1fr; }
+            .col-2, .col-3, .col-4 { grid-column: span 2; }
+            .timer-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4px 16px;
+                max-width: 220px;
+            }
+            .timer-sep { display: none; }
+            .timer-num { font-size: 26px; }
+            .timer-unit { min-width: unset; }
+        }
+        @media (max-width: 540px) {
+            body { padding: 10px; }
+            .bento { gap: 10px; grid-template-columns: 1fr; }
+            .col-2, .col-3, .col-4 { grid-column: span 1; }
+            .item { padding: 16px; border-radius: 12px; }
+            .item-label { font-size: 9px; letter-spacing: 1.2px; margin-bottom: 10px; }
+            .timer-grid { gap: 4px 14px; max-width: 190px; }
+            .timer-num { font-size: 22px; }
+            .timer-label { font-size: 8px; letter-spacing: 0.5px; }
+            .stat-big { font-size: 20px; }
+            .stat-icon { font-size: 14px; top: 12px; right: 14px; }
+            .tag { font-size: 10px; padding: 4px 10px; }
+            .bio-item { font-size: 12px; max-width: 100%; padding: 8px 0; }
+            .btn { font-size: 12px; padding: 10px 14px; border-radius: 8px; }
+            .btn svg { width: 13px; height: 13px; }
+            .profile-info h1 { font-size: 17px; }
+            .profile-info .sub { font-size: 12px; }
+            .avatar { width: 60px; height: 60px; }
+            .social-link { width: 28px; height: 28px; border-radius: 6px; }
+            .social-strip img { width: 13px; height: 13px; }
+            .profile-wrap { gap: 10px; }
+            .stat-sub { font-size: 10px; }
+            .modal-box { width: calc(100vw - 32px); padding: 24px 20px; border-radius: 12px; }
+            .modal-box h3 { font-size: 11px; margin-bottom: 16px; }
+            .footer { font-size: 9px; padding: 14px 0 0; letter-spacing: 0; }
+        }
+        @media (max-width: 400px) {
+            body { padding: 8px; }
+            .bento { gap: 8px; }
+            .item { padding: 14px; border-radius: 10px; }
+            .timer-grid { gap: 2px 10px; max-width: 160px; }
+            .timer-num { font-size: 19px; }
+            .stat-big { font-size: 18px; }
+            .btn { font-size: 11px; padding: 9px 12px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="cursor-glow" id="cursor"></div>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
 
-    <div id="timer-wrapper">
-        <div class="timer-label">LIVED FOR</div>
-        <div id="timer" class="time-display">00 : 00 : 00 : 00</div>
-        <div class="time-sub">DAYS | HOURS | MINS | SECS</div>
-    </div>
+<div class="bento">
 
-    <div class="container" id="main-ui">
-        <div class="card-group">
-            <div class="card">
-                <div class="avatar" style="background-image: url('20260531_171147.jpg');"></div>
-                <h2 style="margin: 0; font-size: 1.5rem;">SEEN</h2>
-                <p style="color: #666; font-size: 0.9rem; margin: 10px 0;">Natthanan Treetos</p>
-                <div class="nav">
-                    <a href="https://www.youtube.com/@natthanan-treetos"><img src="youtube.png"></a>
-                    <a href="https://www.tiktok.com/@natthanantreetos"><img src="tiktok.png"></a>
-                    <a href="https://www.instagram.com/natthanantree_7/"><img src="Instagram.png"></a>
+    <!-- TIMER 2 cols -->
+    <div class="item col-2" style="animation-delay:0.05s">
+        <div class="item-label">⏱ Uptime</div>
+        <div class="timer-grid">
+            <div class="timer-unit">
+                <div class="timer-num" id="days">00</div>
+                <div class="timer-label">Days</div>
+            </div>
+            <span class="timer-sep">:</span>
+            <div class="timer-unit">
+                <div class="timer-num" id="hours">00</div>
+                <div class="timer-label">Hours</div>
+            </div>
+            <span class="timer-sep">:</span>
+            <div class="timer-unit">
+                <div class="timer-num" id="minutes">00</div>
+                <div class="timer-label">Mins</div>
+            </div>
+            <span class="timer-sep">:</span>
+            <div class="timer-unit">
+                <div class="timer-num" id="seconds">00</div>
+                <div class="timer-label">Secs</div>
+            </div>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);width:100%;">
+            <div class="item-label" style="margin-bottom:10px;text-align:center;">🎂 Next Birthday</div>
+            <div class="timer-grid" style="margin:0 auto;">
+                <div class="timer-unit">
+                    <div class="timer-num" id="bdays">00</div>
+                    <div class="timer-label">Days</div>
+                </div>
+                <span class="timer-sep">:</span>
+                <div class="timer-unit">
+                    <div class="timer-num" id="bhours">00</div>
+                    <div class="timer-label">Hours</div>
+                </div>
+                <span class="timer-sep">:</span>
+                <div class="timer-unit">
+                    <div class="timer-num" id="bmins">00</div>
+                    <div class="timer-label">Mins</div>
+                </div>
+                <span class="timer-sep">:</span>
+                <div class="timer-unit">
+                    <div class="timer-num" id="bsecs">00</div>
+                    <div class="timer-label">Secs</div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="card">
-                <div class="label">Age</div>
-                <div class="value" id="age-display">Calculating...</div>
-                <div class="label">Favorite Food</div><div class="value">Fried Egg</div>
-                <div class="label">Expertise</div>
-                <div class="value" style="line-height: 1.8;">
-                    • ADB & Android Studio<br>
-                    • Video Effect & Editing<br>
-                    • AI Integration<br>
-                    • 3D Modeler
+    <!-- PROFILE -->
+    <div class="item" style="animation-delay:0.1s">
+        <div class="profile-wrap">
+            <div class="avatar" style="background-image: url('20260531_171147.jpg');cursor:pointer;" onclick="openAvatar()"></div>
+            <div class="profile-info">
+                <h1>SEEN</h1>
+                <div class="sub">Natthanan <span>Treetos</span></div>
+                <div class="social-strip">
+                    <div class="social-link" onclick="window.open('https://www.youtube.com/@1236seen', '_self')"><img src="youtube.png"></div>
+                    <div class="social-link" onclick="window.open('https://www.tiktok.com/@1236seen', '_self')"><img src="tiktok.png"></div>
+                    <div class="social-link" onclick="window.open('https://www.instagram.com/1236seen/', '_self')"><img src="Instagram.png"></div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="card-group">
-            <div class="card" style="min-width: 150px; text-align: center; padding: 20px;">
-                <div class="label">YouTube</div>
-                <div class="value" style="font-size: 0.9rem; margin-top: 5px;">1.31K Followers</div>
-                <div class="time-sub">Joined May 21, 2021</div>
-            </div>
-            <div class="card" style="min-width: 150px; text-align: center; padding: 20px;">
-                <div class="label">TikTok</div>
-                <div class="value" style="font-size: 0.9rem; margin-top: 5px;">1 Followers</div>
-                <div class="time-sub">Joined May 22, 2026</div>
-            </div>
-            <div class="card" style="min-width: 150px; text-align: center; padding: 20px;">
-                <div class="label">Instagram</div>
-                <div class="value" style="font-size: 0.9rem; margin-top: 5px;">102 Followers</div>
-                <div class="time-sub">Joined July 21, 2022</div>
-            </div>
+    <!-- INFO -->
+    <div class="item" style="animation-delay:0.15s">
+        <div class="item-label">📋 Info</div>
+        <div class="bio-item">
+            <span class="key">Age</span>
+            <span class="val" id="age-display">—</span>
         </div>
-
-        <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-            <a href="KMH.apk" download="KMH.apk" class="download-btn">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                DOWNLOAD PROJECT APP
-            </a>
-
-            <button onclick="openModal()" class="download-btn" style="border: 1px solid rgba(255, 255, 255, 0.1);">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                DOWNLOAD PROJECT CROSS-PLATFORM
-            </button>
+        <div class="bio-item">
+            <span class="key">Food</span>
+            <span class="val">Fried Egg</span>
+        </div>
+        <div class="bio-item">
+            <span class="key">Status</span>
+            <span class="val"><span class="dot green"></span>Building</span>
         </div>
     </div>
 
-    <div id="download-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center;">
-        <div style="background: rgba(20, 20, 20, 0.9); padding: 40px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 300px;">
-            <h3 style="margin-top: 0; color: #fff;">SELECT PLATFORM</h3>
-            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">
-                <a href="CROSSPLATFORM BATTLE.exe" class="download-btn" style="width: 100%; box-sizing: border-box; justify-content: center; gap: 10px;">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                    PC VERSION (.exe)
-                </a>
-                <a href="KMH.apk" download="KMH.apk" class="download-btn" style="width: 100%; box-sizing: border-box; justify-content: center; gap: 10px;">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                    </svg>
-                    MOBILE (.apk)
-                </a>
-                <button onclick="closeModal()" style="background: transparent; border: none; color: #555; cursor: crosshair; margin-top: 10px; font-family: inherit;">CANCEL</button>
+    <!-- EXPERTISE 2 cols -->
+    <div class="item col-2" style="animation-delay:0.2s">
+        <div class="item-label">⚡ Expertise</div>
+        <div class="tag-list">
+            <span class="tag">ADB &amp; Android</span>
+            <span class="tag">Video Effects</span>
+            <span class="tag">Editing</span>
+            <span class="tag">AI Integration</span>
+            <span class="tag">3D Modeler</span>
+            <span class="tag">Kotlin</span>
+            <span class="tag">Lua</span>
+        </div>
+    </div>
+
+    <!-- YOUTUBE -->
+    <div class="item" style="animation-delay:0.25s">
+        <div class="stat-row">
+            <div>
+                <div class="item-label">▶ YouTube</div>
+                <div class="stat-big">1.31K <span class="unit">subs</span></div>
+                <div class="stat-sub">Joined May 2021</div>
+            </div>
+            <div class="stat-icon">▶</div>
+        </div>
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="item" style="animation-delay:0.3s">
+        <div class="stat-row">
+            <div>
+                <div class="item-label">♫ TikTok</div>
+                <div class="stat-big">1 <span class="unit">follower</span></div>
+                <div class="stat-sub">Joined May 2026</div>
+                <div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,0.12);">New account</div>
+            </div>
+            <div class="stat-icon">♫</div>
+        </div>
+    </div>
+
+    <!-- INSTAGRAM -->
+    <div class="item" style="animation-delay:0.35s">
+        <div class="stat-row">
+            <div>
+                <div class="item-label">◈ Instagram</div>
+                <div class="stat-big">102 <span class="unit">followers</span></div>
+                <div class="stat-sub">Joined Jul 2022</div>
+            </div>
+            <div class="stat-icon">◈</div>
+        </div>
+    </div>
+
+    <!-- DOWNLOAD 2 cols -->
+    <div class="item col-2" style="animation-delay:0.4s">
+        <div class="item-label">📦 Downloads</div>
+        <div class="btn-group">
+            <div class="btn" onclick="window.open('KMH.apk', '_self')">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Project KMH App <span class="hint">.apk</span>
+            </div>
+            <div class="btn" onclick="openModal()">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Cross-Platform <span class="hint">multi</span>
             </div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false; };
+    <!-- NOTE -->
+    <div class="item" style="animation-delay:0.45s;align-self:flex-start;">
+        <div class="item-label">💬 Note</div>
+        <p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;text-align:center;">
+            "Build things that matter.<br>Break things that don't."
+        </p>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.04);width:100%;">
+            <div style="font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:1px;">MOTTO</div>
+        </div>
+    </div>
 
-        const cursor = document.getElementById('cursor');
-        let mouseX = 0, mouseY = 0, isGlowVisible = false, ticking = false;
+    <!-- FOOTER -->
+    <div class="footer"><span onclick="window.open('mailto:nattanantreetos@gmail.com', '_self')" style="cursor:pointer;">nattanantreetos@gmail.com</span> &mdash; Gmail</div>
+</div>
 
-        function moveGlow() {
-            cursor.style.transform = `translate3d(${mouseX - 150}px, ${mouseY - 150}px, 0)`;
-            ticking = false;
-        }
+<!-- AVATAR MODAL -->
+<div id="avatar-modal" onclick="closeAvatar()">
+    <div class="avatar-overlay">
+        <div class="avatar-full" style="background-image: url('20260531_171147.jpg');"></div>
+        <div class="avatar-close" onclick="closeAvatar()">✕</div>
+    </div>
+</div>
 
-        function requestTick(x, y) {
-            mouseX = x; mouseY = y;
-            if (!ticking) { requestAnimationFrame(moveGlow); ticking = true; }
-        }
+<!-- MODAL -->
+<div id="modal">
+    <div class="modal-box">
+        <h3>Select Platform</h3>
+        <div class="btn" onclick="window.open('CROSSPLATFORM BATTLE.exe', '_self')">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            PC (.exe)
+        </div>
+        <div class="btn" onclick="window.open('KMH.apk', '_self')">
+            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            Mobile (.apk)
+        </div>
+        <button onclick="closeModal()" class="modal-close">Cancel</button>
+    </div>
+</div>
 
-        document.addEventListener('mousemove', e => {
-            if(!isGlowVisible) { cursor.style.opacity = '1'; isGlowVisible = true; }
-            requestTick(e.clientX, e.clientY);
-        });
+<script>
+    function update() {
+        const birth = new Date(2010, 3, 26);
+        const now = new Date();
+        const diff = now - birth;
+        document.getElementById('days').textContent    = String(Math.floor(diff / 86400000)).padStart(2, '0');
+        document.getElementById('hours').textContent   = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
 
-     
+        let y = now.getFullYear() - birth.getFullYear();
+        let m = now.getMonth() - birth.getMonth();
+        let d = now.getDate() - birth.getDate();
+        if (d < 0) { m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+        if (m < 0) { y--; m += 12; }
+        document.getElementById('age-display').textContent = `${y}y ${m}m ${d}d`;
 
-        function update() {
-            const birthDate = new Date(2010, 3, 26, 0, 0, 0); 
-            const now = new Date();
-            const diff = now - birthDate;
-            const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            document.getElementById("timer").innerText = 
-                `${String(daysTotal).padStart(2, '0')} : ${String(hours).padStart(2, '0')} : ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
+        // Birthday countdown
+        const bday = new Date(now.getFullYear(), 3, 26);
+        if (now > bday) bday.setFullYear(bday.getFullYear() + 1);
+        const bdiff = bday - now;
+        const bd = Math.floor(bdiff / 86400000);
+        const bh = Math.floor((bdiff % 86400000) / 3600000);
+        const bm = Math.floor((bdiff % 3600000) / 60000);
+        const bs = Math.floor((bdiff % 60000) / 1000);
+        const isBirthday = now.getMonth() === 3 && now.getDate() === 26;
+        document.getElementById('bdays').textContent  = isBirthday ? '🎂' : String(bd).padStart(2, '0');
+        document.getElementById('bhours').textContent = isBirthday ? '🎉' : String(bh).padStart(2, '0');
+        document.getElementById('bmins').textContent  = isBirthday ? '🎈' : String(bm).padStart(2, '0');
+        document.getElementById('bsecs').textContent  = isBirthday ? '✨' : String(bs).padStart(2, '0');
+    }
+    setInterval(update, 1000); update();
 
-            let ageYears = now.getFullYear() - birthDate.getFullYear();
-            let ageMonths = now.getMonth() - birthDate.getMonth();
-            let ageDays = now.getDate() - birthDate.getDate();
+    function openModal() { document.getElementById('modal').classList.add('active'); }
+    function closeModal() { document.getElementById('modal').classList.remove('active'); }
+    window.onclick = e => { if (e.target === document.getElementById('modal')) closeModal(); };
 
-            if (ageDays < 0) { ageMonths--; ageDays += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
-            if (ageMonths < 0) { ageYears--; ageMonths += 12; }
+    function openAvatar() { document.getElementById('avatar-modal').classList.add('active'); }
+    function closeAvatar() { document.getElementById('avatar-modal').classList.remove('active'); }
 
-            document.getElementById("age-display").innerText = `${ageYears} Years, ${ageMonths} Months, ${ageDays} Days`;
-        }
-        setInterval(update, 1000); update();
-
-        function openModal() { document.getElementById('download-modal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('download-modal').style.display = 'none'; }
-        window.onclick = function(event) { if (event.target == document.getElementById('download-modal')) closeModal(); }
-
-        setTimeout(() => {
-            document.getElementById('timer-wrapper').classList.add('up');
-            setTimeout(() => document.getElementById('main-ui').classList.add('visible'), 600);
-        }, 1500);
-    </script>
+    document.oncontextmenu = e => e.preventDefault();
+    document.onkeydown = e => {
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 67, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85)) return false;
+    };
+</script>
 </body>
 </html>
