@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEEN | Profile</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&family=JetBrains+Mono:wght@200&display=swap');
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        body {
+            margin: 0; min-height: 100vh; background: #050505; color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow-x: hidden; cursor: crosshair; user-select: none;
+            padding: 40px 0; box-sizing: border-box;
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding-top: 80px; justify-content: flex-start; }
+            .container { margin-top: 20px; gap: 15px; }
+        }
+
+        .cursor-glow {
+            position: fixed; width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(50,50,50,0.4) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none; z-index: 1; top: 0; left: 0;
+            transition: opacity 0.3s ease; opacity: 0; will-change: transform;
+        }
+
+        /* ซ่อนแสงในมือถือโดยเฉพาะ */
+        @media (pointer: coarse) {
+            .cursor-glow { display: none; }
+        }
+
+        #timer-wrapper {
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-align: center; z-index: 10; margin-bottom: 20px;
+        }
+        #timer-wrapper.up { transform: translateY(-5vh) scale(0.7); opacity: 0.6; }
+        
+        .timer-label { font-size: 0.6rem; letter-spacing: 0.2rem; color: #555; }
+        .time-display { 
+            font-family: 'JetBrains Mono'; font-size: clamp(1.5rem, 6vw, 3rem); 
+            color: #fff; margin: 5px 0; white-space: nowrap;
+        }
+        .time-sub { font-size: 0.5rem; letter-spacing: 0.1rem; color: #444; }
+
+        .container {
+            display: flex; flex-direction: column; gap: 20px; z-index: 5; opacity: 0;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+            transform: translateY(20px);
+            width: 90%; max-width: 800px; align-items: center;
+        }
+        .container.visible { opacity: 1; transform: translateY(0); }
+
+        .card-group { display: flex; gap: 20px; width: 100%; justify-content: center; flex-wrap: wrap; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 30px;
+            backdrop-filter: blur(15px); flex: 1;
+            min-width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border 0.4s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 45px rgba(255, 255, 255, 0.05);
+        }
+
+        .avatar { width: 120px; height: 120px; border-radius: 15px; background-size: cover; border: 1px solid #333; margin-bottom: 15px; }
+        .label { color: #555; font-size: 0.7rem; text-transform: uppercase; }
+        .value { font-size: 1rem; color: #eee; margin: 5px 0 15px 0; }
+        
+        .nav { display: flex; gap: 15px; }
+        .nav a { cursor: crosshair; } 
+        
+        .nav img { 
+            width: 28px; opacity: 0.6; 
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; 
+        }
+        .nav img:hover { opacity: 1; transform: scale(1.2); }
+
+        .download-btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff; text-decoration: none;
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1rem;
+            padding: 16px 35px; border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 10px; cursor: crosshair; 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease, border 0.3s ease, box-shadow 0.4s ease;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-glow" id="cursor"></div>
+
+    <div id="timer-wrapper">
+        <div class="timer-label">LIVED FOR</div>
+        <div id="timer" class="time-display">00 : 00 : 00 : 00</div>
+        <div class="time-sub">DAYS | HOURS | MINS | SECS</div>
+    </div>
+
+    <div class="container" id="main-ui">
+        <div class="card-group">
+            <div class="card">
+                <div class="avatar" style="background-image: url('20260531_171147.jpg');"></div>
+                <h2 style="margin: 0; font-size: 1.5rem;">SEEN</h2>
+                <p style="color: #666; font-size: 0.9rem; margin: 10px 0;">Natthanan Treetos</p>
+                <div class="nav">
+                    <a href="https://www.youtube.com/@natthanan-treetos"><img src="youtube.png"></a>
+                    <a href="https://www.tiktok.com/@natthanantreetos"><img src="tiktok.png"></a>
+                    <a href="https://www.instagram.com/natthanantree_7/"><img src="Instagram.png"></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Age</div>
+                <div class="value" id="age-display">Calculating...</div>
+                <div class="label">Favorite Food</div><div class="value">Fried Egg</div>
+                <div class="label">Expertise</div>
+                <div class="value" style="line-height: 1.8;">
+                    • ADB & Android Studio<br>
+                    • Video Effect & Editing<br>
+                    • AI Integration<br>
+                    • 3D Modeler
+                </div>
+            </div>
+        </div>
+
+        <div class="card-group">
+            <div class="card" style="min-width: 150px; text-align: center; padding: 20px;">
+                <div class="label">YouTube</div>
+                <div class="value" style="font-size: 0.9rem; margin-top: 5px;">1.31K Followers</div>
+                <div class="time-sub">Joined May 21, 2021</div>
+            </div>
+            <div class="card" style="min-width: 150px; text-align: center; padding: 20px;">
+                <div class="label">TikTok</div>
+                <div class="value" style="font-size: 0.9rem; margin-top: 5px;">1 Followers</div>
+                <div class="time-sub">Joined May 22, 2026</div>
+            </div>
+            <div class="card" style="min-width: 150px; text-align: center; padding: 20px;">
+                <div class="label">Instagram</div>
+                <div class="value" style="font-size: 0.9rem; margin-top: 5px;">102 Followers</div>
+                <div class="time-sub">Joined July 21, 2022</div>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <a href="KMH.apk" download="KMH.apk" class="download-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                DOWNLOAD PROJECT APP
+            </a>
+
+            <button onclick="openModal()" class="download-btn" style="border: 1px solid rgba(255, 255, 255, 0.1);">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                DOWNLOAD PROJECT CROSS-PLATFORM
+            </button>
+        </div>
+    </div>
+
+    <div id="download-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center;">
+        <div style="background: rgba(20, 20, 20, 0.9); padding: 40px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 300px;">
+            <h3 style="margin-top: 0; color: #fff;">SELECT PLATFORM</h3>
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">
+                <a href="CROSSPLATFORM BATTLE.exe" class="download-btn" style="width: 100%; box-sizing: border-box; justify-content: center; gap: 10px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    PC VERSION (.exe)
+                </a>
+                <a href="KMH.apk" download="KMH.apk" class="download-btn" style="width: 100%; box-sizing: border-box; justify-content: center; gap: 10px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                    MOBILE (.apk)
+                </a>
+                <button onclick="closeModal()" style="background: transparent; border: none; color: #555; cursor: crosshair; margin-top: 10px; font-family: inherit;">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false; };
+
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0, isGlowVisible = false, ticking = false;
+
+        function moveGlow() {
+            cursor.style.transform = `translate3d(${mouseX - 150}px, ${mouseY - 150}px, 0)`;
+            ticking = false;
+        }
+
+        function requestTick(x, y) {
+            mouseX = x; mouseY = y;
+            if (!ticking) { requestAnimationFrame(moveGlow); ticking = true; }
+        }
+
+        document.addEventListener('mousemove', e => {
+            if(!isGlowVisible) { cursor.style.opacity = '1'; isGlowVisible = true; }
+            requestTick(e.clientX, e.clientY);
+        });
+
+     
+
+        function update() {
+            const birthDate = new Date(2010, 3, 26, 0, 0, 0); 
+            const now = new Date();
+            const diff = now - birthDate;
+            const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById("timer").innerText = 
+                `${String(daysTotal).padStart(2, '0')} : ${String(hours).padStart(2, '0')} : ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
+
+            let ageYears = now.getFullYear() - birthDate.getFullYear();
+            let ageMonths = now.getMonth() - birthDate.getMonth();
+            let ageDays = now.getDate() - birthDate.getDate();
+
+            if (ageDays < 0) { ageMonths--; ageDays += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+            if (ageMonths < 0) { ageYears--; ageMonths += 12; }
+
+            document.getElementById("age-display").innerText = `${ageYears} Years, ${ageMonths} Months, ${ageDays} Days`;
+        }
+        setInterval(update, 1000); update();
+
+        function openModal() { document.getElementById('download-modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('download-modal').style.display = 'none'; }
+        window.onclick = function(event) { if (event.target == document.getElementById('download-modal')) closeModal(); }
+
+        setTimeout(() => {
+            document.getElementById('timer-wrapper').classList.add('up');
+            setTimeout(() => document.getElementById('main-ui').classList.add('visible'), 600);
+        }, 1500);
+    </script>
+</body>
+</html>
