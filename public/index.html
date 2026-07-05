@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project.seen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script>
+        // Block DevTools shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key.toUpperCase() === 'U')) {
+                e.preventDefault(); return false;
+            }
+        });
+        // Block right-click globally
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
+        img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+        input, textarea { -webkit-user-select: text; user-select: text; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.08); }
+            50% { box-shadow: 0 0 20px 6px rgba(0,212,255,0.12); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface2: #1a1a2a;
+            --border: #22223a;
+            --border-hover: #33335a;
+            --text: #eeeef2;
+            --text-dim: #8888a0;
+            --text-muted: #555570;
+            --accent: #00d4ff;
+            --accent2: #7c3aed;
+            --red: #ef4444;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --glow: rgba(0,212,255,0.06);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #08080e, #0c0c18, #090912, #0f0f1e);
+            background-size: 400% 400%;
+            animation: gradientShift 25s ease infinite;
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        ::selection { background: rgba(0,212,255,0.25); }
+
+        #app { display: flex; flex-direction: column; min-height: 100vh; }
+        #authPage { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+        #dashPage { display: none; flex-direction: column; flex: 1; }
+
+        /* Auth */
+        .auth-box {
+            width: 100%; max-width: 380px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 2rem 1.5rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 0 80px rgba(0,212,255,0.03);
+            animation: fadeInUp 0.5s ease-out;
+        }
+        .auth-box h1 { font-size: 1.3rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; }
+        .auth-box .sub { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-bottom: 1.2rem; }
+        .tabs { display: flex; gap: 2px; background: var(--surface2); border-radius: 8px; padding: 2px; margin-bottom: 1rem; }
+        .tabs button { flex: 1; padding: 0.4rem; border: none; border-radius: 6px; background: transparent; color: var(--text-dim); font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s ease; }
+        .tabs button.active { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+        .form-group { margin-bottom: 0.7rem; }
+        .form-group label { display: block; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 0.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.55rem 0.75rem; border-radius: 6px;
+            border: 1px solid var(--border); background: var(--surface2);
+            color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,212,255,0.08); }
+        .form-group textarea { resize: vertical; min-height: 80px; line-height: 1.4; }
+        .form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238888a0'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.7rem center; padding-right: 2rem; }
+        .form-group select option { background: var(--surface); color: var(--text); }
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; border: none; font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { opacity: 0.92; box-shadow: 0 0 24px rgba(0,212,255,0.2); transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-danger { background: var(--red); color: #fff; }
+        .btn-danger:hover { opacity: 0.92; box-shadow: 0 0 20px rgba(239,68,68,0.2); transform: translateY(-1px); }
+        .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+        .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); background: rgba(255,255,255,0.02); transform: translateY(-1px); }
+        .btn-block { width: 100%; justify-content: center; }
+        .error-msg { color: var(--red); font-size: 0.75rem; margin-top: 0.4rem; display: none; }
+        .success-msg { color: var(--green); font-size: 0.75rem; margin-top: 0.4rem; display: none; }
+        .auth-footer { text-align: center; margin-top: 1rem; margin-bottom: 0.6rem; font-size: 0.72rem; color: var(--text-muted); }
+        .auth-footer a { color: var(--text-dim); text-decoration: none; cursor: pointer; transition: color 0.15s ease; }
+        .auth-footer a:hover { color: var(--accent); }
+        .auth-support { margin-top: 0; }
+        .auth-support .btn { font-size: 0.75rem; padding: 0.4rem; }
+
+        /* Header */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);
+            background: rgba(18,18,26,0.85); backdrop-filter: blur(12px); gap: 0.8rem;
+        }
+        .header .logo { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+        .header .logo i { color: var(--accent); margin-right: 0.3rem; }
+        .header .breadcrumb {
+            display: flex; align-items: center; gap: 0.3rem; flex: 1; min-width: 0;
+            font-size: 0.82rem; overflow: hidden;
+        }
+        .header .breadcrumb span { cursor: pointer; color: var(--text-dim); white-space: nowrap; transition: color 0.15s ease; }
+        .header .breadcrumb span:hover { color: var(--accent); }
+        .header .breadcrumb .sep { color: var(--text-muted); font-size: 0.7rem; }
+        .header .breadcrumb .current { color: var(--text); cursor: default; }
+        .header .right { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+        .header .right span { font-size: 0.75rem; color: var(--text-dim); }
+        .icon-btn {
+            width: 30px; height: 30px; border-radius: 6px;
+            border: 1px solid var(--border); background: transparent;
+            color: var(--text-dim); cursor: pointer; font-size: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s ease;
+        }
+        .icon-btn:hover { border-color: var(--border-hover); color: var(--text); background: rgba(255,255,255,0.02); transform: translateY(-1px); }
+        .icon-btn.danger:hover { border-color: var(--red); color: var(--red); box-shadow: 0 0 16px rgba(239,68,68,0.12); }
+
+        /* Main */
+        .main { flex: 1; padding: 0.8rem 1rem; max-width: 960px; margin: 0 auto; width: 100%; }
+
+        /* Storage bar */
+        .storage-row {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 0.8rem; font-size: 0.72rem; color: var(--text-dim);
+        }
+        .storage-row .bar {
+            flex: 1; height: 4px; border-radius: 2px;
+            background: var(--surface2); overflow: hidden;
+        }
+        .storage-row .bar .fill {
+            height: 100%; border-radius: 2px;
+            background: var(--accent); width: 0%;
+            transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+        }
+        .storage-row .bar .fill.warning { background: var(--orange); }
+        .storage-row .bar .fill.danger { background: var(--red); }
+        .storage-row .stats { white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; }
+
+        /* Upload progress */
+        .upload-progress { display: none; margin-bottom: 0.8rem; }
+        .upload-progress.active { display: block; animation: fadeIn 0.2s ease-out; }
+        .upload-progress .item {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.35rem 0.6rem; font-size: 0.78rem;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .upload-progress .item .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .upload-progress .item .s { font-size: 0.7rem; color: var(--text-dim); }
+        .upload-progress .item .s.done { color: var(--green); }
+        .upload-progress .item .s.error { color: var(--red); }
+        .upload-progress .item .s.cancel { color: var(--orange); }
+        .upload-progress .item .cancel-btn {
+            width: 22px; height: 22px; border-radius: 4px;
+            border: 1px solid var(--border); background: transparent;
+            color: var(--text-muted); cursor: pointer; font-size: 0.55rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s ease;
+        }
+        .upload-progress .item .cancel-btn:hover { border-color: var(--red); color: var(--red); }
+        .upload-progress .item .cancel-btn.hide { display: none; }
+
+        /* File list grid */
+        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 2px; }
+        .file-item {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.45rem 0.6rem; border-radius: 6px;
+            border: 1px solid transparent; cursor: default; font-size: 0.78rem;
+            transition: all 0.15s ease;
+        }
+        .file-item:hover { background: var(--surface); border-color: var(--border); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+        .file-item.selected { background: var(--surface); border-color: var(--accent); box-shadow: 0 4px 20px rgba(0,212,255,0.06); }
+        .file-item .icon { width: 20px; text-align: center; flex-shrink: 0; font-size: 0.8rem; color: var(--text-muted); transition: color 0.15s ease; }
+        .file-item .icon.folder { color: var(--accent); }
+        .file-item:hover .icon.folder { color: #33ddff; }
+        .file-item .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-item .size { font-size: 0.65rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+        .file-item.drag-over { background: var(--surface); border-color: var(--accent); box-shadow: 0 4px 20px rgba(0,212,255,0.08); }
+        .file-item .more-btn {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 0 0 0.3rem;
+            flex-shrink: 0; transition: color 0.1s ease; display: flex; align-items: center;
+        }
+        .file-item .more-btn:hover { color: var(--text); }
+
+        /* Full-page drop zone */
+        #dashPage.dragover .main { border: 2px dashed var(--accent); border-radius: 10px; background: rgba(0,212,255,0.03); animation: pulseGlow 1.5s ease infinite; }
+        #dashPage.dragover .header,
+        #dashPage.dragover .storage-row,
+        #dashPage.dragover .upload-progress { opacity: 0.3; pointer-events: none; }
+
+        /* Context Menu */
+        .ctx-menu {
+            position: fixed; z-index: 1000;
+            background: rgba(18,18,26,0.95); backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 4px; min-width: 170px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            animation: fadeIn 0.08s ease-out;
+        }
+        .ctx-menu .item {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 0.7rem; border-radius: 4px;
+            font-size: 0.78rem; cursor: pointer; color: var(--text-dim);
+            transition: all 0.1s ease;
+        }
+        .ctx-menu .item:hover { background: var(--surface2); color: var(--text); }
+        .ctx-menu .item i { width: 14px; font-size: 0.7rem; }
+        .ctx-menu .sep { height: 1px; background: var(--border); margin: 3px 0; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+            z-index: 500; display: none; align-items: center; justify-content: center; padding: 1rem;
+            animation: fadeIn 0.12s ease-out;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-overlay.active .modal { animation: scaleIn 0.2s ease-out; }
+        .modal {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 1.5rem; max-width: 400px; width: 100%;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+        }
+        .modal h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .modal h2 i { color: var(--accent); margin-right: 0.3rem; }
+        .modal p { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1rem; }
+        .modal .form-group input, .modal .form-group select, .modal .form-group textarea { padding: 0.5rem 0.7rem; font-size: 0.82rem; }
+        .modal .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .modal .actions .btn { flex: 1; }
+
+        /* Preview modal */
+.modal-preview { max-width: 90vw; max-height: 90vh; width: auto; padding: 0; overflow: hidden; border-radius: 10px; }
+.modal-preview .preview-header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); }
+.modal-preview .preview-header span { font-size: 0.82rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modal-preview .preview-header button { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; padding: 0.2rem; flex-shrink: 0; }
+.modal-preview .preview-header button:hover { color: var(--text); }
+.modal-preview .preview-body { display: flex; align-items: center; justify-content: center; max-height: calc(90vh - 44px); overflow: auto; }
+.modal-preview .preview-body img { max-width: 100%; max-height: calc(90vh - 44px); display: block; }
+.modal-preview .preview-body iframe { width: 100%; height: calc(90vh - 44px); border: none; }
+.modal-preview .preview-body video { max-width: 100%; max-height: calc(90vh - 44px); display: block; }
+.modal-preview .preview-body audio { width: 100%; padding: 1rem; }
+.preview-loading { text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.82rem; }
+.preview-error { text-align: center; padding: 2rem; color: var(--red); font-size: 0.82rem; }
+
+/* Empty */
+        .empty { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.82rem; }
+
+        /* Toast */
+        .toast-container {
+            position: fixed; bottom: 1rem; right: 1rem; z-index: 999;
+            display: flex; flex-direction: column; gap: 0.4rem;
+        }
+        .toast {
+            padding: 0.5rem 0.8rem; border-radius: 6px;
+            background: rgba(18,18,26,0.92); backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            font-size: 0.78rem; display: flex; align-items: center; gap: 0.4rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+            animation: slideInRight 0.2s ease-out;
+        }
+        .toast.error { border-color: rgba(239,68,68,0.3); }
+        .toast.success { border-color: rgba(34,197,94,0.3); }
+
+        /* Light theme — applied to <body> so everything inherits */
+        body.theme-light {
+            --bg: #f2f2f7;
+            --surface: #ffffff;
+            --surface2: #e8e9f0;
+            --border: #c8cad8;
+            --border-hover: #a8abb8;
+            --text: #111118;
+            --text-dim: #3a3a4a;
+            --text-muted: #6a6a7e;
+            --glow: rgba(0,0,0,0.03);
+        }
+        body.theme-light {
+            background: var(--bg);
+            animation: none;
+        }
+        body.theme-light .auth-box { background: var(--surface); box-shadow: 0 4px 24px rgba(0,0,0,0.05), 0 0 40px rgba(0,0,0,0.02); }
+        body.theme-light .header { background: rgba(255,255,255,0.82); backdrop-filter: blur(12px); }
+        body.theme-light .ctx-menu { background: rgba(255,255,255,0.97); border-color: var(--border); }
+        body.theme-light .toast { background: rgba(255,255,255,0.94); border-color: var(--border); }
+        body.theme-light .modal { background: var(--surface); border-color: var(--border); }
+        body.theme-light .modal-overlay { background: rgba(0,0,0,0.25); }
+        body.theme-light .file-item:hover { background: rgba(0,0,0,0.02); border-color: var(--border); }
+        body.theme-light .file-item.selected { background: rgba(0,212,255,0.04); border-color: var(--accent); }
+        body.theme-light .file-item.drag-over { background: rgba(0,212,255,0.04); border-color: var(--accent); }
+        body.theme-light #dashPage.dragover .main { border-color: var(--accent); background: rgba(0,212,255,0.03); }
+        body.theme-light .settings-scroll::-webkit-scrollbar-thumb { background: var(--border); }
+        body.theme-light .theme-toggle { background: var(--surface2); }
+        body.theme-light .theme-btn.active { background: var(--surface); }
+        body.theme-light .form-group input,
+        body.theme-light .form-group select,
+        body.theme-light .form-group textarea { background: var(--bg); border-color: var(--border); color: var(--text); }
+        body.theme-light .form-group input:focus,
+        body.theme-light .form-group select:focus,
+        body.theme-light .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,212,255,0.1); }
+        body.theme-light .form-group select option { background: var(--surface); color: var(--text); }
+        body.theme-light .tabs { background: var(--surface2); }
+        body.theme-light .tabs button.active { background: var(--surface); }
+        body.theme-light .file-grid .empty { color: var(--text-muted); }
+        body.theme-light .ctx-menu .item:hover { background: var(--surface2); }
+        body.theme-light .btn-ghost { border-color: var(--border); color: var(--text-dim); }
+        body.theme-light .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); background: var(--surface2); }
+        body.theme-light .storage-row .bar { background: var(--surface2); }
+
+        /* Parent folder */
+        .file-item.is-parent { color: var(--accent); opacity: 0.8; }
+        .file-item.is-parent:hover { opacity: 1; }
+        .file-item.is-parent .icon { color: var(--accent); }
+
+        /* Settings modal */
+        .modal-wide { max-width: 480px; }
+        .settings-scroll { max-height: 60vh; overflow-y: auto; margin: 0.5rem 0; }
+        .settings-section { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .settings-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .settings-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.4rem 0; gap: 0.8rem;
+        }
+        .settings-label { font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.4rem; }
+        .settings-label i { width: 14px; text-align: center; color: var(--accent); }
+        .settings-value { font-size: 0.82rem; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+        .status-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--green); display: inline-block;
+            box-shadow: 0 0 6px rgba(34,197,94,0.4);
+        }
+        .theme-toggle { display: flex; gap: 2px; background: var(--surface2); border-radius: 6px; padding: 2px; }
+        .theme-btn {
+            padding: 0.3rem 0.6rem; border: none; border-radius: 4px;
+            background: transparent; color: var(--text-dim); font-size: 0.72rem;
+            font-weight: 600; cursor: pointer; font-family: inherit;
+            transition: all 0.15s ease; display: flex; align-items: center; gap: 0.25rem;
+        }
+        .theme-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .theme-btn:hover:not(.active) { color: var(--text); }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        @media (max-width: 500px) {
+            .file-grid { grid-template-columns: 1fr; }
+            .header .breadcrumb { font-size: 0.75rem; }
+            .header .right span { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="authPage">
+        <div class="auth-box">
+            <h1>Project.seen</h1>
+            <div class="sub">Store. Share. Seamless.</div>
+            <div class="tabs">
+                <button class="active" data-tab="login">Sign In</button>
+                <button data-tab="register">Create</button>
+            </div>
+            <form class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUser" placeholder="Enter username" required autofocus />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPass" placeholder="Enter password" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                <div class="error-msg" id="loginError"></div>
+            </form>
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUser" placeholder="Choose username (min 3 chars)" required />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPass" placeholder="Choose password (min 4 chars)" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                <div class="error-msg" id="regError"></div>
+                <div class="success-msg" id="regSuccess"></div>
+            </form>
+            <div class="auth-footer">
+                <a id="switchTabBtn">Switch to <span id="switchTabLabel">Create Account</span></a>
+            </div>
+            <div class="auth-support">
+                <button class="btn btn-ghost btn-block" id="supportBtn"><i class="fas fa-headset"></i> Contact Support</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashPage">
+        <div class="header">
+            <div class="logo"><i class="fas fa-layer-group"></i> Project.seen</div>
+            <div class="breadcrumb" id="breadcrumb"></div>
+            <div class="right">
+                <span id="userLabel"></span>
+                <button class="icon-btn" id="settingsBtn" title="Settings"><i class="fas fa-cog"></i></button>
+                <button class="icon-btn danger" id="logoutBtn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+
+        <div class="main">
+
+            <div class="storage-row">
+                <div class="bar"><div class="fill" id="storageFill"></div></div>
+                <div class="stats" id="storageStats">0 B / 25 GB</div>
+            </div>
+
+            <input type="file" id="fileInput" multiple style="display:none" />
+
+            <div class="upload-progress" id="uploadProgress"></div>
+
+            <div id="fileArea">
+                <div class="empty" id="emptyState">No files yet. Drop something here to get started.</div>
+                <div class="file-grid" id="fileGrid"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Context Menu -->
+<div class="ctx-menu" id="ctxMenu" style="display:none"></div>
+
+<!-- Modal: Confirm -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+        <h2 id="confirmTitle">Delete?</h2>
+        <p id="confirmMsg">This cannot be undone.</p>
+        <div class="actions">
+            <button class="btn btn-ghost" id="confirmCancel">Cancel</button>
+            <button class="btn btn-danger" id="confirmOk">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Prompt -->
+<div class="modal-overlay" id="promptModal">
+    <div class="modal">
+        <h2 id="promptTitle">New folder</h2>
+        <p id="promptMsg">Enter a name:</p>
+        <div class="form-group">
+            <input type="text" id="promptInput" placeholder="Name" />
+        </div>
+        <div class="actions">
+            <button class="btn btn-ghost" id="promptCancel">Cancel</button>
+            <button class="btn btn-primary" id="promptOk">Create</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Support -->
+<div class="modal-overlay" id="supportModal">
+    <div class="modal">
+        <h2><i class="fas fa-headset"></i> Contact Support</h2>
+        <p>We'll get back to you as soon as possible.</p>
+        <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="supportName" placeholder="Enter your name" />
+        </div>
+        <div class="form-group">
+            <label>Issue Type</label>
+            <select id="supportIssue">
+                <option value="">Select an issue...</option>
+                <option value="Cannot access account">Cannot access account</option>
+                <option value="Change username">Change username</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Message</label>
+            <textarea id="supportMessage" rows="4" placeholder="Describe your issue in detail..."></textarea>
+        </div>
+        <div class="error-msg" id="supportError"></div>
+        <div class="success-msg" id="supportSuccess"></div>
+        <div class="actions">
+            <button class="btn btn-ghost" id="supportCancel">Cancel</button>
+            <button class="btn btn-primary" id="supportSubmit"><i class="fas fa-paper-plane"></i> Submit</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Settings -->
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal modal-wide">
+        <h2><i class="fas fa-cog"></i> Settings</h2>
+        <div class="settings-scroll">
+            <div class="settings-section">
+                <div class="settings-row">
+                    <span class="settings-label"><i class="fas fa-palette"></i> Theme</span>
+                    <div class="theme-toggle">
+                        <button class="theme-btn active" data-theme="dark"><i class="fas fa-moon"></i> Dark</button>
+                        <button class="theme-btn" data-theme="light"><i class="fas fa-sun"></i> Light</button>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-row">
+                    <span class="settings-label"><i class="fas fa-user-circle"></i> Account Status</span>
+                    <span class="settings-value"><span class="status-dot"></span> Active</span>
+                </div>
+                <div class="settings-row">
+                    <span class="settings-label">Username</span>
+                    <span class="settings-value" id="settingsUsername">-</span>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-row"><span class="settings-label"><i class="fas fa-key"></i> Change Password</span></div>
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="settingsOldPass" placeholder="Enter current password" />
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="settingsNewPass" placeholder="Enter new password (min 4 chars)" />
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="settingsConfirmPass" placeholder="Confirm new password" />
+                </div>
+                <div class="error-msg" id="settingsError"></div>
+                <div class="success-msg" id="settingsSuccess"></div>
+                <button class="btn btn-primary btn-block" id="settingsChangePassBtn"><i class="fas fa-save"></i> Update Password</button>
+            </div>
+        </div>
+        <div class="actions" style="margin-top:0.8rem;">
+            <button class="btn btn-ghost btn-block" id="settingsClose">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Preview modal -->
+<div class="modal-overlay" id="previewModal">
+    <div class="modal modal-preview">
+        <div class="preview-header">
+            <span id="previewName"></span>
+            <button id="previewClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="preview-body" id="previewBody">
+            <div class="preview-loading"><i class="fas fa-spinner fa-pulse"></i> Loading...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    const API = '';
+    let token = localStorage.getItem('token') || '';
+    let userTheme = localStorage.getItem('theme') || 'light';
+    // Apply saved theme immediately
+    if (userTheme === 'light') document.body.classList.add('theme-light');
+    let currentPath = '';
+    let ctxTarget = null;
+    let ctxIsDir = false;
+    let uploadControllers = new Map();
+    let selectedNames = [];
+    let lastClickedIdx = -1;
+    let currentEntries = [];
+
+    // DOM refs
+    const authPage = document.getElementById('authPage');
+    const dashPage = document.getElementById('dashPage');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const loginError = document.getElementById('loginError');
+    const regError = document.getElementById('regError');
+    const regSuccess = document.getElementById('regSuccess');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const regUser = document.getElementById('regUser');
+    const regPass = document.getElementById('regPass');
+    const fileGrid = document.getElementById('fileGrid');
+    const emptyState = document.getElementById('emptyState');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const fileInput = document.getElementById('fileInput');
+    const uploadProgress = document.getElementById('uploadProgress');
+    const ctxMenu = document.getElementById('ctxMenu');
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmTitle = document.getElementById('confirmTitle');
+    const confirmMsg = document.getElementById('confirmMsg');
+    const confirmOk = document.getElementById('confirmOk');
+    const confirmCancel = document.getElementById('confirmCancel');
+    const promptModal = document.getElementById('promptModal');
+    const promptTitle = document.getElementById('promptTitle');
+    const promptMsg = document.getElementById('promptMsg');
+    const promptInput = document.getElementById('promptInput');
+    const promptOk = document.getElementById('promptOk');
+    const promptCancel = document.getElementById('promptCancel');
+    const toastContainer = document.getElementById('toastContainer');
+    const storageFill = document.getElementById('storageFill');
+    const storageStats = document.getElementById('storageStats');
+    const userLabel = document.getElementById('userLabel');
+    const settingsModal = document.getElementById('settingsModal');
+    const supportModal = document.getElementById('supportModal');
+    const supportName = document.getElementById('supportName');
+    const supportIssue = document.getElementById('supportIssue');
+    const supportMessage = document.getElementById('supportMessage');
+    const supportError = document.getElementById('supportError');
+    const supportSuccess = document.getElementById('supportSuccess');
+    const supportCancel = document.getElementById('supportCancel');
+    const supportSubmit = document.getElementById('supportSubmit');
+    const supportBtn = document.getElementById('supportBtn');
+
+    let pendingConfirm = null;
+    let pendingPrompt = null;
+
+    // ── Auth tabs ──
+    document.querySelectorAll('.tabs button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab + 'Form').classList.add('active');
+            loginError.style.display = 'none';
+            regError.style.display = 'none';
+            regSuccess.style.display = 'none';
+        });
+    });
+    document.getElementById('switchTabBtn').addEventListener('click', () => {
+        const isLogin = document.querySelector('[data-tab="login"]').classList.contains('active');
+        if (isLogin) document.querySelector('[data-tab="register"]').click();
+        else document.querySelector('[data-tab="login"]').click();
+    });
+    document.querySelectorAll('.tabs button').forEach(b => {
+        b.addEventListener('click', () => {
+            document.getElementById('switchTabLabel').textContent = b.dataset.tab === 'login' ? 'Create Account' : 'Sign In';
+        });
+    });
+
+    // ── Login ──
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.style.display = 'none';
+        const btn = loginForm.querySelector('.btn');
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+        let done = false;
+        const ac = new AbortController();
+        const timer = setTimeout(() => ac.abort(), 15000);
+        try {
+            const res = await fetch(`${API}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: loginUser.value.trim(), password: loginPass.value }),
+                signal: ac.signal
+            });
+            clearTimeout(timer);
+            const data = await res.json();
+            if (!res.ok) { loginError.textContent = data.error; loginError.style.display = 'block'; return; }
+            token = data.token;
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', data.username);
+            userTheme = data.theme || 'light';
+            localStorage.setItem('theme', userTheme);
+            done = true;
+            enterDashboard();
+        } catch {
+            clearTimeout(timer);
+            if (ac.signal.aborted) loginError.textContent = 'Request timed out. Check your connection.';
+            else loginError.textContent = 'Connection error';
+            loginError.style.display = 'block';
+        } finally {
+            if (!done) { btn.disabled = false; btn.textContent = 'Sign In'; }
+        }
+    });
+
+    // ── Register ──
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        regError.style.display = 'none';
+        regSuccess.style.display = 'none';
+        const btn = registerForm.querySelector('.btn');
+        btn.disabled = true;
+        btn.textContent = 'Creating...';
+        try {
+            const res = await fetch(`${API}/api/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: regUser.value.trim(), password: regPass.value })
+            });
+            const data = await res.json();
+            if (!res.ok) { regError.textContent = data.error; regError.style.display = 'block'; btn.disabled = false; btn.textContent = 'Create Account'; return; }
+            regSuccess.innerHTML = '<i class="fas fa-check-circle"></i> Account created! Signing you in...';
+            regSuccess.style.display = 'block';
+            try {
+                const r2 = await fetch(`${API}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: regUser.value.trim(), password: regPass.value })
+                });
+                const d2 = await r2.json();
+                if (r2.ok) { token = d2.token; localStorage.setItem('token', token); localStorage.setItem('username', d2.username); userTheme = d2.theme || 'light'; localStorage.setItem('theme', userTheme); setTimeout(enterDashboard, 300); return; }
+            } catch {}
+            document.querySelector('[data-tab="login"]').click();
+            loginUser.value = regUser.value.trim();
+            loginPass.value = '';
+            loginPass.focus();
+            btn.disabled = false;
+            btn.textContent = 'Create Account';
+        } catch { regError.textContent = 'Connection error'; regError.style.display = 'block'; btn.disabled = false; btn.textContent = 'Create Account'; }
+    });
+
+    // ── Logout ──
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        confirmTitle.textContent = 'Sign out';
+        confirmMsg.textContent = 'Are you sure you want to sign out?';
+        confirmOk.textContent = 'Sign out';
+        confirmOk.className = 'btn btn-danger';
+        pendingConfirm = () => {
+            token = '';
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            // Clear login forms
+            loginUser.value = '';
+            loginPass.value = '';
+            regUser.value = '';
+            regPass.value = '';
+            loginError.style.display = 'none';
+            regError.style.display = 'none';
+            regSuccess.style.display = 'none';
+            // Reset to login tab
+            document.querySelector('[data-tab="login"]').click();
+            authPage.style.display = 'flex';
+            dashPage.style.display = 'none';
+            // Reset to light theme for login page
+            userTheme = 'light';
+            localStorage.setItem('theme', 'light');
+            document.body.classList.add('theme-light');
+        };
+        confirmModal.classList.add('active');
+    });
+
+    // ── Check auth ──
+    async function checkAuth() {
+        if (!token) { authPage.style.display = 'flex'; dashPage.style.display = 'none'; return; }
+        try {
+            const res = await fetch(`${API}/api/storage`, { headers: { 'Authorization': token } });
+            if (res.status === 401) { authPage.style.display = 'flex'; dashPage.style.display = 'none'; return; }
+            if (!res.ok) { authPage.style.display = 'flex'; dashPage.style.display = 'none'; return; }
+            enterDashboard();
+        } catch { setTimeout(checkAuth, 2000); }
+    }
+
+    function enterDashboard() {
+        authPage.style.display = 'none';
+        dashPage.style.display = 'flex';
+        userLabel.textContent = localStorage.getItem('username') || '';
+        // Apply user's saved theme
+        if (userTheme === 'light') document.body.classList.add('theme-light');
+        else document.body.classList.remove('theme-light');
+        currentPath = '';
+        loadDir();
+    }
+
+    // ── Load directory ──
+    async function loadDir() {
+        try {
+            const res = await fetch(`${API}/api/files?path=${encodeURIComponent(currentPath)}`, {
+                headers: { 'Authorization': token }
+            });
+            if (!res.ok) { showToast('Failed to load', 'error'); return; }
+            const entries = await res.json();
+            currentEntries = entries;
+            renderBreadcrumb();
+            if (entries.length === 0) {
+                if (currentPath) {
+                    // Show ".." even when empty
+                    emptyState.style.display = 'none';
+                    fileGrid.innerHTML = `<div class="file-item is-parent" data-name=".." data-dir="true" data-index="0" ondblclick="cd('${currentPath.split('/').slice(0,-1).join('/')}')" oncontextmenu="showCtxParent(event)" draggable="false">
+                        <span class="icon folder"><i class="fas fa-level-up-alt folder"></i></span>
+                        <span class="name">..</span>
+                        <span class="size"></span>
+                        <button class="more-btn" onclick="event.stopPropagation();showCtxParent(event)">⋮</button>
+                    </div>`;
+                    loadStorage();
+                    return;
+                }
+                fileGrid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+            const displayEntries = currentPath ? [{ name: '..', isDir: true, isParent: true }] : [];
+            entries.forEach(e => displayEntries.push(e));
+            fileGrid.innerHTML = displayEntries.map((e, i) => {
+                const isDir = e.isDir;
+                const isParent = e.isParent;
+                const icon = isParent ? '<i class="fas fa-level-up-alt folder"></i>' : (isDir ? '<i class="fas fa-folder folder"></i>' : '<i class="far fa-file"></i>');
+                const size = (isDir || isParent) ? '' : formatSize(e.size);
+                const dblClick = isDir ? `cd('${isParent ? currentPath.split('/').slice(0,-1).join('/') : e.name.replace(/'/g, "\\'")}')` : `previewFile('${e.name.replace(/'/g, "\\'")}')`;
+                const ctx = isParent ? '' : `showCtx(event,'${e.name.replace(/'/g, "\\'")}',${isDir})`;
+                const drg = isParent ? '' : `dragStart(event,'${e.name.replace(/'/g, "\\'")}',${isDir})`;
+                const draggable = isParent ? 'false' : 'true';
+                const cls = isParent ? 'file-item is-parent' : 'file-item';
+                const more = isParent
+                    ? `<button class="more-btn" onclick="event.stopPropagation();showCtxParent(event)">⋮</button>`
+                    : `<button class="more-btn" onclick="event.stopPropagation();showCtx(event,'${e.name.replace(/'/g, "\\'")}',${isDir})">⋮</button>`;
+                return `<div class="${cls}" data-name="${isParent ? '..' : e.name.replace(/"/g, '&quot;')}" data-dir="${isDir}" data-index="${i}" ondblclick="${dblClick}" oncontextmenu="${ctx || 'showCtxParent(event)'}" draggable="${draggable}" ondragstart="${drg}">
+                    <span class="icon folder">${icon}</span>
+                    <span class="name">${e.name}</span>
+                    <span class="size">${size}</span>${more}
+                </div>`;
+            }).join('');
+
+            // Drag & drop on folders (upload from desktop or move items within web)
+            fileGrid.querySelectorAll('.file-item[data-dir="true"]').forEach(el => {
+                el.addEventListener('dragover', (e) => { e.preventDefault(); el.classList.add('drag-over'); });
+                el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+                el.addEventListener('drop', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    el.classList.remove('drag-over');
+                    const name = el.dataset.name;
+                    const targetPath = currentPath ? currentPath + '/' + name : name;
+                    const files = e.dataTransfer.files;
+                    if (files.length) {
+                        uploadFiles(files, targetPath);
+                    } else if (dragData && dragData.length > 0) {
+                        await moveItems(dragData, targetPath);
+                        dragData = null;
+                    }
+                });
+            });
+
+
+            loadStorage();
+        } catch { showToast('Connection error', 'error'); }
+    }
+
+    // ── Breadcrumb ──
+    function renderBreadcrumb() {
+        const parts = currentPath ? currentPath.split('/') : [];
+        let html = '<span onclick="cd(\'\')">Root</span>';
+        let acc = '';
+        for (const p of parts) {
+            acc = acc ? acc + '/' + p : p;
+            html += `<span class="sep">/</span><span onclick="cd('${acc}')">${p}</span>`;
+        }
+        breadcrumb.innerHTML = html;
+    }
+    window.cd = function(path) { currentPath = path; clearSelection(); loadDir(); };
+
+    // ── Storage ──
+    async function loadStorage() {
+        try {
+            const res = await fetch(`${API}/api/storage`, { headers: { 'Authorization': token } });
+            const data = await res.json();
+            const usedGB = (data.used / (1024*1024*1024)).toFixed(2);
+            const totalGB = '25.00';
+            storageFill.style.width = Math.min(data.percent, 100) + '%';
+            storageFill.className = 'fill' + (data.percent > 90 ? ' danger' : data.percent > 75 ? ' warning' : '');
+            storageStats.textContent = `${usedGB} GB / ${totalGB} GB`;
+        } catch {}
+    }
+
+    function formatSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+        if (bytes < 1024*1024*1024) return (bytes/(1024*1024)).toFixed(1) + ' MB';
+        return (bytes/(1024*1024*1024)).toFixed(2) + ' GB';
+    }
+
+    // ── Upload (entire page is drop zone, but skip for internal drags) ──
+    document.addEventListener('dragover', (e) => {
+        if (isInternalDrag) return;
+        if (e.target.closest('#dashPage')) { e.preventDefault(); dashPage.classList.add('dragover'); }
+    });
+    document.addEventListener('dragleave', (e) => {
+        if (isInternalDrag) return;
+        if (!e.target.closest('#dashPage')) dashPage.classList.remove('dragover');
+    });
+    document.addEventListener('drop', (e) => {
+        dashPage.classList.remove('dragover');
+        isInternalDrag = false;
+        if (!e.target.closest('#dashPage')) return;
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            uploadFiles(files, currentPath);
+        } else if (dragData && dragData.length > 0) {
+            moveItems(dragData, currentPath);
+            dragData = null;
+        }
+    });
+    document.addEventListener('dragend', () => { isInternalDrag = false; });
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+            const files = Array.from(fileInput.files);
+            fileInput.value = '';
+            uploadFiles(files, currentPath);
+        }
+    });
+
+    function fmtSpeed(bytesPerSec) {
+        if (bytesPerSec >= 1024 * 1024) return (bytesPerSec / (1024 * 1024)).toFixed(1) + ' MB/s';
+        if (bytesPerSec >= 1024) return (bytesPerSec / 1024).toFixed(0) + ' KB/s';
+        return bytesPerSec.toFixed(0) + ' B/s';
+    }
+
+    async function uploadFiles(files, destPath) {
+        uploadProgress.innerHTML = '';
+        uploadProgress.classList.add('active');
+        let totalBytes = 0;
+        let successCount = 0;
+        const startTime = Date.now();
+        for (const file of files) {
+            const id = Date.now() + '-' + Math.random().toString(36).slice(2, 6);
+            const controller = new AbortController();
+            uploadControllers.set(id, controller);
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.innerHTML = `<i class="fas fa-spinner fa-pulse" style="color:var(--accent);font-size:0.65rem;"></i>
+                <span class="name">${file.name}</span>
+                <span class="s">Uploading...</span>
+                <button class="cancel-btn"><i class="fas fa-times"></i></button>`;
+            item.querySelector('.cancel-btn').addEventListener('click', () => {
+                controller.abort();
+                item.querySelector('.cancel-btn').classList.add('hide');
+                item.querySelector('.s').textContent = 'Cancelled';
+                item.querySelector('.s').className = 's cancel';
+                item.querySelector('i').className = 'fas fa-ban';
+                item.querySelector('i').style.color = 'var(--orange)';
+            });
+            uploadProgress.appendChild(item);
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('path', destPath || '');
+            try {
+                const res = await fetch(`${API}/api/upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': token },
+                    body: fd,
+                    signal: controller.signal
+                });
+                if (controller.signal.aborted) continue;
+                const data = await res.json();
+                if (controller.signal.aborted) continue;
+                if (res.ok) {
+                    item.querySelector('i').className = 'fas fa-check-circle';
+                    item.querySelector('i').style.color = 'var(--green)';
+                    item.querySelector('.s').textContent = 'Done';
+                    item.querySelector('.s').className = 's done';
+                    item.querySelector('.cancel-btn').classList.add('hide');
+                    totalBytes += file.size;
+                    successCount++;
+                } else {
+                    item.querySelector('i').className = 'fas fa-times-circle';
+                    item.querySelector('i').style.color = 'var(--red)';
+                    item.querySelector('.s').textContent = data.error || 'Error';
+                    item.querySelector('.s').className = 's error';
+                    item.querySelector('.cancel-btn').classList.add('hide');
+                    if (data.error && data.error.includes('full')) showToast('Storage full', 'error');
+                }
+            } catch (err) {
+                if (err.name === 'AbortError' || controller.signal.aborted) continue;
+                item.querySelector('i').className = 'fas fa-times-circle';
+                item.querySelector('i').style.color = 'var(--red)';
+                item.querySelector('.s').textContent = 'Failed';
+                item.querySelector('.s').className = 's error';
+                item.querySelector('.cancel-btn').classList.add('hide');
+            } finally { uploadControllers.delete(id); }
+        }
+        await loadDir();
+        const elapsed = (Date.now() - startTime) / 1000;
+        if (successCount > 0 && elapsed > 0) {
+            const speed = fmtSpeed(totalBytes / elapsed);
+            showToast(`Uploaded ${successCount} file(s) at ${speed}`, 'success');
+        }
+        setTimeout(() => {
+            if (!uploadProgress.querySelector('.cancel-btn:not(.hide)')) {
+                setTimeout(() => uploadProgress.classList.remove('active'), 1000);
+            }
+        }, 1500);
+    }
+
+    // ── File Preview ──
+    let previewUrl = null;
+    const previewModal = document.getElementById('previewModal');
+    const previewBody = document.getElementById('previewBody');
+    const previewName = document.getElementById('previewName');
+    window.previewFile = async function(name) {
+        const path = currentPath ? currentPath + '/' + name : name;
+        previewName.textContent = name;
+        previewBody.innerHTML = '<div class="preview-loading"><i class="fas fa-spinner fa-pulse"></i> Loading...</div>';
+        previewModal.classList.add('active');
+        try {
+            const res = await fetch(`${API}/api/download?name=${encodeURIComponent(path)}`, {
+                headers: { 'Authorization': token }
+            });
+            if (!res.ok) { previewBody.innerHTML = '<div class="preview-error">Failed to load file</div>'; return; }
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            previewUrl = url;
+            const ext = name.split('.').pop().toLowerCase();
+            if (['jpg','jpeg','png','gif','bmp','webp'].includes(ext)) {
+                previewBody.innerHTML = `<img src="${url}" alt="${name}" />`;
+            } else if (ext === 'pdf') {
+                previewBody.innerHTML = `<iframe src="${url}"></iframe>`;
+            } else if (['mp4','webm','ogg','mov','avi','mkv'].includes(ext)) {
+                previewBody.innerHTML = `<video src="${url}" controls></video>`;
+            } else if (['mp3','wav','flac','aac','m4a'].includes(ext)) {
+                previewBody.innerHTML = `<audio src="${url}" controls></audio>`;
+            } else {
+                previewBody.innerHTML = '<div class="preview-error">Preview not available for this file type</div>';
+            }
+        } catch {
+            previewBody.innerHTML = '<div class="preview-error">Connection error</div>';
+        }
+    };
+    document.getElementById('previewClose').addEventListener('click', () => {
+        previewModal.classList.remove('active');
+        if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = null; }
+    });
+    previewModal.addEventListener('click', (e) => {
+        if (e.target === previewModal) {
+            previewModal.classList.remove('active');
+            if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = null; }
+        }
+    });
+
+    // ── Context Menu ──
+    window.showCtxParent = function(e) {
+        e.preventDefault();
+        renderCtxMenu(e.clientX, e.clientY, [
+            { icon: 'fa-solid fa-arrow-up', label: 'Go to parent folder', action: () => cd(currentPath.split('/').slice(0, -1).join('/')) },
+            { sep: true },
+            { icon: 'fa-solid fa-upload', label: 'Upload here', action: () => { fileInput.click(); } }
+        ]);
+    };
+
+    window.showCtx = function(e, name, isDir) {
+        e.preventDefault();
+        ctxTarget = name;
+        ctxIsDir = isDir;
+        const items = [];
+        if (isDir) {
+            items.push({ icon: 'fa-solid fa-folder-open', label: 'Open', action: () => cd(currentPath ? currentPath + '/' + name : name) });
+            items.push({ sep: true });
+        }
+        if (!isDir) {
+            items.push({ icon: 'fa-solid fa-eye', label: 'Preview', action: () => previewFile(name) });
+            items.push({ sep: true });
+        }
+        items.push({ icon: 'fa-solid fa-upload', label: 'Upload here', action: () => { fileInput.click(); } });
+        if (!isDir) {
+            items.push({ icon: 'fa-solid fa-download', label: 'Download', action: () => downloadFile(currentPath ? currentPath + '/' + name : name) });
+        }
+        items.push({ sep: true });
+        items.push({ icon: 'fa-solid fa-pen', label: 'Rename', action: () => promptRename(name) });
+        items.push({ icon: 'fa-solid fa-trash', label: 'Delete', action: () => confirmDelete(currentPath ? currentPath + '/' + name : name) });
+        renderCtxMenu(e.clientX, e.clientY, items);
+    };
+
+    function renderCtxMenu(x, y, items) {
+        ctxMenu.innerHTML = items.map(it => {
+            if (it.sep) return '<div class="sep"></div>';
+            return `<div class="item" onclick="ctxMenu.style.display='none';${it.action.toString()}"><i class="${it.icon}"></i> ${it.label}</div>`;
+        }).join('');
+        // Fix the onclick to actually call the functions
+        ctxMenu.innerHTML = items.map(it => {
+            if (it.sep) return '<div class="sep"></div>';
+            return `<div class="item" data-idx="${items.indexOf(it)}"><i class="${it.icon}"></i> ${it.label}</div>`;
+        }).join('');
+        // Attach real handlers
+        ctxMenu.querySelectorAll('.item').forEach(el => {
+            const idx = parseInt(el.dataset.idx);
+            el.addEventListener('click', (e) => { e.stopPropagation(); ctxMenu.style.display = 'none'; items[idx].action(); });
+        });
+        ctxMenu.style.display = 'block';
+        ctxMenu.style.left = Math.min(x, window.innerWidth - 180) + 'px';
+        ctxMenu.style.top = Math.min(y, window.innerHeight - 250) + 'px';
+    }
+
+    document.addEventListener('click', () => ctxMenu.style.display = 'none');
+    document.addEventListener('contextmenu', (e) => { if (!e.target.closest('.file-item')) ctxMenu.style.display = 'none'; });
+
+    // ── Create folder / upload (right-click anywhere on dashboard) ──
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.file-item') || e.target.closest('.header') || e.target.closest('#ctxMenu')) return;
+        if (!e.target.closest('#dashPage')) return;
+        e.preventDefault();
+        renderCtxMenu(e.clientX, e.clientY, [
+            { icon: 'fa-solid fa-folder-plus', label: 'New folder', action: () => promptCreateFolder() },
+            { icon: 'fa-solid fa-upload', label: 'Upload files', action: () => fileInput.click() },
+        ]);
+    });
+
+    // ── Drag & Drop reorder / move between folders ──
+    let dragData = null;
+    let isInternalDrag = false;
+    window.dragStart = function(event, name, isDir) {
+        isInternalDrag = true;
+        const item = event.target.closest('.file-item');
+        if (selectedNames.length > 0 && !selectedNames.includes(name)) {
+            clearSelection();
+            singleSelect(name, item);
+        }
+        if (selectedNames.length === 0) {
+            singleSelect(name, item);
+        }
+        dragData = selectedNames.map(n => {
+            const entry = currentEntries.find(en => en.name === n);
+            return { name: n, isDir: entry ? entry.isDir : false };
+        });
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', 'move');
+    };
+
+    // ── Download ──
+    function downloadFile(filepath) {
+        const a = document.createElement('a');
+        fetch(`${API}/api/download?name=${encodeURIComponent(filepath)}`, { headers: { 'Authorization': token } })
+            .then(r => { if (!r.ok) throw Error(); return r.blob(); })
+            .then(blob => { a.href = URL.createObjectURL(blob); a.download = filepath.split('/').pop(); a.click(); URL.revokeObjectURL(url); showToast('Download started', 'success'); })
+            .catch(() => showToast('Download failed', 'error'));
+    }
+
+    // ── Prompt: Create folder ──
+    function promptCreateFolder() {
+        promptTitle.textContent = 'New folder';
+        promptMsg.textContent = 'Enter folder name:';
+        promptInput.value = '';
+        promptOk.textContent = 'Create';
+        promptOk.className = 'btn btn-primary';
+        pendingPrompt = async () => {
+            const name = promptInput.value.trim();
+            if (!name) return;
+            try {
+                const res = await fetch(`${API}/api/mkdir`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify({ name, path: currentPath })
+                });
+                const data = await res.json();
+                if (!res.ok) { showToast(data.error || 'Failed', 'error'); return; }
+                showToast('Folder created', 'success');
+                loadDir();
+            } catch { showToast('Connection error', 'error'); }
+        };
+        promptModal.classList.add('active');
+        setTimeout(() => promptInput.focus(), 50);
+    }
+
+    // ── Prompt: Rename ──
+    function promptRename(oldName) {
+        promptTitle.textContent = 'Rename';
+        promptMsg.textContent = `New name for "${oldName}":`;
+        promptInput.value = oldName;
+        promptOk.textContent = 'Rename';
+        promptOk.className = 'btn btn-primary';
+        pendingPrompt = async () => {
+            const newName = promptInput.value.trim();
+            if (!newName || newName === oldName) return;
+            try {
+                const res = await fetch(`${API}/api/rename`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify({ oldName, newName, path: currentPath })
+                });
+                const data = await res.json();
+                if (!res.ok) { showToast(data.error || 'Failed', 'error'); return; }
+                showToast('Renamed', 'success');
+                loadDir();
+            } catch { showToast('Connection error', 'error'); }
+        };
+        promptModal.classList.add('active');
+        setTimeout(() => { promptInput.focus(); promptInput.select(); }, 50);
+    }
+
+    // ── Confirm: Delete ──
+    function confirmDelete(filepath) {
+        confirmTitle.textContent = 'Delete?';
+        confirmMsg.textContent = `Delete "${filepath.split('/').pop()}"? This cannot be undone.`;
+        confirmOk.textContent = 'Delete';
+        confirmOk.className = 'btn btn-danger';
+        pendingConfirm = async () => {
+            try {
+                const res = await fetch(`${API}/api/files?name=${encodeURIComponent(filepath)}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': token }
+                });
+                if (!res.ok) { showToast('Failed to delete', 'error'); return; }
+                showToast('Deleted', 'success');
+                loadDir();
+            } catch { showToast('Connection error', 'error'); }
+        };
+        confirmModal.classList.add('active');
+    }
+
+    // ── Modal handlers ──
+    confirmCancel.addEventListener('click', () => { confirmModal.classList.remove('active'); pendingConfirm = null; });
+    confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) { confirmModal.classList.remove('active'); pendingConfirm = null; } });
+    confirmOk.addEventListener('click', () => { if (pendingConfirm) { const fn = pendingConfirm; pendingConfirm = null; confirmModal.classList.remove('active'); fn(); } });
+
+    promptCancel.addEventListener('click', () => { promptModal.classList.remove('active'); pendingPrompt = null; });
+    promptModal.addEventListener('click', (e) => { if (e.target === promptModal) { promptModal.classList.remove('active'); pendingPrompt = null; } });
+    promptOk.addEventListener('click', () => { if (pendingPrompt) { const fn = pendingPrompt; pendingPrompt = null; promptModal.classList.remove('active'); fn(); } });
+    promptInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') promptOk.click(); });
+
+    // ── Toast ──
+    function showToast(msg, type = '') {
+        const el = document.createElement('div');
+        el.className = 'toast ' + type;
+        const icon = type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' : type === 'success' ? '<i class="fas fa-check-circle"></i>' : '';
+        el.innerHTML = icon + msg;
+        toastContainer.appendChild(el);
+        setTimeout(() => { el.remove(); }, 2500);
+    }
+
+    // ── Theme ──
+    function applyTheme(theme) {
+        userTheme = theme;
+        if (theme === 'light') document.body.classList.add('theme-light');
+        else document.body.classList.remove('theme-light');
+        localStorage.setItem('theme', theme);
+        document.querySelectorAll('.theme-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.theme === theme);
+        });
+        // Save to server
+        if (token) {
+            fetch(`${API}/api/theme`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                body: JSON.stringify({ theme })
+            }).catch(() => {});
+        }
+    }
+
+    // ── Settings modal ──
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+        document.getElementById('settingsUsername').textContent = localStorage.getItem('username') || '-';
+        document.getElementById('settingsOldPass').value = '';
+        document.getElementById('settingsNewPass').value = '';
+        document.getElementById('settingsConfirmPass').value = '';
+        document.getElementById('settingsError').style.display = 'none';
+        document.getElementById('settingsSuccess').style.display = 'none';
+        // Sync theme buttons
+        const curTheme = userTheme;
+        document.querySelectorAll('.theme-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.theme === curTheme);
+        });
+        settingsModal.classList.add('active');
+        setTimeout(() => document.getElementById('settingsOldPass').focus(), 50);
+    });
+
+    document.getElementById('settingsClose').addEventListener('click', () => {
+        settingsModal.classList.remove('active');
+    });
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) settingsModal.classList.remove('active');
+    });
+
+    // Theme toggle
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
+    });
+
+    // Change password
+    document.getElementById('settingsChangePassBtn').addEventListener('click', async () => {
+        const oldPass = document.getElementById('settingsOldPass').value;
+        const newPass = document.getElementById('settingsNewPass').value;
+        const confirmPass = document.getElementById('settingsConfirmPass').value;
+        const errEl = document.getElementById('settingsError');
+        const sucEl = document.getElementById('settingsSuccess');
+        errEl.style.display = 'none';
+        sucEl.style.display = 'none';
+        if (!oldPass || !newPass || !confirmPass) {
+            errEl.textContent = 'Please fill in all password fields.'; errEl.style.display = 'block'; return;
+        }
+        if (newPass.length < 4) {
+            errEl.textContent = 'New password must be at least 4 characters.'; errEl.style.display = 'block'; return;
+        }
+        if (newPass !== confirmPass) {
+            errEl.textContent = 'New passwords do not match.'; errEl.style.display = 'block'; return;
+        }
+        const btn = document.getElementById('settingsChangePassBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Updating...';
+        try {
+            const res = await fetch(`${API}/api/change-password`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                body: JSON.stringify({ oldPassword: oldPass, newPassword: newPass })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errEl.textContent = data.error || 'Failed to change password'; errEl.style.display = 'block';
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Update Password';
+                return;
+            }
+            token = data.token;
+            localStorage.setItem('token', token);
+            sucEl.innerHTML = '<i class="fas fa-check-circle"></i> Password changed successfully.';
+            sucEl.style.display = 'block';
+            btn.innerHTML = '<i class="fas fa-check"></i> Updated';
+            document.getElementById('settingsOldPass').value = '';
+            document.getElementById('settingsNewPass').value = '';
+            document.getElementById('settingsConfirmPass').value = '';
+            setTimeout(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Update Password'; }, 1500);
+        } catch {
+            errEl.textContent = 'Connection error. Please try again.'; errEl.style.display = 'block';
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Update Password';
+        }
+    });
+
+    // ── Support modal ──
+    supportBtn.addEventListener('click', () => {
+        supportName.value = '';
+        supportIssue.value = '';
+        supportMessage.value = '';
+        supportError.style.display = 'none';
+        supportSuccess.style.display = 'none';
+        supportSubmit.disabled = false;
+        supportSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit';
+        supportModal.classList.add('active');
+        setTimeout(() => supportName.focus(), 50);
+    });
+
+    supportCancel.addEventListener('click', () => {
+        supportModal.classList.remove('active');
+    });
+
+    supportModal.addEventListener('click', (e) => {
+        if (e.target === supportModal) supportModal.classList.remove('active');
+    });
+
+    supportSubmit.addEventListener('click', async () => {
+        const name = supportName.value.trim();
+        const issue = supportIssue.value;
+        const message = supportMessage.value.trim();
+        if (!name || !issue || !message) {
+            supportError.textContent = 'Please fill in all fields.';
+            supportError.style.display = 'block';
+            return;
+        }
+        supportError.style.display = 'none';
+        supportSubmit.disabled = true;
+        supportSubmit.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sending...';
+        try {
+            const res = await fetch(`${API}/api/support`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, issue, message })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                supportError.textContent = data.error || 'Failed to submit';
+                supportError.style.display = 'block';
+                supportSubmit.disabled = false;
+                supportSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit';
+                return;
+            }
+            supportSuccess.innerHTML = '<i class="fas fa-check-circle"></i> Ticket submitted! We\'ll respond shortly.';
+            supportSuccess.style.display = 'block';
+            supportSubmit.innerHTML = '<i class="fas fa-check"></i> Submitted';
+            setTimeout(() => {
+                supportModal.classList.remove('active');
+                supportSuccess.style.display = 'none';
+                supportSubmit.disabled = false;
+                supportSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit';
+                showToast('Support ticket sent', 'success');
+            }, 1800);
+        } catch {
+            supportError.textContent = 'Connection error. Please try again.';
+            supportError.style.display = 'block';
+            supportSubmit.disabled = false;
+            supportSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit';
+        }
+    });
+
+    // ── Grid-level drag-drop handlers (set once) ──
+    fileGrid.addEventListener('dragover', (e) => e.preventDefault());
+    fileGrid.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            uploadFiles(files, currentPath);
+        } else if (dragData && dragData.length > 0) {
+            moveItems(dragData, currentPath);
+            dragData = null;
+        }
+    });
+
+    // ── Selection via click ──
+    fileGrid.addEventListener('click', function(e) {
+        const item = e.target.closest('.file-item');
+        if (!item || item.dataset.name === '..') {
+            if (!item) clearSelection();
+            return;
+        }
+        const name = item.dataset.name;
+        const idx = parseInt(item.dataset.index);
+
+        if (e.ctrlKey || e.metaKey) {
+            toggleSelection(name, item);
+        } else if (e.shiftKey && lastClickedIdx >= 0) {
+            const items = fileGrid.querySelectorAll('.file-item');
+            const start = Math.min(lastClickedIdx, idx);
+            const end = Math.max(lastClickedIdx, idx);
+            selectRange(start, end);
+        } else {
+            singleSelect(name, item);
+        }
+        lastClickedIdx = idx;
+    });
+
+    // ── Selection helpers ──
+    function clearSelection() {
+        fileGrid.querySelectorAll('.file-item.selected').forEach(el => el.classList.remove('selected'));
+        selectedNames = [];
+        lastClickedIdx = -1;
+    }
+
+    function singleSelect(name, item) {
+        fileGrid.querySelectorAll('.file-item.selected').forEach(el => el.classList.remove('selected'));
+        selectedNames = [name];
+        item.classList.add('selected');
+    }
+
+    function toggleSelection(name, item) {
+        const idx = selectedNames.indexOf(name);
+        if (idx >= 0) {
+            selectedNames.splice(idx, 1);
+            item.classList.remove('selected');
+        } else {
+            selectedNames.push(name);
+            item.classList.add('selected');
+        }
+    }
+
+    function selectRange(start, end) {
+        fileGrid.querySelectorAll('.file-item.selected').forEach(el => el.classList.remove('selected'));
+        const items = fileGrid.querySelectorAll('.file-item');
+        selectedNames = [];
+        for (let i = start; i <= end; i++) {
+            items[i].classList.add('selected');
+            selectedNames.push(items[i].dataset.name);
+        }
+    }
+
+    // ── Move items between folders ──
+    async function moveItems(items, destPath) {
+        let moved = 0;
+        for (const item of items) {
+            const from = currentPath ? currentPath + '/' + item.name : item.name;
+            const to = destPath ? destPath + '/' + item.name : item.name;
+            if (from === to) continue;
+            try {
+                const res = await fetch(`${API}/api/move`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify({ from, to })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    moved++;
+                } else {
+                    showToast(`Cannot move ${item.name}: ${data.error}`, 'error');
+                }
+            } catch {
+                showToast(`Failed to move ${item.name}`, 'error');
+            }
+        }
+        if (moved > 0) {
+            showToast(`Moved ${moved} item(s)`, 'success');
+            clearSelection();
+            loadDir();
+        }
+    }
+
+    // ── Init ──
+    checkAuth();
+</script>
+
+</body>
+</html>
