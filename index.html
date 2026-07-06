@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="icon.png">
-    <title>SEEN // glass</title>
+    <title>SEEN — Natthanan Treetos</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -201,15 +201,22 @@
 
         .social-strip {
             display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 8px;
             margin-top: 10px;
+        }
+        .social-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             justify-content: center;
         }
         .social-link {
             width: 32px;
             height: 32px;
-            border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 25%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -541,10 +548,12 @@
             .timer-unit { min-width: unset; }
         }
         @media (max-width: 540px) {
-            body { padding: 10px; }
-            .bento { gap: 10px; grid-template-columns: 1fr; }
-            .col-2, .col-3, .col-4 { grid-column: span 1; }
-            .item { padding: 16px; border-radius: 12px; }
+            body { padding: 10px; display: flex; flex-direction: column; min-height: 100dvh; }
+            .bento { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+            .col-2, .col-3, .col-4 { grid-column: unset; }
+            .item { padding: 16px; border-radius: 12px; order: 2; }
+            .item.note-card { height: 200px; min-height: 200px; width: 100%; max-width: 100%; overflow: hidden; align-self: stretch !important; }
+            .footer { order: 3; margin-top: auto; }
             .item-label { font-size: 9px; letter-spacing: 1.2px; margin-bottom: 10px; }
             .timer-grid { gap: 4px 14px; max-width: 190px; }
             .timer-num { font-size: 22px; }
@@ -558,9 +567,11 @@
             .profile-info h1 { font-size: 17px; }
             .profile-info .sub { font-size: 12px; }
             .avatar { width: 60px; height: 60px; }
-            .social-link { width: 28px; height: 28px; border-radius: 6px; }
+            .social-link { width: 28px; height: 28px; border-radius: 25%; }
             .social-strip img { width: 13px; height: 13px; }
             .profile-wrap { gap: 10px; }
+            .profile-card { order: 0; }
+            .timer-card { order: 1; }
             .stat-sub { font-size: 10px; }
             .modal-box { width: calc(100vw - 32px); padding: 24px 20px; border-radius: 12px; }
             .modal-box h3 { font-size: 11px; margin-bottom: 16px; }
@@ -575,6 +586,7 @@
             .stat-big { font-size: 18px; }
             .btn { font-size: 11px; padding: 9px 12px; }
         }
+        .note-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
@@ -582,10 +594,11 @@
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
 
+
 <div class="bento">
 
     <!-- TIMER 2 cols -->
-    <div class="item col-2" style="animation-delay:0.05s">
+    <div class="item col-2 timer-card" style="animation-delay:0.05s">
         <div class="item-label">⏱ Uptime</div>
         <div class="timer-grid">
             <div class="timer-unit">
@@ -635,16 +648,22 @@
     </div>
 
     <!-- PROFILE -->
-    <div class="item" style="animation-delay:0.1s">
+    <div class="item profile-card" style="animation-delay:0.1s">
         <div class="profile-wrap">
             <div class="avatar" style="background-image: url('20260531_171147.jpg');cursor:pointer;" onclick="openAvatar()"></div>
             <div class="profile-info">
                 <h1>SEEN</h1>
                 <div class="sub">Natthanan <span>Treetos</span></div>
                 <div class="social-strip">
-                    <div class="social-link" onclick="window.open('https://www.youtube.com/@1236seen', '_self')"><img src="youtube.png"></div>
-                    <div class="social-link" onclick="window.open('https://www.tiktok.com/@1236seen', '_self')"><img src="tiktok.png"></div>
-                    <div class="social-link" onclick="window.open('https://www.instagram.com/1236seen/', '_self')"><img src="Instagram.png"></div>
+                    <div class="social-row">
+                        <div class="social-link" onclick="window.open('https://www.youtube.com/@1236seen', '_self')"><img src="youtube.png"></div>
+                        <div class="social-link" onclick="window.open('https://www.tiktok.com/@1236seen', '_self')"><img src="tiktok.png"></div>
+                        <div class="social-link" onclick="window.open('https://www.instagram.com/1236seen/', '_self')"><img src="Instagram.png"></div>
+                    </div>
+                    <div class="social-row">
+                        <div class="social-link" onclick="window.open('https://github.com/SEEN1236', '_self')"><img src="github.png"></div>
+                        <div class="social-link" onclick="window.open('https://www.facebook.com/no.on.702772', '_self')"><img src="facebook.png"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -734,13 +753,10 @@
     </div>
 
     <!-- NOTE -->
-    <div class="item" style="animation-delay:0.45s;align-self:flex-start;">
+    <div class="item note-card" style="animation-delay:0.45s;align-self:flex-start;">
         <div class="item-label">💬 Note</div>
-        <p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.7;text-align:center;">
-            "Build things that matter.<br>Break things that don't."
-        </p>
-        <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.04);width:100%;">
-            <div style="font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:1px;">MOTTO</div>
+        <div style="width:100%;height:145px;min-height:145px;overflow-y:auto;overflow-x:hidden;padding-right:0;scrollbar-width:none;flex-shrink:0;" class="note-scroll">
+            <p id="typewriter" style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.8;text-align:left;width:100%;margin:0;"></p>
         </div>
     </div>
 
@@ -773,6 +789,67 @@
 </div>
 
 <script>
+    const typewriterText = [
+        "สวัสดีผมชื่อ SEEN คุณเข้าเว็บนี้มาโหลดอะไรรึป่าว ข้างๆผมมีดาวน์โหลดอยู่อะ และมันไม่ได้มีไวรัส โหลดกันได้เป็น แอปออฟไลน์ 100% ตามจริงผมไว้ ใช้เองแต่ถ้าเข้ามาดูก็ ลองโหลดใช้ได้ ผมเขียน นี้เมื่อ วันอาทิตย์ที่ 5 กรกฎา 2026 ในอนาคต ผม อยากเป็น ครู ตอนผมโตผมก็ไม่รู้ว่าผมจะได้เป็นไหน แต่ขอให้ได้เป็นเถอะ ผมซื้อคอมนี้ตอน ม.3 มาประกอบ",
+        "SPECIFICATION:",
+        "——————————",
+        "• CPU : INTEL I5-3470 3.2GHZ x1",
+        "• MB  : DELL 0YXT71 x1",
+        "• RAM : DDR3 4GB x1",
+        "• HDD : 500GB x1",
+        "• CASE : OPTIPLEX 7010 x1",
+        "———— ฿1,232 ———",
+        "• GPU : R7 250X 1GB x1",
+        "———— ฿580 ————",
+        "• DDR3 8GB 1600MHz = PC3-12800 x2",
+        "———— ฿392 ————",
+    ];
+
+    const el = document.getElementById('typewriter');
+    const scrollBox = el.parentElement;
+    let lineIdx = 0, charIdx = 0;
+    let autoScroll = true;
+
+    scrollBox.addEventListener('wheel', () => { autoScroll = false; });
+    scrollBox.addEventListener('touchstart', () => { autoScroll = false; });
+    scrollBox.addEventListener('scroll', () => {
+        if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 5) {
+            autoScroll = true;
+        }
+    });
+
+    function buildHTML() {
+        let html = '';
+        for (let i = 0; i < typewriterText.length; i++) {
+            if (i < lineIdx) {
+                html += escHTML(typewriterText[i]) + '<br>';
+            } else if (i === lineIdx) {
+                html += escHTML(typewriterText[i].substring(0, charIdx));
+                break;
+            }
+        }
+        el.innerHTML = html;
+    }
+    function escHTML(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function type() {
+        if (lineIdx >= typewriterText.length) return;
+        const line = typewriterText[lineIdx];
+        if (charIdx < line.length) {
+            charIdx++;
+            buildHTML();
+            if (autoScroll) scrollBox.scrollTop = scrollBox.scrollHeight;
+            setTimeout(type, 40 + Math.random() * 50);
+        } else {
+            lineIdx++;
+            charIdx = 0;
+            if (autoScroll) scrollBox.scrollTop = scrollBox.scrollHeight;
+            setTimeout(type, 400);
+        }
+    }
+    setTimeout(type, 100);
+
     function update() {
         const birth = new Date(2010, 3, 26);
         const now = new Date();
