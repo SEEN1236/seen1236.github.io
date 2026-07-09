@@ -31,7 +31,7 @@
             left: -20%;
             width: 80%;
             height: 80%;
-            background: radial-gradient(ellipse, rgba(120,80,255,0.08) 0%, transparent 65%);
+            background: radial-gradient(ellipse, rgba(120,80,255,0.15) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -42,18 +42,7 @@
             right: -20%;
             width: 70%;
             height: 70%;
-            background: radial-gradient(ellipse, rgba(255,80,120,0.06) 0%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .bg-grid {
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
+            background: radial-gradient(ellipse, rgba(255,80,120,0.12) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -63,7 +52,7 @@
             width: 500px;
             height: 500px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(120,80,255,0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(120,80,255,0.12) 0%, transparent 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -548,7 +537,7 @@
             .timer-unit { min-width: unset; }
         }
         @media (max-width: 540px) {
-            body { padding: 10px; display: flex; flex-direction: column; min-height: 100dvh; }
+            body { padding: 25px; display: flex; flex-direction: column; min-height: 100dvh; }
             .bento { display: flex; flex-direction: column; gap: 10px; flex: 1; }
             .col-2, .col-3, .col-4 { grid-column: unset; }
             .item { padding: 16px; border-radius: 12px; order: 2; }
@@ -578,9 +567,9 @@
             .footer { font-size: 9px; padding: 14px 0 0; letter-spacing: 0; }
         }
         @media (max-width: 400px) {
-            body { padding: 8px; }
-            .bento { gap: 8px; }
-            .item { padding: 14px; border-radius: 10px; }
+            body { padding: 0; }
+            .bento { gap: 1px; }
+            .item { padding: 14px; border-radius: 0; border: none; }
             .timer-grid { gap: 2px 10px; max-width: 160px; }
             .timer-num { font-size: 19px; }
             .stat-big { font-size: 18px; }
@@ -591,7 +580,6 @@
 </head>
 <body>
 
-<div class="bg-grid"></div>
 <div class="bg-glow"></div>
 
 
@@ -599,7 +587,7 @@
 
     <!-- TIMER 2 cols -->
     <div class="item col-2 timer-card" style="animation-delay:0.05s">
-        <div class="item-label">⏱ Uptime</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Uptime</div>
         <div class="timer-grid">
             <div class="timer-unit">
                 <div class="timer-num" id="days">00</div>
@@ -622,7 +610,7 @@
             </div>
         </div>
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);width:100%;">
-            <div class="item-label" style="margin-bottom:10px;text-align:center;">🎂 Next Birthday</div>
+            <div class="item-label" style="margin-bottom:10px;text-align:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M12 2v4M6 10l12 2-2 10H8L6 10z"/><circle cx="12" cy="6" r="1.5"/></svg> Next Birthday</div>
             <div class="timer-grid" style="margin:0 auto;">
                 <div class="timer-unit">
                     <div class="timer-num" id="bdays">00</div>
@@ -671,7 +659,7 @@
 
     <!-- INFO -->
     <div class="item" style="animation-delay:0.15s">
-        <div class="item-label">📋 Info</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Info</div>
         <div class="bio-item">
             <span class="key">Age</span>
             <span class="val" id="age-display">—</span>
@@ -688,7 +676,7 @@
 
     <!-- EXPERTISE 2 cols -->
     <div class="item col-2" style="animation-delay:0.2s">
-        <div class="item-label">⚡ Expertise</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Expertise</div>
         <div class="tag-list">
             <span class="tag">ADB &amp; Android</span>
             <span class="tag">Video Effects</span>
@@ -704,11 +692,11 @@
     <div class="item" style="animation-delay:0.25s">
         <div class="stat-row">
             <div>
-                <div class="item-label">▶ YouTube</div>
+                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="2" ry="2"/></svg> YouTube</div>
                 <div class="stat-big">1.31K <span class="unit">subs</span></div>
                 <div class="stat-sub">Joined May 2021</div>
             </div>
-            <div class="stat-icon">▶</div>
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="2" ry="2"/></svg></div>
         </div>
     </div>
 
@@ -716,12 +704,12 @@
     <div class="item" style="animation-delay:0.3s">
         <div class="stat-row">
             <div>
-                <div class="item-label">♫ TikTok</div>
+                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> TikTok</div>
                 <div class="stat-big">1 <span class="unit">follower</span></div>
                 <div class="stat-sub">Joined May 2026</div>
                 <div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,0.12);">New account</div>
             </div>
-            <div class="stat-icon">♫</div>
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
         </div>
     </div>
 
@@ -729,17 +717,17 @@
     <div class="item" style="animation-delay:0.35s">
         <div class="stat-row">
             <div>
-                <div class="item-label">◈ Instagram</div>
+                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram</div>
                 <div class="stat-big">102 <span class="unit">followers</span></div>
                 <div class="stat-sub">Joined Jul 2022</div>
             </div>
-            <div class="stat-icon">◈</div>
+            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
         </div>
     </div>
 
     <!-- DOWNLOAD 2 cols -->
     <div class="item col-2" style="animation-delay:0.4s">
-        <div class="item-label">📦 Downloads</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Downloads</div>
         <div class="btn-group">
             <div class="btn" onclick="window.open('KMH.apk', '_self')">
                 <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -754,7 +742,7 @@
 
     <!-- NOTE -->
     <div class="item note-card" style="animation-delay:0.45s;align-self:flex-start;">
-        <div class="item-label">💬 Note</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Note</div>
         <div style="width:100%;height:145px;min-height:145px;overflow-y:auto;overflow-x:hidden;padding-right:0;scrollbar-width:none;flex-shrink:0;" class="note-scroll">
             <p id="typewriter" style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.8;text-align:left;width:100%;margin:0;"></p>
         </div>
@@ -875,10 +863,10 @@
         const bm = Math.floor((bdiff % 3600000) / 60000);
         const bs = Math.floor((bdiff % 60000) / 1000);
         const isBirthday = now.getMonth() === 3 && now.getDate() === 26;
-        document.getElementById('bdays').textContent  = isBirthday ? '🎂' : String(bd).padStart(2, '0');
-        document.getElementById('bhours').textContent = isBirthday ? '🎉' : String(bh).padStart(2, '0');
-        document.getElementById('bmins').textContent  = isBirthday ? '🎈' : String(bm).padStart(2, '0');
-        document.getElementById('bsecs').textContent  = isBirthday ? '✨' : String(bs).padStart(2, '0');
+        document.getElementById('bdays').textContent  = isBirthday ? '+' : String(bd).padStart(2, '0');
+        document.getElementById('bhours').textContent = isBirthday ? '!' : String(bh).padStart(2, '0');
+        document.getElementById('bmins').textContent  = isBirthday ? '!' : String(bm).padStart(2, '0');
+        document.getElementById('bsecs').textContent  = isBirthday ? '*' : String(bs).padStart(2, '0');
     }
     setInterval(update, 1000); update();
 
