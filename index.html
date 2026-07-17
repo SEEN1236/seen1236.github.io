@@ -8,13 +8,27 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+        :root {
+            --bg: #070708;
+            --text: #f0f0f0;
+            --card-bg: rgba(18, 18, 22, 0.55);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --card-border-hover: rgba(255, 255, 255, 0.14);
+            --glass-blur: blur(24px);
+            --accent-purple: rgba(120, 80, 255, 0.12);
+            --accent-pink: rgba(255, 80, 120, 0.10);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.35s cubic-bezier(0.2, 0, 0, 1);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; scrollbar-width: none; -ms-overflow-style: none; }
         *::-webkit-scrollbar { display: none; }
 
         body {
             min-height: 100vh;
-            background: #070708;
-            color: #f0f0f0;
+            background: var(--bg);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
@@ -23,28 +37,25 @@
             overflow-x: hidden;
         }
 
-        /* === BG EFFECTS === */
-        body::before {
+        body::before, body::after {
             content: '';
             position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::before {
             top: -40%;
             left: -20%;
             width: 80%;
             height: 80%;
             background: radial-gradient(ellipse, rgba(120,80,255,0.15) 0%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
         }
         body::after {
-            content: '';
-            position: fixed;
             bottom: -30%;
             right: -20%;
             width: 70%;
             height: 70%;
             background: radial-gradient(ellipse, rgba(255,80,120,0.12) 0%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
         }
 
         .bg-glow {
@@ -55,17 +66,29 @@
             background: radial-gradient(circle, rgba(120,80,255,0.12) 0%, transparent 70%);
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            translate: -50% -50%;
             pointer-events: none;
             z-index: 0;
             animation: breath 6s ease-in-out infinite;
         }
+        .bg-glow-2 {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,80,120,0.08) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: breath 8s ease-in-out infinite reverse;
+        }
         @keyframes breath {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+            0%, 100% { scale: 1; opacity: 0.5; }
+            50% { scale: 1.35; opacity: 0.9; }
         }
 
-        /* === BENTO GRID === */
         .bento {
             max-width: 1060px;
             width: 100%;
@@ -76,60 +99,147 @@
             z-index: 1;
             opacity: 0;
             transform: translateY(30px);
-            animation: fadeUp 1s ease forwards;
+            animation: fadeUp 0.9s cubic-bezier(0.2, 0, 0, 1) forwards;
             margin: auto;
+            perspective: 1200px;
+            transform-style: preserve-3d;
         }
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* === GLASS CARD === */
         .item {
-            background: rgba(18, 18, 22, 0.6);
-            backdrop-filter: blur(24px) saturate(1.2);
-            -webkit-backdrop-filter: blur(24px) saturate(1.2);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur) saturate(1.2);
+            -webkit-backdrop-filter: var(--glass-blur) saturate(1.2);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
             padding: 28px 24px;
-            transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
+            transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.35s cubic-bezier(0.2, 0, 0, 1), border-color 0.35s, background 0.35s;
             position: relative;
             overflow: hidden;
+            animation: float 5s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+            translate: 0 0;
             box-shadow:
-                0 1px 3px rgba(0,0,0,0.2),
-                0 20px 60px rgba(0,0,0,0.3),
+                0 2px 8px rgba(0,0,0,0.25),
+                0 20px 60px rgba(0,0,0,0.35),
+                0 0 30px rgba(120,80,255,0.03),
                 inset 0 1px 0 rgba(255,255,255,0.04);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            transform-style: preserve-3d;
+            will-change: transform, translate;
         }
 
-        /* gloss overlay */
+        .item:nth-child(2) { animation-delay: -0.8s; }
+        .item:nth-child(3) { animation-delay: -1.6s; }
+        .item:nth-child(4) { animation-delay: -0.4s; }
+        .item:nth-child(5) { animation-delay: -2.0s; }
+        .item:nth-child(6) { animation-delay: -1.0s; }
+        .item:nth-child(7) { animation-delay: -2.4s; }
+        .item:nth-child(8) { animation-delay: -0.2s; }
+        .item:nth-child(9) { animation-delay: -2.8s; }
+
+        @keyframes float {
+            0%, 100% { translate: 0 0; }
+            50% { translate: 0 -6px; }
+        }
+
+        .item > * {
+            transform-style: preserve-3d;
+        }
+
+        .item-label, .timer-num, .stat-big, .profile-info h1 {
+            transform: translateZ(8px);
+        }
+        .tag, .btn {
+            transform: translateZ(4px);
+        }
+
         .item::before {
             content: '';
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(255,255,255,0.04) 0%,
-                transparent 40%,
-                transparent 80%,
-                rgba(255,255,255,0.02) 100%
-            );
+            background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, transparent 80%, rgba(255,255,255,0.02) 100%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 0;
+        }
+        .item:hover::before { opacity: 1; }
+
+        .item::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(120,80,255,0.08), transparent 40%, transparent 60%, rgba(255,80,120,0.06));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.5s;
         }
-        .item:hover::before { opacity: 1; }
+        .item:hover::after { opacity: 1; }
+
+        .item .shine {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+        .item .shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shine 5s ease-in-out infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .shadow-fx {
+            position: absolute;
+            bottom: -24px;
+            left: 5%;
+            width: 90%;
+            height: 30px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.35s;
+            filter: blur(10px);
+            border-radius: 50%;
+        }
+        .item:hover .shadow-fx {
+            opacity: 1;
+            transform: translateY(6px) scale(1.05);
+        }
 
         .item:hover {
-            border-color: rgba(255, 255, 255, 0.12);
-            background: rgba(22, 22, 28, 0.7);
-            transform: translateY(-2px);
+            animation-play-state: paused;
+            border-color: var(--card-border-hover);
+            background: rgba(22, 22, 28, 0.65);
+            transform: translateY(-3px) translateZ(20px);
             box-shadow:
-                0 1px 3px rgba(0,0,0,0.2),
-                0 24px 80px rgba(0,0,0,0.4),
+                0 4px 12px rgba(0,0,0,0.3),
+                0 30px 80px rgba(0,0,0,0.45),
+                0 0 50px rgba(120,80,255,0.06),
+                0 0 20px rgba(120,80,255,0.03),
                 inset 0 1px 0 rgba(255,255,255,0.06);
         }
 
@@ -144,13 +254,25 @@
             position: relative;
             z-index: 1;
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .item-label svg {
+            width: 14px;
+            height: 14px;
+            stroke: rgba(255,255,255,0.5);
+            transition: stroke 0.3s;
+        }
+        .item:hover .item-label svg {
+            stroke: rgba(180, 140, 255, 0.8);
         }
 
         .col-2 { grid-column: span 2; }
         .col-3 { grid-column: 1 / -1; }
         .col-4 { grid-column: 1 / -1; }
 
-        /* === PROFILE === */
         .profile-wrap {
             display: flex;
             flex-direction: column;
@@ -168,16 +290,21 @@
             flex-shrink: 0;
             border: 2px solid rgba(255,255,255,0.08);
             box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-            transition: border 0.3s;
+            transition: border 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
-        .item:hover .avatar { border-color: rgba(255,255,255,0.15); }
+        .avatar:hover {
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 30px rgba(120,80,255,0.1);
+        }
 
         .profile-info h1 {
             font-size: 20px;
             font-weight: 700;
-            background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.5));
+            background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.4));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .profile-info .sub {
             font-size: 13px;
@@ -216,18 +343,23 @@
         .social-link:hover {
             border-color: rgba(255,255,255,0.15);
             background: rgba(255,255,255,0.06);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
         }
         .social-strip img {
             width: 15px;
             height: 15px;
             opacity: 0.35;
-            transition: opacity 0.25s;
+            transition: opacity 0.25s, filter 0.25s;
             pointer-events: none;
         }
-        .social-link:hover img { opacity: 0.7; }
+        .social-link:hover img { opacity: 0.9; }
+        .social-row:nth-child(1) .social-link:nth-child(1):hover { border-color: #ff0000; box-shadow: 0 4px 20px rgba(255,0,0,0.15); }
+        .social-row:nth-child(1) .social-link:nth-child(2):hover { border-color: #ff0050; box-shadow: 0 4px 20px rgba(255,0,80,0.15); }
+        .social-row:nth-child(1) .social-link:nth-child(3):hover { border-color: #e1306c; box-shadow: 0 4px 20px rgba(225,48,108,0.15); }
+        .social-row:nth-child(2) .social-link:nth-child(1):hover { border-color: #fff; box-shadow: 0 4px 20px rgba(255,255,255,0.08); }
+        .social-row:nth-child(2) .social-link:nth-child(2):hover { border-color: #1877f2; box-shadow: 0 4px 20px rgba(24,119,242,0.15); }
 
-        /* === TIMER === */
         .timer-grid {
             display: flex;
             align-items: center;
@@ -241,9 +373,10 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 34px;
             font-weight: 600;
-            background: linear-gradient(135deg, #f0f0f0, rgba(255,255,255,0.5));
+            background: linear-gradient(135deg, #f0f0f0, rgba(255,255,255,0.4));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: 1px;
             line-height: 1;
         }
@@ -262,7 +395,6 @@
             margin-bottom: 14px;
         }
 
-        /* === STATS === */
         .stat-big {
             font-size: 28px;
             font-weight: 700;
@@ -293,15 +425,25 @@
             position: relative;
         }
         .stat-icon {
-            font-size: 18px;
-            opacity: 0.1;
             position: absolute;
             top: 16px;
             right: 18px;
             z-index: 1;
         }
+        .stat-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: rgba(255,255,255,0.15);
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+        .item:hover .stat-icon svg {
+            opacity: 0.8;
+        }
+        .item:nth-child(5) .stat-icon svg { stroke: #ff4444; } /* YouTube - red */
+        .item:nth-child(6) .stat-icon svg { stroke: #ff0050; } /* TikTok - pink */
+        .item:nth-child(7) .stat-icon svg { stroke: #e1306c; } /* Instagram */
 
-        /* === TAGS === */
         .tag-list {
             display: flex;
             flex-wrap: wrap;
@@ -320,13 +462,12 @@
             transition: all 0.25s;
         }
         .tag:hover {
-            border-color: rgba(255,255,255,0.15);
-            color: rgba(255,255,255,0.8);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border-color: rgba(120,80,255,0.2);
+            color: rgba(255,255,255,0.9);
+            background: rgba(120,80,255,0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 20px rgba(120,80,255,0.04);
         }
 
-        /* === BIO === */
         .bio-item {
             display: flex;
             justify-content: space-between;
@@ -355,7 +496,6 @@
             box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
         }
 
-        /* === DOWNLOAD === */
         .btn-group {
             display: flex;
             flex-direction: column;
@@ -370,7 +510,7 @@
             align-items: center;
             gap: 10px;
             padding: 12px 20px;
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.06);
             color: rgba(255,255,255,0.8);
@@ -388,10 +528,13 @@
         .btn:hover {
             border-color: rgba(255,255,255,0.15);
             background: rgba(255,255,255,0.06);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
             box-shadow:
                 inset 0 1px 0 rgba(255,255,255,0.06),
                 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
         }
         .btn svg {
             width: 15px;
@@ -402,6 +545,10 @@
             stroke-linecap: round;
             stroke-linejoin: round;
             pointer-events: none;
+            transition: stroke 0.25s;
+        }
+        .btn:hover svg {
+            stroke: rgba(180, 140, 255, 0.9);
         }
         .btn .hint {
             color: rgba(255,255,255,0.2);
@@ -409,14 +556,13 @@
             font-size: 11px;
         }
 
-        /* === AVATAR MODAL === */
         #avatar-modal {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 200;
             justify-content: center;
             align-items: center;
@@ -441,8 +587,8 @@
             animation: zoomIn 0.3s cubic-bezier(0.2, 0, 0, 1);
         }
         @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { scale: 0.8; opacity: 0; }
+            to { scale: 1; opacity: 1; }
         }
         .avatar-close {
             position: absolute;
@@ -460,7 +606,6 @@
             .avatar-full { width: 80vw; height: 80vw; max-width: 80vw; max-height: 80vw; border-radius: 16px; }
         }
 
-        /* === MODAL === */
         #modal {
             display: none;
             position: fixed;
@@ -480,7 +625,7 @@
             background: rgba(18, 18, 22, 0.85);
             backdrop-filter: blur(30px) saturate(1.2);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
+            border-radius: var(--radius);
             padding: 28px;
             width: 300px;
             box-shadow: 0 40px 100px rgba(0,0,0,0.5);
@@ -510,7 +655,6 @@
         }
         .modal-close:hover { color: rgba(255,255,255,0.4); }
 
-        /* === FOOTER === */
         .footer {
             grid-column: 1 / -1;
             text-align: center;
@@ -520,12 +664,31 @@
             border-top: 1px solid rgba(255,255,255,0.04);
             letter-spacing: 0.5px;
         }
+        .footer span {
+            transition: color 0.2s;
+        }
+        .footer span:hover {
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* === NOISE === */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.015;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
 
         /* === RESPONSIVE === */
         @media (max-width: 900px) {
             body { padding: 20px 12px; }
             .bento { gap: 12px; grid-template-columns: 1fr 1fr; }
             .col-2, .col-3, .col-4 { grid-column: span 2; }
+            .item { padding: 24px 20px; }
             .timer-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -533,46 +696,47 @@
                 max-width: 220px;
             }
             .timer-sep { display: none; }
-            .timer-num { font-size: 26px; }
+            .timer-num { font-size: 28px; }
             .timer-unit { min-width: unset; }
         }
         @media (max-width: 540px) {
-            body { padding: 25px; display: flex; flex-direction: column; min-height: 100dvh; }
-            .bento { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+            body { padding: 24px 20px; display: flex; flex-direction: column; min-height: 100dvh; }
+            .bento { display: flex; flex-direction: column; gap: 12px; flex: 1; }
             .col-2, .col-3, .col-4 { grid-column: unset; }
-            .item { padding: 16px; border-radius: 12px; order: 2; }
+            .item { padding: 20px 18px; border-radius: 14px; order: 2; }
             .item.note-card { height: 200px; min-height: 200px; width: 100%; max-width: 100%; overflow: hidden; align-self: stretch !important; }
             .footer { order: 3; margin-top: auto; }
             .item-label { font-size: 9px; letter-spacing: 1.2px; margin-bottom: 10px; }
             .timer-grid { gap: 4px 14px; max-width: 190px; }
-            .timer-num { font-size: 22px; }
+            .timer-num { font-size: 24px; }
             .timer-label { font-size: 8px; letter-spacing: 0.5px; }
-            .stat-big { font-size: 20px; }
-            .stat-icon { font-size: 14px; top: 12px; right: 14px; }
+            .stat-big { font-size: 22px; }
+            .stat-icon { top: 12px; right: 14px; }
+            .stat-icon svg { width: 18px; height: 18px; }
             .tag { font-size: 10px; padding: 4px 10px; }
             .bio-item { font-size: 12px; max-width: 100%; padding: 8px 0; }
             .btn { font-size: 12px; padding: 10px 14px; border-radius: 8px; }
             .btn svg { width: 13px; height: 13px; }
-            .profile-info h1 { font-size: 17px; }
+            .profile-info h1 { font-size: 18px; }
             .profile-info .sub { font-size: 12px; }
-            .avatar { width: 60px; height: 60px; }
-            .social-link { width: 28px; height: 28px; border-radius: 25%; }
+            .avatar { width: 64px; height: 64px; }
+            .social-link { width: 30px; height: 30px; border-radius: 25%; }
             .social-strip img { width: 13px; height: 13px; }
             .profile-wrap { gap: 10px; }
             .profile-card { order: 0; }
             .timer-card { order: 1; }
             .stat-sub { font-size: 10px; }
-            .modal-box { width: calc(100vw - 32px); padding: 24px 20px; border-radius: 12px; }
+            .modal-box { width: calc(100vw - 32px); padding: 24px 20px; border-radius: 14px; }
             .modal-box h3 { font-size: 11px; margin-bottom: 16px; }
             .footer { font-size: 9px; padding: 14px 0 0; letter-spacing: 0; }
         }
         @media (max-width: 400px) {
-            body { padding: 20px; }
-            .bento { gap: 8px; }
-            .item { padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); }
+            body { padding: 16px; }
+            .bento { gap: 10px; }
+            .item { padding: 16px 14px; border-radius: 12px; }
             .timer-grid { gap: 2px 10px; max-width: 160px; }
-            .timer-num { font-size: 19px; }
-            .stat-big { font-size: 18px; }
+            .timer-num { font-size: 20px; }
+            .stat-big { font-size: 19px; }
             .btn { font-size: 11px; padding: 9px 12px; }
         }
         .note-scroll::-webkit-scrollbar { display: none; }
@@ -581,13 +745,15 @@
 <body>
 
 <div class="bg-glow"></div>
+<div class="bg-glow-2"></div>
+<div class="noise"></div>
 
 
 <div class="bento">
 
     <!-- TIMER 2 cols -->
     <div class="item col-2 timer-card" style="animation-delay:0.05s">
-        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Uptime</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Uptime</div>
         <div class="timer-grid">
             <div class="timer-unit">
                 <div class="timer-num" id="days">00</div>
@@ -610,7 +776,7 @@
             </div>
         </div>
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);width:100%;">
-            <div class="item-label" style="margin-bottom:10px;text-align:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M12 2v4M6 10l12 2-2 10H8L6 10z"/><circle cx="12" cy="6" r="1.5"/></svg> Next Birthday</div>
+            <div class="item-label" style="margin-bottom:10px;text-align:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M6 10l12 2-2 10H8L6 10z"/><circle cx="12" cy="6" r="1.5"/></svg> Next Birthday</div>
             <div class="timer-grid" style="margin:0 auto;">
                 <div class="timer-unit">
                     <div class="timer-num" id="bdays">00</div>
@@ -659,7 +825,7 @@
 
     <!-- INFO -->
     <div class="item" style="animation-delay:0.15s">
-        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Info</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Info</div>
         <div class="bio-item">
             <span class="key">Age</span>
             <span class="val" id="age-display">—</span>
@@ -676,7 +842,7 @@
 
     <!-- EXPERTISE 2 cols -->
     <div class="item col-2" style="animation-delay:0.2s">
-        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Expertise</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Expertise</div>
         <div class="tag-list">
             <span class="tag">ADB &amp; Android</span>
             <span class="tag">Video Effects</span>
@@ -692,7 +858,7 @@
     <div class="item" style="animation-delay:0.25s">
         <div class="stat-row">
             <div>
-                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="2" ry="2"/></svg> YouTube</div>
+                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="2" ry="2"/></svg> YouTube</div>
                 <div class="stat-big">1.31K <span class="unit">subs</span></div>
                 <div class="stat-sub">Joined May 2021</div>
             </div>
@@ -704,7 +870,7 @@
     <div class="item" style="animation-delay:0.3s">
         <div class="stat-row">
             <div>
-                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> TikTok</div>
+                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> TikTok</div>
                 <div class="stat-big">1 <span class="unit">follower</span></div>
                 <div class="stat-sub">Joined May 2026</div>
                 <div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,0.12);">New account</div>
@@ -717,7 +883,7 @@
     <div class="item" style="animation-delay:0.35s">
         <div class="stat-row">
             <div>
-                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram</div>
+                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram</div>
                 <div class="stat-big">102 <span class="unit">followers</span></div>
                 <div class="stat-sub">Joined Jul 2022</div>
             </div>
@@ -727,7 +893,7 @@
 
     <!-- DOWNLOAD 2 cols -->
     <div class="item col-2" style="animation-delay:0.4s">
-        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Downloads</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Downloads</div>
         <div class="btn-group">
             <div class="btn" onclick="window.open('KMH.apk', '_self')">
                 <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -742,7 +908,7 @@
 
     <!-- NOTE -->
     <div class="item note-card" style="animation-delay:0.45s;align-self:flex-start;">
-        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;vertical-align:middle;margin-right:4px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Note</div>
+        <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Note</div>
         <div style="width:100%;height:145px;min-height:145px;overflow-y:auto;overflow-x:hidden;padding-right:0;scrollbar-width:none;flex-shrink:0;" class="note-scroll">
             <p id="typewriter" style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.8;text-align:left;width:100%;margin:0;"></p>
         </div>
@@ -881,6 +1047,38 @@
     document.onkeydown = e => {
         if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 67, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85)) return false;
     };
+
+    // === 3D TILT ===
+    document.querySelectorAll('.item').forEach(card => {
+        const shine = document.createElement('div');
+        shine.className = 'shine';
+        card.appendChild(shine);
+        const shadow = document.createElement('div');
+        shadow.className = 'shadow-fx';
+        card.appendChild(shadow);
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+            const rotX = ((y - cy) / cy) * -6;
+            const rotY = ((x - cx) / cx) * 6;
+            card.style.setProperty('--rx', rotX + 'deg');
+            card.style.setProperty('--ry', rotY + 'deg');
+            card.style.setProperty('--tz', '15px');
+            card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(0px)`;
+            card.style.animationPlayState = 'paused';
+            const sx = ((x - cx) / cx) * 8;
+            const sy = ((y - cy) / cy) * 8;
+            shadow.style.transform = `translate(${sx}px, ${sy + 6}px) scale(1.05)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+            card.style.animationPlayState = '';
+            shadow.style.transform = '';
+        });
+    });
 </script>
 </body>
 </html>
