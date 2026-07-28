@@ -9,9 +9,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
         :root {
-            --bg: #050508;
+            --bg: #000000;
             --text: #f0f0f0;
-            --card-bg: rgba(14, 14, 20, 0.5);
+            --card-bg: rgba(10, 10, 16, 0.55);
             --card-border: rgba(255, 255, 255, 0.05);
             --card-border-hover: rgba(255, 255, 255, 0.12);
             --glass-blur: blur(28px);
@@ -22,6 +22,7 @@
             --radius-sm: 10px;
             --shadow-1: 0 1px 3px rgba(0,0,0,0.3);
             --shadow-2: 0 24px 80px rgba(0,0,0,0.4);
+            color-interpolation-filters: sRGB;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; scrollbar-width: none; -ms-overflow-style: none; }
@@ -30,6 +31,10 @@
         body {
             min-height: 100vh;
             background: var(--bg);
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 40px 40px;
             color: var(--text);
             font-family: 'Inter', sans-serif;
             display: flex;
@@ -71,7 +76,6 @@
             translate: -50% -50%;
             pointer-events: none;
             z-index: 0;
-            animation: breath 7s ease-in-out infinite;
         }
         .bg-glow-2 {
             position: fixed;
@@ -84,11 +88,6 @@
             translate: -50% -50%;
             pointer-events: none;
             z-index: 0;
-            animation: breath 9s ease-in-out infinite reverse;
-        }
-        @keyframes breath {
-            0%, 100% { scale: 1; opacity: 0.4; }
-            50% { scale: 1.4; opacity: 0.9; }
         }
 
         .bento {
@@ -99,15 +98,7 @@
             gap: 16px;
             position: relative;
             z-index: 1;
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             margin: auto;
-            perspective: 1200px;
-            transform-style: preserve-3d;
-        }
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .item {
@@ -117,11 +108,8 @@
             border: 1px solid var(--card-border);
             border-radius: var(--radius);
             padding: 28px 24px;
-            transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.4s cubic-bezier(0.2, 0, 0, 1), border-color 0.4s, background 0.4s;
             position: relative;
             overflow: hidden;
-            animation: float 5s cubic-bezier(0.45, 0, 0.25, 1) infinite;
-            translate: 0 0;
             box-shadow:
                 0 2px 8px rgba(0,0,0,0.25),
                 0 20px 60px rgba(0,0,0,0.35),
@@ -130,117 +118,20 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            transform-style: preserve-3d;
-            will-change: transform, translate;
+            transition: transform 0.2s ease;
         }
-
-        .item:nth-child(2) { animation-delay: -0.8s; }
-        .item:nth-child(3) { animation-delay: -1.6s; }
-        .item:nth-child(4) { animation-delay: -0.4s; }
-        .item:nth-child(5) { animation-delay: -2.0s; }
-        .item:nth-child(6) { animation-delay: -1.0s; }
-        .item:nth-child(7) { animation-delay: -2.4s; }
-        .item:nth-child(8) { animation-delay: -0.2s; }
-        .item:nth-child(9) { animation-delay: -2.8s; }
-
-        @keyframes float {
-            0%, 100% { translate: 0 0; }
-            50% { translate: 0 -6px; }
+        .item:hover {
+            animation: cardBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-
-        .item > * {
-            transform-style: preserve-3d;
+        @keyframes cardBounce {
+            0% { transform: translateY(-4px); }
+            40% { transform: translateY(2px); }
+            70% { transform: translateY(-2px); }
+            100% { transform: translateY(-3px); }
         }
 
         .item-label, .timer-num, .stat-big, .profile-info h1 {
-            transform: translateZ(12px);
-        }
-        .tag, .btn {
-            transform: translateZ(6px);
-        }
-
-        .item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%, transparent 80%, rgba(255,255,255,0.02) 100%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.5s;
-            z-index: 0;
-        }
-        .item:hover::before { opacity: 1; }
-
-        .item::after {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: var(--radius);
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(139,92,246,0.12), transparent 35%, transparent 65%, rgba(6,182,212,0.08));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        .item:hover::after { opacity: 1; }
-
-        .item .shine {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-            border-radius: var(--radius);
-        }
-        .item .shine::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-            animation: shine 5s ease-in-out infinite;
-        }
-        @keyframes shine {
-            0% { left: -100%; }
-            15% { left: 150%; }
-            100% { left: 150%; }
-        }
-
-        .shadow-fx {
-            position: absolute;
-            bottom: -24px;
-            left: 5%;
-            width: 90%;
-            height: 30px;
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.5s, transform 0.4s;
-            filter: blur(12px);
-            border-radius: 50%;
-        }
-        .item:hover .shadow-fx {
-            opacity: 1;
-            transform: translateY(6px) scale(1.08);
-        }
-
-        .item:hover {
-            animation-play-state: paused;
-            border-color: var(--card-border-hover);
-            background: rgba(16, 16, 24, 0.6);
-            transform: translateY(-3px) translateZ(24px);
-            box-shadow:
-                0 4px 16px rgba(0,0,0,0.3),
-                0 30px 80px rgba(0,0,0,0.45),
-                0 0 60px rgba(139,92,246,0.05),
-                inset 0 1px 0 rgba(255,255,255,0.06);
+            font-weight: 600;
         }
 
         .item-label {
@@ -263,10 +154,6 @@
             width: 14px;
             height: 14px;
             stroke: rgba(255,255,255,0.35);
-            transition: stroke 0.3s;
-        }
-        .item:hover .item-label svg {
-            stroke: rgba(167, 139, 250, 0.8);
         }
 
         .col-2 { grid-column: span 2; }
@@ -287,15 +174,25 @@
             height: 80px;
             border-radius: 50%;
             background-size: cover;
+            background-position: center;
             flex-shrink: 0;
             border: 2px solid rgba(255,255,255,0.1);
             box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.04);
-            transition: border 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        .avatar:hover {
-            border-color: rgba(167,139,250,0.3);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 50px rgba(139,92,246,0.12);
+        .avatar-slide {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .avatar-slide.active {
+            opacity: 1;
         }
 
         .profile-info h1 {
@@ -338,28 +235,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s;
             background: rgba(255,255,255,0.02);
             cursor: pointer;
+            transition: transform 0.1s;
         }
-        .social-link:hover {
-            transform: translateY(-3px);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        .social-link:active {
+            transform: scale(0.92);
         }
         .social-strip img {
             width: 16px;
             height: 16px;
             opacity: 0.35;
-            transition: opacity 0.25s;
             pointer-events: none;
         }
-        .social-link:hover img { opacity: 0.9; }
-        .social-row:nth-child(1) .social-link:nth-child(1):hover { border-color: #ff0033; box-shadow: 0 4px 20px rgba(255,0,51,0.2); }
-        .social-row:nth-child(1) .social-link:nth-child(2):hover { border-color: #ff0050; box-shadow: 0 4px 20px rgba(255,0,80,0.2); }
-        .social-row:nth-child(1) .social-link:nth-child(3):hover { border-color: #e1306c; box-shadow: 0 4px 20px rgba(225,48,108,0.2); }
-        .social-row:nth-child(2) .social-link:nth-child(1):hover { border-color: #c9d1d9; box-shadow: 0 4px 20px rgba(255,255,255,0.08); }
-        .social-row:nth-child(2) .social-link:nth-child(2):hover { border-color: #1877f2; box-shadow: 0 4px 20px rgba(24,119,242,0.2); }
 
         .timer-grid {
             display: flex;
@@ -435,10 +323,6 @@
             width: 24px;
             height: 24px;
             opacity: 0.4;
-            transition: all 0.3s;
-        }
-        .item:hover .stat-icon svg {
-            opacity: 0.85;
         }
         .item:nth-child(5) .stat-icon svg { stroke: #ff0033; } /* YouTube */
         .item:nth-child(6) .stat-icon svg { stroke: #ff0050; } /* TikTok */
@@ -459,13 +343,6 @@
             border: 1px solid rgba(139,92,246,0.08);
             font-size: 12px;
             color: rgba(255,255,255,0.4);
-            transition: all 0.25s;
-        }
-        .tag:hover {
-            border-color: rgba(139,92,246,0.2);
-            color: rgba(255,255,255,0.9);
-            background: rgba(139,92,246,0.08);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 30px rgba(139,92,246,0.04);
         }
 
         .bio-item {
@@ -518,24 +395,25 @@
             font-size: 13px;
             font-weight: 500;
             font-family: 'Inter', sans-serif;
-            transition: all 0.25s;
             cursor: pointer;
             width: 100%;
             justify-content: center;
             backdrop-filter: blur(10px);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+            transition: transform 0.2s;
         }
         .btn:hover {
-            border-color: rgba(139,92,246,0.2);
-            background: rgba(139,92,246,0.08);
-            transform: translateY(-2px);
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.06),
-                0 8px 30px rgba(0,0,0,0.3),
-                0 0 30px rgba(139,92,246,0.04);
+            transform: scale(1.06);
+            animation: btnBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
         .btn:active {
-            transform: translateY(0);
+            transform: scale(0.96);
+        }
+        @keyframes btnBounce {
+            0% { transform: scale(1.06); }
+            40% { transform: scale(0.97); }
+            70% { transform: scale(1.03); }
+            100% { transform: scale(1.04); }
         }
         .btn svg {
             width: 15px;
@@ -546,10 +424,6 @@
             stroke-linecap: round;
             stroke-linejoin: round;
             pointer-events: none;
-            transition: stroke 0.25s;
-        }
-        .btn:hover svg {
-            stroke: rgba(167, 139, 250, 0.9);
         }
         .btn .hint {
             color: rgba(255,255,255,0.15);
@@ -580,31 +454,21 @@
             height: 60vh;
             max-width: 500px;
             max-height: 500px;
-            border-radius: 20px;
+            border-radius: 50%;
             background-size: cover;
             background-position: center;
             border: 1px solid rgba(167,139,250,0.15);
             box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 60px rgba(139,92,246,0.06);
+            transition: background-image 0.8s ease;
             animation: zoomIn 0.3s cubic-bezier(0.2, 0, 0, 1);
         }
         @keyframes zoomIn {
             from { scale: 0.8; opacity: 0; }
             to { scale: 1; opacity: 1; }
         }
-        .avatar-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: rgba(255,255,255,0.3);
-            font-size: 22px;
-            cursor: pointer;
-            transition: color 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .avatar-close:hover { color: rgba(255,255,255,0.7); }
 
         @media (max-width: 600px) {
-            .avatar-full { width: 80vw; height: 80vw; max-width: 80vw; max-height: 80vw; border-radius: 16px; }
+            .avatar-full { width: 80vw; height: 80vw; max-width: 80vw; max-height: 80vw; border-radius: 50%; }
         }
 
         #modal {
@@ -756,7 +620,7 @@
 <div class="bento">
 
     <!-- TIMER 2 cols -->
-    <div class="item col-2 timer-card" style="animation-delay:0.05s">
+    <div class="item col-2 timer-card" >
         <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Uptime</div>
         <div class="timer-grid">
             <div class="timer-unit">
@@ -806,9 +670,12 @@
     </div>
 
     <!-- PROFILE -->
-    <div class="item profile-card" style="animation-delay:0.1s">
+    <div class="item profile-card">
         <div class="profile-wrap">
-            <div class="avatar" style="background-image: url('20260531_171147.jpg');cursor:pointer;" onclick="openAvatar()"></div>
+            <div class="avatar" onclick="openAvatar()">
+                <div class="avatar-slide active" style="background-image: url('1778995068748.jpg')"></div>
+                <div class="avatar-slide" style="background-image: url('1781878817675.jpg')"></div>
+            </div>
             <div class="profile-info">
                 <h1>SEEN</h1>
                 <div class="sub">Natthanan <span>Treetos</span></div>
@@ -828,7 +695,7 @@
     </div>
 
     <!-- INFO -->
-    <div class="item" style="animation-delay:0.15s">
+    <div class="item">
         <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Info</div>
         <div class="bio-item">
             <span class="key">Age</span>
@@ -845,7 +712,7 @@
     </div>
 
     <!-- EXPERTISE 2 cols -->
-    <div class="item col-2" style="animation-delay:0.2s">
+    <div class="item col-2">
         <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Expertise</div>
         <div class="tag-list">
             <span class="tag">ADB &amp; Android</span>
@@ -859,44 +726,110 @@
     </div>
 
     <!-- YOUTUBE -->
-    <div class="item" style="animation-delay:0.25s">
+    <div class="item">
         <div class="stat-row">
-            <div>
-                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="4"/><polygon points="8,6 17,12 8,18"/></svg> YouTube</div>
-                <div class="stat-big">1.31K <span class="unit">subs</span></div>
-                <div class="stat-sub">Joined May 2021</div>
-            </div>
-            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="4"/><polygon points="8,6 17,12 8,18"/></svg></div>
+            <div class="yt-card">
+  <div class="yt-card-content">
+    <div class="item-label">
+      <!-- Official YouTube Icon SVG -->
+      <svg class="yt-icon-svg" viewBox="0 0 23.6 16.5">
+        <path fill="#FF0000" d="M22.8,2.6c-0.3-1-1-1.8-2-2.1C19,0,11.8,0,11.8,0S4.6,0,2.8,0.5c-1,0.3-1.7,1.1-2,2.1C0,4.4,0,8.2,0,8.2s0,3.8,0.8,5.6c0.3,1,1,1.8,2,2.1C4.6,16.5,11.8,16.5,11.8,16.5s7.2,0,9-0.5c1-0.3,1.7-1.1,2-2.1C23.6,12,23.6,8.2,23.6,8.2S23.6,4.4,22.8,2.6z"/>
+        <polygon fill="#FFFFFF" points="9.4,11.8 15.5,8.2 9.4,4.7"/>
+      </svg>
+      YouTube
+    </div>
+    <div class="stat-big">1.31K <span class="unit">subs</span></div>
+    <div class="stat-sub">Joined May 2021</div>
+  </div>
+  
+  <div class="stat-icon">
+    <!-- Secondary Watermark/Icon -->
+    <svg class="yt-icon-svg" style="width: 24px; height: 17px;" viewBox="0 0 23.6 16.5">
+      <path fill="#FF0000" d="M22.8,2.6c-0.3-1-1-1.8-2-2.1C19,0,11.8,0,11.8,0S4.6,0,2.8,0.5c-1,0.3-1.7,1.1-2,2.1C0,4.4,0,8.2,0,8.2s0,3.8,0.8,5.6c0.3,1,1,1.8,2,2.1C4.6,16.5,11.8,16.5,11.8,16.5s7.2,0,9-0.5c1-0.3,1.7-1.1,2-2.1C23.6,12,23.6,8.2,23.6,8.2S23.6,4.4,22.8,2.6z"/>
+      <polygon fill="#FFFFFF" points="9.4,11.8 15.5,8.2 9.4,4.7"/>
+    </svg>
+  </div>
+</div>
         </div>
     </div>
 
-    <!-- TIKTOK -->
-    <div class="item" style="animation-delay:0.3s">
-        <div class="stat-row">
-            <div>
-                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><path d="M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M9 5l12-2"/></svg> TikTok</div>
-                <div class="stat-big">1 <span class="unit">follower</span></div>
-                <div class="stat-sub">Joined May 2026</div>
-                <div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,0.12);">New account</div>
+<!-- TIKTOK -->
+<div class="item">
+    <div class="stat-row">
+        <div>
+            <div class="item-label" style="display:flex; align-items:center; gap:6px;">
+                <!-- SVG TikTok Icon หน้าชื่อ -->
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                    <defs>
+                        <filter id="tiktok-glitch-sm" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="-1.2" dy="-0.8" stdDeviation="0" flood-color="#25F4EE"/>
+                            <feDropShadow dx="1.2" dy="0.8" stdDeviation="0" flood-color="#FE2C55"/>
+                        </filter>
+                    </defs>
+                    <path fill="#FFFFFF" filter="url(#tiktok-glitch-sm)" d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.901 2.868 2.893 2.893 0 0 1-2.887-2.896 2.893 2.893 0 0 1 2.887-2.895c.294 0 .58.043.85.122V9.382a6.38 6.38 0 0 0-.85-.057A6.338 6.338 0 0 0 3.14 15.663 6.338 6.338 0 0 0 9.473 22a6.338 6.338 0 0 0 6.333-6.337V9.617a8.21 8.21 0 0 0 4.783 1.523v-3.48a4.847 4.847 0 0 1-1.000-.974z"/>
+                </svg> 
+                TikTok
             </div>
-            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><path d="M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M9 5l12-2"/></svg></div>
+            <div class="stat-big">1 <span class="unit">follower</span></div>
+            <div class="stat-sub">Joined May 2026</div>
+            <div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,0.12);">New account</div>
+        </div>
+
+        <!-- ไอคอนขวาใหญ่ (Background Icon) -->
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24">
+                <defs>
+                    <filter id="tiktok-glitch-lg" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="-1" dy="-0.6" stdDeviation="0" flood-color="#25F4EE" flood-opacity="0.8"/>
+                        <feDropShadow dx="1" dy="0.6" stdDeviation="0" flood-color="#FE2C55" flood-opacity="0.8"/>
+                    </filter>
+                </defs>
+                <path fill="#FFFFFF" filter="url(#tiktok-glitch-lg)" d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.901 2.868 2.893 2.893 0 0 1-2.887-2.896 2.893 2.893 0 0 1 2.887-2.895c.294 0 .58.043.85.122V9.382a6.38 6.38 0 0 0-.85-.057A6.338 6.338 0 0 0 3.14 15.663 6.338 6.338 0 0 0 9.473 22a6.338 6.338 0 0 0 6.333-6.337V9.617a8.21 8.21 0 0 0 4.783 1.523v-3.48a4.847 4.847 0 0 1-1.000-.974z"/>
+            </svg>
         </div>
     </div>
+</div>
 
-    <!-- INSTAGRAM -->
-    <div class="item" style="animation-delay:0.35s">
-        <div class="stat-row">
-            <div>
-                <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram</div>
-                <div class="stat-big">102 <span class="unit">followers</span></div>
-                <div class="stat-sub">Joined Jul 2022</div>
+<!-- INSTAGRAM -->
+<div class="item">
+    <div class="stat-row">
+        <div>
+            <div class="item-label">
+                <svg width="14" height="14" viewBox="0 0 24 24">
+                    <defs>
+                        <radialGradient id="ig-grad-sm" cx="30%" cy="107%" r="130%">
+                            <stop offset="0%" stop-color="#fdf497"/>
+                            <stop offset="5%" stop-color="#fdf497"/>
+                            <stop offset="45%" stop-color="#fd5949"/>
+                            <stop offset="60%" stop-color="#d6249f"/>
+                            <stop offset="90%" stop-color="#285AEB"/>
+                        </radialGradient>
+                    </defs>
+                    <path fill="url(#ig-grad-sm)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg> Instagram
             </div>
-            <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+            <div class="stat-big">102 <span class="unit">followers</span></div>
+            <div class="stat-sub">Joined Jul 2022</div>
+        </div>
+        <div class="stat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+                <defs>
+                    <radialGradient id="ig-grad-bg" cx="30%" cy="107%" r="130%">
+                        <stop offset="0%" stop-color="#fdf497"/>
+                        <stop offset="5%" stop-color="#fdf497"/>
+                        <stop offset="45%" stop-color="#fd5949"/>
+                        <stop offset="60%" stop-color="#d6249f"/>
+                        <stop offset="90%" stop-color="#285AEB"/>
+                    </radialGradient>
+                </defs>
+                <path fill="url(#ig-grad-bg)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
         </div>
     </div>
+</div>
 
-    <!-- DOWNLOAD 2 cols -->
-    <div class="item col-2" style="animation-delay:0.4s">
+    <!-- NOTE -->
+    <div class="item">
         <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Downloads</div>
         <div class="btn-group">
             <div class="btn" onclick="window.open('KMH.apk', '_self')">
@@ -910,11 +843,11 @@
         </div>
     </div>
 
-    <!-- NOTE -->
-    <div class="item note-card" style="animation-delay:0.45s;align-self:flex-start;">
+    <!-- DOWNLOAD 2 cols -->
+    <div class="item col-2">
         <div class="item-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Note</div>
-        <div style="width:100%;height:145px;min-height:145px;overflow-y:auto;overflow-x:hidden;padding-right:0;scrollbar-width:none;flex-shrink:0;" class="note-scroll">
-            <p id="typewriter" style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.8;text-align:left;width:100%;margin:0;"></p>
+        <div style="width:100%;height:180px;min-height:180px;overflow-y:auto;overflow-x:hidden;padding-right:4px;scrollbar-width:none;flex-shrink:0;" class="note-scroll">
+            <p id="typewriter" style="font-size:13px;color:rgba(255,255,255,0.55);line-height:0;text-align:left;width:100%;margin:0;white-space:pre-wrap;"></p>
         </div>
     </div>
 
@@ -925,8 +858,7 @@
 <!-- AVATAR MODAL -->
 <div id="avatar-modal" onclick="closeAvatar()">
     <div class="avatar-overlay">
-        <div class="avatar-full" style="background-image: url('20260531_171147.jpg');"></div>
-        <div class="avatar-close" onclick="closeAvatar()">✕</div>
+        <div class="avatar-full" id="avatar-full" style="background-image: url('1778995068748.jpg');"></div>
     </div>
 </div>
 
@@ -947,66 +879,67 @@
 </div>
 
 <script>
-    const typewriterText = [
-        "สวัสดีผมชื่อ SEEN คุณเข้าเว็บนี้มาโหลดอะไรรึป่าว ข้างๆผมมีดาวน์โหลดอยู่อะ และมันไม่ได้มีไวรัส โหลดกันได้เป็น แอปออฟไลน์ 100% ตามจริงผมไว้ ใช้เองแต่ถ้าเข้ามาดูก็ ลองโหลดใช้ได้ ผมเขียน นี้เมื่อ วันอาทิตย์ที่ 5 กรกฎา 2026 ในอนาคต ผม อยากเป็น ครู ตอนผมโตผมก็ไม่รู้ว่าผมจะได้เป็นไหน แต่ขอให้ได้เป็นเถอะ ผมซื้อคอมนี้ตอน ม.3 มาประกอบ",
-        "SPECIFICATION:",
-        "——————————",
-        "• CPU : INTEL I5-3470 3.2GHZ x1",
-        "• MB  : DELL 0YXT71 x1",
-        "• RAM : DDR3 4GB x1",
-        "• HDD : 500GB x1",
-        "• CASE : OPTIPLEX 7010 x1",
-        "———— ฿1,232 ———",
-        "• GPU : R7 250X 1GB x1",
-        "———— ฿580 ————",
-        "• DDR3 8GB 1600MHz = PC3-12800 x2",
-        "———— ฿392 ————",
-    ];
+    // จัดรูปแบบ HTML สำหรับเนื้อหา Note ให้สวยงาม โดยไม่เปลี่ยนเนื้อหาดั้งเดิม
+    const noteHTML = `
+        <div style="font-family: 'JetBrains Mono', 'Inter', monospace; font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.5; text-align: left; display: block;">
+            <p style="margin: 0 0 6px 0; font-size: 14px; font-weight: 600; color: #fff;">
+                สวัสดี ผมชื่อ <span style="color: var(--accent-purple);">SEEN</span>
+            </p>
+            
+            <p style="margin: 0 0 4px 0;">คุณเข้ามาในเว็บนี้เพื่อโหลดอะไรหรือเปล่า?</p>
+            <p style="margin: 0 0 4px 0; color: rgba(255,255,255,0.85);">
+                ข้างๆ กันนี้มีปุ่มดาวน์โหลดอยู่ — <span style="color: #4ade80;">ไม่มีไวรัสแน่นอน</span>
+            </p>
+            <p style="margin: 0 0 4px 0;">เป็นแอปออฟไลน์ 100% ผมเขียนไว้ใช้เอง</p>
+            <p style="margin: 0 0 10px 0;">แต่ถ้าเข้ามาเห็นก็ลองโหลดไปใช้ได้เลย</p>
 
-    const el = document.getElementById('typewriter');
-    const scrollBox = el.parentElement;
-    let lineIdx = 0, charIdx = 0;
-    let autoScroll = true;
+            <div style="margin: 10px 0; padding: 6px 12px; background: rgba(255,255,255,0.03); border-left: 2px solid var(--accent-purple); border-radius: 4px; font-size: 11px; color: rgba(255,255,255,0.4);">
+                เขียนเมื่อ: วันอาทิตย์ที่ 5 กรกฎาคม 2026
+            </div>
 
-    scrollBox.addEventListener('wheel', () => { autoScroll = false; });
-    scrollBox.addEventListener('touchstart', () => { autoScroll = false; });
-    scrollBox.addEventListener('scroll', () => {
-        if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 5) {
-            autoScroll = true;
-        }
-    });
+            <p style="margin: 0 0 4px 0;">ในอนาคตผมอยากเป็น <strong style="color: #fff; font-weight: 700;">ครู</strong></p>
+            <p style="margin: 0 0 10px 0;">ตอนโตขึ้นไม่รู้ว่าจะได้เป็นไหม แต่ขอให้ได้เป็นเถอะ</p>
 
-    function buildHTML() {
-        let html = '';
-        for (let i = 0; i < typewriterText.length; i++) {
-            if (i < lineIdx) {
-                html += escHTML(typewriterText[i]) + '<br>';
-            } else if (i === lineIdx) {
-                html += escHTML(typewriterText[i].substring(0, charIdx));
-                break;
-            }
-        }
-        el.innerHTML = html;
-    }
-    function escHTML(s) {
-        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    }
-    function type() {
-        if (lineIdx >= typewriterText.length) return;
-        const line = typewriterText[lineIdx];
-        if (charIdx < line.length) {
-            charIdx++;
-            buildHTML();
-            if (autoScroll) scrollBox.scrollTop = scrollBox.scrollHeight;
-            setTimeout(type, 40 + Math.random() * 50);
-        } else {
-            lineIdx++;
-            charIdx = 0;
-            if (autoScroll) scrollBox.scrollTop = scrollBox.scrollHeight;
-            setTimeout(type, 400);
-        }
-    }
-    setTimeout(type, 100);
+            <p style="margin: 0 0 10px 0; color: rgba(255,255,255,0.6);">
+                คอมพิวเตอร์เครื่องนี้ซื้อตอน <span style="color: var(--accent-cyan);">ม.3</span> มาประกอบเอง
+            </p>
+
+            <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; margin-top: 8px;">
+                <div style="font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-align: center; margin-bottom: 10px; font-weight: 600;">
+                    ─── SPECIFICATION ───
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">CPU</span> <span>INTEL I5-3470 3.2GHZ <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">MB</span> <span>DELL 0YXT71 <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">RAM</span> <span>DDR3 4GB <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">HDD</span> <span>500GB <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">CASE</span> <span>OPTIPLEX 7010 <span style="color: var(--accent-purple);">x1</span></span></div>
+                    
+                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 11px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                        รวม ฿1,232
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">GPU</span> <span>R7 250X 1GB <span style="color: var(--accent-purple);">x1</span></span></div>
+                    
+                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 11px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                        รวม ฿580
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <span style="color: rgba(255,255,255,0.35);">RAM</span> 
+                        <span>DDR3 8GB 1600MHz = PC3-12800 <span style="color: var(--accent-purple);">x2</span></span>
+                    </div>
+                    
+                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 11px;">
+                        รวม ฿392
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('typewriter').innerHTML = noteHTML;
 
     function update() {
         const birth = new Date(2010, 3, 26);
@@ -1047,71 +980,24 @@
     function openAvatar() { document.getElementById('avatar-modal').classList.add('active'); }
     function closeAvatar() { document.getElementById('avatar-modal').classList.remove('active'); }
 
-    // === AUDIO BG ===
-    var bgAudio = new Audio();
-    bgAudio.src = 'Shine  Progressive House.mp3';
-    bgAudio.loop = true;
-    bgAudio.volume = 0.05;
-
-    function startBg() {
-        bgAudio.play().catch(function(e) {});
-
-        // Pulsing glow via JS rAF (no AudioContext needed)
-        var card = document.querySelector('.profile-card');
-        var start = performance.now();
-        var base = '0 2px 8px rgba(0,0,0,0.25), 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)';
-
-        (function pulse() {
-            var t = (performance.now() - start) / 1000;
-            var v = Math.sin(t * 1.2) * 0.35 + Math.sin(t * 2.7) * 0.25 + Math.sin(t * 5.1) * 0.1 + 0.5;
-            v = Math.max(0, Math.min(1, v));
-            var s1 = 5 + v * 50;
-            var o1 = 0.02 + v * 0.2;
-            var s2 = 15 + v * 80;
-            var o2 = 0.01 + v * 0.07;
-            card.style.boxShadow = base + ', 0 0 ' + s1 + 'px rgba(139,92,246,' + o1 + '), 0 0 ' + s2 + 'px rgba(6,182,212,' + o2 + ')';
-            requestAnimationFrame(pulse);
-        })();
-    }
-    document.addEventListener('click', startBg, {once: true});
-    document.addEventListener('touchstart', startBg, {once: true});
-
     document.oncontextmenu = e => e.preventDefault();
     document.onkeydown = e => {
         if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 67, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85)) return false;
     };
 
-    // === 3D TILT ===
-    document.querySelectorAll('.item').forEach(card => {
-        const shine = document.createElement('div');
-        shine.className = 'shine';
-        card.appendChild(shine);
-        const shadow = document.createElement('div');
-        shadow.className = 'shadow-fx';
-        card.appendChild(shadow);
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const cx = rect.width / 2;
-            const cy = rect.height / 2;
-            const rotX = ((y - cy) / cy) * -6;
-            const rotY = ((x - cx) / cx) * 6;
-            card.style.setProperty('--rx', rotX + 'deg');
-            card.style.setProperty('--ry', rotY + 'deg');
-            card.style.setProperty('--tz', '15px');
-            card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(0px)`;
-            card.style.animationPlayState = 'paused';
-            const sx = ((x - cx) / cx) * 8;
-            const sy = ((y - cy) / cy) * 8;
-            shadow.style.transform = `translate(${sx}px, ${sy + 6}px) scale(1.05)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-            card.style.animationPlayState = '';
-            shadow.style.transform = '';
-        });
-    });
+    // Avatar slideshow
+    (function() {
+        var images = ['1778995068748.jpg', '1781878817675.jpg'];
+        var slides = document.querySelectorAll('.avatar-slide');
+        var full = document.getElementById('avatar-full');
+        var current = 0;
+        setInterval(function() {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+            full.style.backgroundImage = "url('" + images[current] + "')";
+        }, 3000);
+    })();
 </script>
 </body>
 </html>
