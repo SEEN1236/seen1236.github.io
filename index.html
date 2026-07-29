@@ -881,57 +881,57 @@
 <script>
     // จัดรูปแบบ HTML สำหรับเนื้อหา Note ให้สวยงาม โดยไม่เปลี่ยนเนื้อหาดั้งเดิม
     const noteHTML = `
-        <div style="font-family: 'JetBrains Mono', 'Inter', monospace; font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.5; text-align: left; display: block;">
-            <p style="margin: 0 0 6px 0; font-size: 14px; font-weight: 600; color: #fff;">
+        <div style="font-family: 'JetBrains Mono', 'Inter', monospace; font-size: 14px; color: rgba(255,255,255,0.8); line-height: 0.4; text-align: left; display: block;">
+            <p style="margin: 0 0 10px 0; font-size: 15px; font-weight: 600; color: #fff;">
                 สวัสดี ผมชื่อ <span style="color: var(--accent-purple);">SEEN</span>
             </p>
             
-            <p style="margin: 0 0 4px 0;">คุณเข้ามาในเว็บนี้เพื่อโหลดอะไรหรือเปล่า?</p>
-            <p style="margin: 0 0 4px 0; color: rgba(255,255,255,0.85);">
+            <p style="margin: 0 0 6px 0;">คุณเข้ามาในเว็บนี้เพื่อโหลดอะไรหรือเปล่า?</p>
+            <p style="margin: 0 0 6px 0; color: #fff;">
                 ข้างๆ กันนี้มีปุ่มดาวน์โหลดอยู่ — <span style="color: #4ade80;">ไม่มีไวรัสแน่นอน</span>
             </p>
-            <p style="margin: 0 0 4px 0;">เป็นแอปออฟไลน์ 100% ผมเขียนไว้ใช้เอง</p>
-            <p style="margin: 0 0 10px 0;">แต่ถ้าเข้ามาเห็นก็ลองโหลดไปใช้ได้เลย</p>
+            <p style="margin: 0 0 6px 0;">เป็นแอปออฟไลน์ 100% ผมเขียนไว้ใช้เอง</p>
+            <p style="margin: 0 0 14px 0;">แต่ถ้าเข้ามาเห็นก็ลองโหลดไปใช้ได้เลย</p>
 
-            <div style="margin: 10px 0; padding: 6px 12px; background: rgba(255,255,255,0.03); border-left: 2px solid var(--accent-purple); border-radius: 4px; font-size: 11px; color: rgba(255,255,255,0.4);">
+            <div style="margin: 14px 0; padding: 8px 14px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent-purple); border-radius: 4px; font-size: 12px; color: rgba(255,255,255,0.5);">
                 เขียนเมื่อ: วันอาทิตย์ที่ 5 กรกฎาคม 2026
             </div>
 
             <p style="margin: 0 0 4px 0;">ในอนาคตผมอยากเป็น <strong style="color: #fff; font-weight: 700;">ครู</strong></p>
-            <p style="margin: 0 0 10px 0;">ตอนโตขึ้นไม่รู้ว่าจะได้เป็นไหม แต่ขอให้ได้เป็นเถอะ</p>
+            <p style="margin: 0 0 14px 0;">ตอนโตขึ้นไม่รู้ว่าจะได้เป็นไหม แต่ขอให้ได้เป็นเถอะ</p>
 
-            <p style="margin: 0 0 10px 0; color: rgba(255,255,255,0.6);">
+            <p style="margin: 0 0 14px 0; color: rgba(255,255,255,0.7);">
                 คอมพิวเตอร์เครื่องนี้ซื้อตอน <span style="color: var(--accent-cyan);">ม.3</span> มาประกอบเอง
             </p>
 
-            <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; margin-top: 8px;">
-                <div style="font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-align: center; margin-bottom: 10px; font-weight: 600;">
+            <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px; margin-top: 10px; line-height: 1.2;">
+                <div style="font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-align: center; margin-bottom: 12px; font-weight: 600;">
                     ─── SPECIFICATION ───
                 </div>
                 
-                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
-                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">CPU</span> <span>INTEL I5-3470 3.2GHZ <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">MB</span> <span>DELL 0YXT71 <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">RAM</span> <span>DDR3 4GB <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">HDD</span> <span>500GB <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">CASE</span> <span>OPTIPLEX 7010 <span style="color: var(--accent-purple);">x1</span></span></div>
+                <div style="display: flex; flex-direction: column; gap: 7px; font-size: 13px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">CPU</span> <span style="color: #fff;">INTEL I5-3470 3.2GHZ <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">MB</span> <span style="color: #fff;">DELL 0YXT71 <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">RAM</span> <span style="color: #fff;">DDR3 4GB <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">HDD</span> <span style="color: #fff;">500GB <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">CASE</span> <span style="color: #fff;">OPTIPLEX 7010 <span style="color: var(--accent-purple);">x1</span></span></div>
                     
-                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 11px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 12px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.06); padding-bottom: 5px;">
                         รวม ฿1,232
                     </div>
 
-                    <div style="display: flex; justify-content: space-between;"><span style="color: rgba(255,255,255,0.35);">GPU</span> <span>R7 250X 1GB <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">GPU</span> <span style="color: #fff;">R7 250X 1GB <span style="color: var(--accent-purple);">x1</span></span></div>
                     
-                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 11px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 12px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.06); padding-bottom: 5px;">
                         รวม ฿580
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-                        <span style="color: rgba(255,255,255,0.35);">RAM</span> 
-                        <span>DDR3 8GB 1600MHz = PC3-12800 <span style="color: var(--accent-purple);">x2</span></span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <span style="color: rgba(255,255,255,0.4);">RAM</span> 
+                        <span style="color: #fff;">DDR3 8GB 1600MHz = PC3-12800 <span style="color: var(--accent-purple);">x2</span></span>
                     </div>
                     
-                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 11px;">
+                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 12px;">
                         รวม ฿392
                     </div>
                 </div>
