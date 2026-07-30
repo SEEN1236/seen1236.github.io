@@ -578,7 +578,19 @@
             .timer-unit { min-width: unset; }
         }
         @media (max-width: 540px) {
-            body { padding: 20px 16px; display: flex; flex-direction: column; min-height: 100dvh; }
+            html, body {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto !important;
+                touch-action: pan-y !important;
+            }
+            body { 
+                padding: 20px 16px; 
+                display: flex; 
+                flex-direction: column; 
+                min-height: 100dvh; 
+                overflow: visible !important;
+            }
             .bento { display: flex; flex-direction: column; gap: 12px; flex: 1; }
             .col-2, .col-3, .col-4 { grid-column: unset; }
             .item { padding: 20px 18px; border-radius: 14px; order: 2; }
