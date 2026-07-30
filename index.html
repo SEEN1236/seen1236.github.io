@@ -26,8 +26,22 @@
             color-interpolation-filters: sRGB;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; scrollbar-width: none; -ms-overflow-style: none; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-user-select: none; 
+            user-select: none; 
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
         *::-webkit-scrollbar { display: none; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            touch-action: none;
+        }
 
         body {
             min-height: 100vh;
@@ -42,7 +56,8 @@
             justify-content: center;
             padding: 40px 20px;
             position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
+            contain: content;
         }
 
         body::before, body::after {
@@ -50,7 +65,6 @@
             position: fixed;
             pointer-events: none;
             z-index: 0;
-            will-change: transform;
             transform: translateZ(0);
         }
         body::before {
@@ -73,7 +87,6 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            will-change: transform;
             transform: translateZ(0);
         }
         .bg-glow {
@@ -105,9 +118,7 @@
         }
 
         .item {
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            background: rgba(12, 12, 18, 0.88);
             border: 1px solid var(--card-border);
             border-radius: var(--radius);
             padding: 28px 24px;
@@ -115,15 +126,13 @@
             overflow: hidden;
             box-shadow:
                 0 2px 8px rgba(0,0,0,0.25),
-                0 20px 60px rgba(0,0,0,0.35),
-                inset 0 1px 0 rgba(255,255,255,0.04);
+                0 20px 60px rgba(0,0,0,0.35);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease;
-            will-change: transform;
-            transform: translateZ(0);
+            contain: content;
         }
         .item:hover {
             transform: translateY(-4px);
@@ -156,7 +165,6 @@
             width: 16px;
             height: 16px;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            will-change: transform;
         }
         .uptime-icon { filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5)); }
         .item:hover .uptime-icon { transform: rotate(15deg) scale(1.1); }
@@ -191,11 +199,10 @@
             background-position: center;
             flex-shrink: 0;
             border: 2px solid rgba(255,255,255,0.1);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.04);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            will-change: transform;
         }
         .avatar-slide {
             position: absolute;
@@ -253,7 +260,6 @@
             background: rgba(255,255,255,0.02);
             cursor: pointer;
             transition: transform 0.15s ease, background 0.15s ease;
-            will-change: transform;
         }
         .social-link:hover {
             background: rgba(255,255,255,0.08);
@@ -404,8 +410,6 @@
             justify-content: center;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
-            will-change: transform;
-            transform: translateZ(0);
         }
         .btn:hover {
             transform: scale(1.03);
@@ -436,8 +440,6 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.88);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             z-index: 200;
             justify-content: center;
             align-items: center;
@@ -471,19 +473,16 @@
             .avatar-full { width: 80vw; height: 80vw; max-width: 80vw; max-height: 80vw; border-radius: 50%; }
         }
 
-        #modal {
+        #modal, #confirm-modal {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
             z-index: 100;
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.2s ease;
         }
-        #modal.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .modal-box {
@@ -617,6 +616,9 @@
             .timer-num { font-size: 20px; }
             .stat-big { font-size: 20px; }
             .btn { font-size: 11px; padding: 9px 12px; }
+        }
+        .note-scroll {
+            scroll-behavior: smooth;
         }
         .note-scroll::-webkit-scrollbar { display: none; }
     </style>
@@ -977,21 +979,20 @@
     <!-- DOWNLOADS -->
     <div class="item">
         <div class="item-label">
-            <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="url(#dl-hdr-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="dl-icon" viewBox="0 0 24 24" fill="url(#dl-hdr-grad)">
                 <defs>
                     <linearGradient id="dl-hdr-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#06b6d4"/>
                         <stop offset="100%" stop-color="#10b981"/>
                     </linearGradient>
                 </defs>
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+                <!-- Filled Arrow Solid Shape -->
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
             </svg> 
             Downloads
         </div>
         <div class="btn-group">
-            <div class="btn" onclick="window.open('KMH.apk', '_self')">
+            <div class="btn" onclick="openConfirmModal('KMH.apk', 'Project KMH App (.apk)')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="url(#apk-btn-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <defs>
                         <linearGradient id="apk-btn-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -999,10 +1000,8 @@
                             <stop offset="100%" stop-color="#10b981"/>
                         </linearGradient>
                     </defs>
-                    <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-                    <path d="M12 18h.01"/>
-                    <path d="M9 13l3 3 3-3"/>
-                    <path d="M12 8v8"/>
+                    <rect x="7" y="2" width="10" height="20" rx="2.5"/>
+                    <path d="M11 18h2"/>
                 </svg>
                 Project KMH App <span class="hint">.apk</span>
             </div>
@@ -1014,9 +1013,9 @@
                             <stop offset="100%" stop-color="#8b5cf6"/>
                         </linearGradient>
                     </defs>
-                    <rect x="2" y="3" width="20" height="14" rx="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
+                    <rect x="2" y="3" width="20" height="13" rx="2"/>
+                    <path d="M8 20h8"/>
+                    <path d="M12 16v4"/>
                 </svg>
                 Cross-Platform <span class="hint">multi</span>
             </div>
@@ -1041,7 +1040,7 @@
             </svg> 
             Note
         </div>
-        <div style="width:100%;height:180px;min-height:180px;overflow-y:auto;overflow-x:hidden;padding-right:4px;scrollbar-width:none;flex-shrink:0;" class="note-scroll">
+        <div style="width:100%;height:180px;min-height:180px;overflow-y:auto;overflow-x:hidden;padding-right:4px;scrollbar-width:none;flex-shrink:0;" class="note-scroll" onwheel="limitNoteScroll(event)">
             <p id="typewriter" style="font-size:13px;color:rgba(255,255,255,0.55);line-height:0;text-align:left;width:100%;margin:0;white-space:pre-wrap;"></p>
         </div>
     </div>
@@ -1073,78 +1072,146 @@
     </div>
 </div>
 
-<!-- MODAL -->
+<!-- PLATFORM SELECTION MODAL -->
 <div id="modal">
     <div class="modal-box">
         <h3>Select Platform</h3>
-        <div class="btn" onclick="window.open('CROSSPLATFORM BATTLE.exe', '_self')">
-            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <div class="btn" onclick="openConfirmModal('CROSSPLATFORM BATTLE.exe', 'CROSSPLATFORM BATTLE (.exe)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="13" rx="2"/>
+                <path d="M8 20h8"/>
+                <path d="M12 16v4"/>
+            </svg>
             PC (.exe)
         </div>
-        <div class="btn" onclick="window.open('KMH.apk', '_self')">
-            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        <div class="btn" onclick="openConfirmModal('KMH.apk', 'Project KMH App (.apk)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="2" width="10" height="20" rx="2.5"/>
+                <path d="M11 18h2"/>
+            </svg>
             Mobile (.apk)
         </div>
         <button onclick="closeModal()" class="modal-close">Cancel</button>
     </div>
 </div>
 
+<!-- DOWNLOAD CONFIRMATION MODAL -->
+<div id="confirm-modal">
+    <div class="modal-box">
+        <h3>Are you sure to download?</h3>
+        <p id="confirm-file-name" style="font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; word-break: break-all;"></p>
+        <div class="btn" id="confirm-dl-btn" style="background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3); color: #34d399; font-weight: 600;">
+            Download Now
+        </div>
+        <button onclick="closeConfirmModal()" class="modal-close">Cancel</button>
+    </div>
+</div>
+
 <script>
     const noteHTML = `
-        <div style="font-family: 'JetBrains Mono', 'Inter', monospace; font-size: 14px; color: rgba(255,255,255,0.8); line-height: 0.4; text-align: left; display: block;">
-            <p style="margin: 0 0 10px 0; font-size: 15px; font-weight: 600; color: #fff;">
+        <div style="font-family: 'JetBrains Mono', 'Inter', monospace; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 0.6; text-align: left; display: block;">
+            <p style="margin: 0 0 1px 0; font-size: 14px; font-weight: 600; color: #fff;">
                 สวัสดี ผมชื่อ <span style="color: var(--accent-purple);">SEEN</span>
             </p>
             
-            <p style="margin: 0 0 6px 0;">คุณเข้ามาในเว็บนี้เพื่อโหลดอะไรหรือเปล่า?</p>
-            <p style="margin: 0 0 6px 0; color: #fff;">
+            <p style="margin: 0;">คุณเข้ามาในเว็บนี้เพื่อโหลดอะไรหรือเปล่า?</p>
+            <p style="margin: 0; color: #fff;">
                 ข้างๆ กันนี้มีปุ่มดาวน์โหลดอยู่ — <span style="color: #4ade80;">ไม่มีไวรัสแน่นอน</span>
             </p>
-            <p style="margin: 0 0 6px 0;">เป็นแอปออฟไลน์ 100% ผมเขียนไว้ใช้เอง</p>
-            <p style="margin: 0 0 14px 0;">แต่ถ้าเข้ามาเห็นก็ลองโหลดไปใช้ได้เลย</p>
+            <p style="margin: 0;">เป็นแอปออฟไลน์ 100% ผมเขียนไว้ใช้เอง</p>
+            <p style="margin: 0 0 2px 0;">แต่ถ้าเข้ามาเห็นก็ลองโหลดไปใช้ได้เลย</p>
 
-            <div style="margin: 14px 0; padding: 8px 14px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent-purple); border-radius: 4px; font-size: 12px; color: rgba(255,255,255,0.5);">
-                เขียนเมื่อ: วันอาทิตย์ที่ 5 กรกฎาคม 2026
-            </div>
 
-            <p style="margin: 0 0 4px 0;">ในอนาคตผมอยากเป็น <strong style="color: #fff; font-weight: 700;">ครู</strong></p>
-            <p style="margin: 0 0 14px 0;">ตอนโตขึ้นไม่รู้ว่าจะได้เป็นไหม แต่ขอให้ได้เป็นเถอะ</p>
 
-            <p style="margin: 0 0 14px 0; color: rgba(255,255,255,0.7);">
+            <p style="margin: 0;">ในอนาคตผมอยากเป็น <strong style="color: #fff; font-weight: 700;">ครู</strong></p>
+            <p style="margin: 0 0 2px 0;">ตอนโตขึ้นไม่รู้ว่าจะได้เป็นไหม แต่ขอให้ได้เป็นเถอะ</p>
+
+            <p style="margin: 0 0 2px 0; color: rgba(255,255,255,0.7);">
                 คอมพิวเตอร์เครื่องนี้ซื้อตอน <span style="color: var(--accent-cyan);">ม.3</span> มาประกอบเอง
             </p>
 
-            <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px; margin-top: 10px; line-height: 1.2;">
-                <div style="font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-align: center; margin-bottom: 12px; font-weight: 600;">
-                    ─── SPECIFICATION ───
+            <!-- BASE SPEC CARD -->
+            <div style="background: rgba(18, 18, 26, 0.75); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 12px; padding: 14px 16px; margin-top: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                <div style="font-size: 11px; font-weight: 700; color: #a78bfa; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                        BASE SPEC
+                    </span>
+                    <span style="font-size: 10px; background: rgba(139, 92, 246, 0.15); color: #a78bfa; padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.25);">SYSTEM</span>
                 </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 7px; font-size: 13px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">CPU</span> <span style="color: #fff;">INTEL I5-3470 3.2GHZ <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">MB</span> <span style="color: #fff;">DELL 0YXT71 <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">RAM</span> <span style="color: #fff;">DDR3 4GB <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">HDD</span> <span style="color: #fff;">500GB <span style="color: var(--accent-purple);">x1</span></span></div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">CASE</span> <span style="color: #fff;">OPTIPLEX 7010 <span style="color: var(--accent-purple);">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.45); font-size: 12px;">CPU</span> <span style="color: #f3f4f6; font-weight: 500;">INTEL I5-3470 3.2GHZ <span style="color: var(--accent-purple); font-weight: 700;">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.45); font-size: 12px;">MB</span> <span style="color: #f3f4f6; font-weight: 500;">DELL 0YXT71 <span style="color: var(--accent-purple); font-weight: 700;">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.45); font-size: 12px;">RAM</span> <span style="color: #f3f4f6; font-weight: 500;">DDR3 4GB <span style="color: var(--accent-purple); font-weight: 700;">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.45); font-size: 12px;">HDD</span> <span style="color: #f3f4f6; font-weight: 500;">500GB <span style="color: var(--accent-purple); font-weight: 700;">x1</span></span></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.45); font-size: 12px;">CASE</span> <span style="color: #f3f4f6; font-weight: 500;">OPTIPLEX 7010 <span style="color: var(--accent-purple); font-weight: 700;">x1</span></span></div>
                     
-                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 12px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.06); padding-bottom: 5px;">
-                        รวม ฿1,232
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.4);">GPU</span> <span style="color: #fff;">R7 250X 1GB <span style="color: var(--accent-purple);">x1</span></span></div>
-                    
-                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 12px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.06); padding-bottom: 5px;">
-                        รวม ฿580
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                        <span style="color: rgba(255,255,255,0.4);">RAM</span> 
-                        <span style="color: #fff;">DDR3 8GB 1600MHz = PC3-12800 <span style="color: var(--accent-purple);">x2</span></span>
-                    </div>
-                    
-                    <div style="text-align: right; color: #4ade80; font-weight: 600; font-size: 12px;">
-                        รวม ฿392
+                    <div style="margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 11px; color: rgba(255,255,255,0.35);">SUBTOTAL</span>
+                        <span style="color: #4ade80; font-weight: 700; font-size: 13px; font-family: 'JetBrains Mono', monospace;">฿1,232</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- GRAPHICS CARD -->
+            <div style="background: rgba(18, 18, 26, 0.75); border: 1px solid rgba(236, 72, 153, 0.25); border-radius: 12px; padding: 14px 16px; margin-top: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                <div style="font-size: 11px; font-weight: 700; color: #f472b6; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><path d="M12 2v4"/><path d="M12 18v4"/>
+                        </svg>
+                        GRAPHICS CARD
+                    </span>
+                    <span style="font-size: 10px; background: rgba(236, 72, 153, 0.15); color: #f472b6; padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(236, 72, 153, 0.25);">GPU</span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: rgba(255,255,255,0.45); font-size: 12px;">GPU</span> <span style="color: #f3f4f6; font-weight: 500;">R7 250X 1GB <span style="color: var(--accent-pink); font-weight: 700;">x1</span></span></div>
+                    
+                    <div style="margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 11px; color: rgba(255,255,255,0.35);">SUBTOTAL</span>
+                        <span style="color: #4ade80; font-weight: 700; font-size: 13px; font-family: 'JetBrains Mono', monospace;">฿580</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RAM UPGRADE CARD -->
+            <div style="background: rgba(18, 18, 26, 0.75); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: 12px; padding: 14px 16px; margin-top: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                <div style="font-size: 11px; font-weight: 700; color: #38bdf8; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="8" width="20" height="8" rx="1"/>
+                            <path d="M6 16v2"/>
+                            <path d="M10 16v2"/>
+                            <path d="M14 16v2"/>
+                            <path d="M18 16v2"/>
+                            <circle cx="7" cy="12" r="1" fill="#38bdf8"/>
+                            <circle cx="12" cy="12" r="1" fill="#38bdf8"/>
+                            <circle cx="17" cy="12" r="1" fill="#38bdf8"/>
+                        </svg>
+                        RAM UPGRADE
+                    </span>
+                    <span style="font-size: 10px; background: rgba(6, 182, 212, 0.15); color: #38bdf8; padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(6, 182, 212, 0.25);">MEMORY</span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <span style="color: rgba(255,255,255,0.45); font-size: 12px;">RAM</span> 
+                        <span style="color: #f3f4f6; font-weight: 500;">DDR3 8GB 1600MHz <span style="color: var(--accent-cyan); font-weight: 700;">x2</span></span>
+                    </div>
+                    
+                    <div style="margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 11px; color: rgba(255,255,255,0.35);">SUBTOTAL</span>
+                        <span style="color: #4ade80; font-weight: 700; font-size: 13px; font-family: 'JetBrains Mono', monospace;">฿392</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 14px; padding: 6px 12px; background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent-purple); border-radius: 4px; font-size: 11px; color: rgba(255,255,255,0.5);">
+                เขียนเมื่อ: วันอาทิตย์ที่ 5 กรกฎาคม 2026
             </div>
         </div>
     `;
@@ -1183,9 +1250,46 @@
     }
     setInterval(update, 1000); update();
 
-    function openModal() { document.getElementById('modal').classList.add('active'); }
-    function closeModal() { document.getElementById('modal').classList.remove('active'); }
-    window.onclick = e => { if (e.target === document.getElementById('modal')) closeModal(); };
+    function smoothScrollNote(e) {
+        e.preventDefault();
+        const container = e.currentTarget;
+        const scrollAmount = e.deltaY * 0.35;
+        container.scrollBy({
+            top: scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    function limitNoteScroll(e) {
+        e.preventDefault();
+        const container = e.currentTarget;
+        container.scrollTop += e.deltaY * 0.35;
+    }
+
+    function openModal() { document.getElementById('modal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    
+    let targetDownloadUrl = '';
+    function openConfirmModal(url, filename) {
+        closeModal();
+        targetDownloadUrl = url;
+        document.getElementById('confirm-file-name').textContent = filename;
+        document.getElementById('confirm-modal').style.display = 'flex';
+    }
+    function closeConfirmModal() {
+        document.getElementById('confirm-modal').style.display = 'none';
+    }
+    document.getElementById('confirm-dl-btn').onclick = function() {
+        if (targetDownloadUrl) {
+            window.open(targetDownloadUrl, '_self');
+        }
+        closeConfirmModal();
+    };
+
+    window.onclick = e => { 
+        if (e.target === document.getElementById('modal')) closeModal(); 
+        if (e.target === document.getElementById('confirm-modal')) closeConfirmModal();
+    };
 
     function openAvatar() { document.getElementById('avatar-modal').classList.add('active'); }
     function closeAvatar() { document.getElementById('avatar-modal').classList.remove('active'); }
