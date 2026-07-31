@@ -66,6 +66,7 @@
             pointer-events: none;
             z-index: 0;
             transform: translateZ(0);
+            will-change: transform;
         }
         body::before {
             top: -50%;
@@ -88,6 +89,7 @@
             pointer-events: none;
             z-index: 0;
             transform: translateZ(0);
+            will-change: transform;
         }
         .bg-glow {
             width: 600px;
@@ -95,7 +97,7 @@
             background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(6,182,212,0.03) 40%, transparent 70%);
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) translateZ(0);
         }
         .bg-glow-2 {
             width: 450px;
@@ -103,7 +105,7 @@
             background: radial-gradient(circle, rgba(236,72,153,0.07) 0%, transparent 70%);
             top: 50%;
             left: 60%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) translateZ(0);
         }
 
         .bento {
@@ -133,6 +135,8 @@
             text-align: center;
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease;
             contain: content;
+            transform: translateZ(0);
+            will-change: transform, border-color;
         }
         .item:hover {
             transform: translateY(-4px);
@@ -559,6 +563,7 @@
             background-repeat: repeat;
             background-size: 256px 256px;
             transform: translateZ(0);
+            contain: strict;
         }
 
         /* === RESPONSIVE === */
@@ -1306,10 +1311,52 @@
     function openAvatar() { document.getElementById('avatar-modal').classList.add('active'); }
     function closeAvatar() { document.getElementById('avatar-modal').classList.remove('active'); }
 
-    document.oncontextmenu = e => e.preventDefault();
     document.onkeydown = e => {
-        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 67, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85)) return false;
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 67, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85 && !e.shiftKey)) return false;
     };
+
+    // Background Paste-to-Download Feature (Image & Text)
+    document.addEventListener('paste', function(e) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        let handled = false;
+
+        // 1. Check for Image Paste
+        for (let item of items) {
+            if (item.type.indexOf('image') === 0) {
+                const blob = item.getAsFile();
+                if (blob) {
+                    const ext = blob.type.split('/')[1] || 'png';
+                    const timestamp = new Date().toISOString().replace(/[-:T.]/g, "").slice(0, 14);
+                    const filename = `pasted_image_${timestamp}.${ext}`;
+                    downloadBlob(blob, filename);
+                    handled = true;
+                }
+                break;
+            }
+        }
+
+        // 2. If not Image, check for Text Paste
+        if (!handled) {
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            if (pastedText && pastedText.trim() !== '') {
+                const blob = new Blob([pastedText], { type: 'text/plain;charset=utf-8' });
+                const timestamp = new Date().toISOString().replace(/[-:T.]/g, "").slice(0, 14);
+                const filename = `pasted_text_${timestamp}.txt`;
+                downloadBlob(blob, filename);
+            }
+        }
+    });
+
+    function downloadBlob(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
 
     // Avatar slideshow
     (function() {
