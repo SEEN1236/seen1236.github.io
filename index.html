@@ -1,7 +1,8 @@
 <html lang="th"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="icon" type="image/png" href="Icon.png">
+    <link rel="shortcut icon" type="image/png" href="Icon.png">
     <title>SEEN</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -1018,19 +1019,9 @@
                 </svg>
                 Project KMH App <span class="hint">.apk</span>
             </div>
-            <div class="btn" onclick="openModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="url(#multi-btn-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <defs>
-                        <linearGradient id="multi-btn-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#38bdf8"></stop>
-                            <stop offset="100%" stop-color="#8b5cf6"></stop>
-                        </linearGradient>
-                    </defs>
-                    <rect x="2" y="3" width="20" height="13" rx="2"></rect>
-                    <path d="M8 20h8"></path>
-                    <path d="M12 16v4"></path>
-                </svg>
-                Cross-Platform <span class="hint">multi</span>
+            <div class="btn" onclick="openConfirmModal('Auto Clicker.exe', 'Auto Clicker (.exe)')">
+                <img src="exe.png" alt="Auto Clicker icon" style="width: 18px; height: 18px; object-fit: contain; margin-right: 6px;">
+                Auto Clicker <span class="hint">.exe</span>
             </div>
         </div>
     </div>
@@ -1096,11 +1087,7 @@
     <div class="modal-box">
         <h3>Select Platform</h3>
         <div class="btn" onclick="openConfirmModal('Auto Clicker.exe', 'Auto Clicker (.exe)')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="3" width="20" height="13" rx="2"></rect>
-                <path d="M8 20h8"></path>
-                <path d="M12 16v4"></path>
-            </svg>
+            <img src="exe.png" alt="Auto Clicker icon" style="width: 18px; height: 18px; object-fit: contain; margin-right: 6px;">
             PC (.exe)
         </div>
         <div class="btn" onclick="openConfirmModal('KMH.apk', 'Project KMH App (.apk)')">
