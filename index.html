@@ -591,6 +591,7 @@
             .col-2, .col-3, .col-4 { grid-column: unset; }
             .item { padding: 20px 18px; border-radius: 14px; order: 2; }
             .item.note-card { height: 200px; min-height: 200px; width: 100%; max-width: 100%; overflow: hidden; align-self: stretch !important; }
+            .item.note-card .note-scroll { height: calc(100% - 22px) !important; min-height: 0 !important; padding-bottom: 0px; }
             .footer { order: 3; margin-top: auto; }
             .item-label { font-size: 9px; letter-spacing: 1.2px; margin-bottom: 10px; }
             .timer-grid { gap: 4px 14px; max-width: 190px; }
@@ -1006,22 +1007,13 @@
             Downloads
         </div>
         <div class="btn-group">
-            <div class="btn" onclick="openConfirmModal('KMH.apk', 'Project KMH App (.apk)')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="url(#apk-btn-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <defs>
-                        <linearGradient id="apk-btn-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#34d399"></stop>
-                            <stop offset="100%" stop-color="#10b981"></stop>
-                        </linearGradient>
-                    </defs>
-                    <rect x="7" y="2" width="10" height="20" rx="2.5"></rect>
-                    <path d="M11 18h2"></path>
-                </svg>
-                Project KMH App <span class="hint">.apk</span>
+            <div class="btn" onclick="openConfirmModal('Speed Detection.apk', 'SPEED DETECTION (.apk)')">
+                <img src="apk.png" alt="Speed Detection icon" style="width: 18px; height: 18px; object-fit: contain; margin-right: 6px; border-radius: 4px;">
+                SPEED DETECTION <span class="hint">.apk</span>
             </div>
-            <div class="btn" onclick="openConfirmModal('Auto Clicker.exe', 'Auto Clicker (.exe)')">
+            <div class="btn" onclick="openConfirmModal('Auto Clicker.exe', 'AUTO CLICKER (.exe)')">
                 <img src="exe.png" alt="Auto Clicker icon" style="width: 18px; height: 18px; object-fit: contain; margin-right: 6px;">
-                Auto Clicker <span class="hint">.exe</span>
+                AUTO CLICKER <span class="hint">.exe</span>
             </div>
         </div>
     </div>
@@ -1086,15 +1078,12 @@
 <div id="modal">
     <div class="modal-box">
         <h3>Select Platform</h3>
-        <div class="btn" onclick="openConfirmModal('Auto Clicker.exe', 'Auto Clicker (.exe)')">
+        <div class="btn" onclick="openConfirmModal('Auto Clicker.exe', 'AUTO CLICKER (.exe)')">
             <img src="exe.png" alt="Auto Clicker icon" style="width: 18px; height: 18px; object-fit: contain; margin-right: 6px;">
             PC (.exe)
         </div>
-        <div class="btn" onclick="openConfirmModal('KMH.apk', 'Project KMH App (.apk)')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="7" y="2" width="10" height="20" rx="2.5"></rect>
-                <path d="M11 18h2"></path>
-            </svg>
+        <div class="btn" onclick="openConfirmModal('Speed Detection.apk', 'SPEED DETECTION (.apk)')">
+            <img src="apk.png" alt="Speed Detection icon" style="width: 18px; height: 18px; object-fit: contain; margin-right: 6px; border-radius: 4px;">
             Mobile (.apk)
         </div>
         <button onclick="closeModal()" class="modal-close">Cancel</button>
@@ -1212,7 +1201,7 @@
                 </div>
             </div>
 
-            <div style="margin-top: 14px; padding: 8px 12px; background: rgba(30, 34, 48, 0.4); border-radius: 6px; font-size: 11px; color: var(--text-sub);">
+            <div style="margin-top: 14px; margin-bottom: 4px; padding: 8px 12px; background: rgba(30, 34, 48, 0.4); border-radius: 6px; font-size: 11px; color: var(--text-sub);">
                 เขียนเมื่อ: วันอาทิตย์ที่ 5 กรกฎาคม 2026
             </div>
         </div>
