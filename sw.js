@@ -1,10 +1,8 @@
-const CACHE_NAME = 'seen-v7';
+const CACHE_NAME = 'seen-v8';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
   './icon-192.webp',
   './icon-512.webp',
   './1778995068748.webp',
