@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seen-v5';
+const CACHE_NAME = 'seen-v7';
 const ASSETS = [
   './',
   './index.html',
