@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seen-v8';
+const CACHE_NAME = 'seen-v21';
 const ASSETS = [
   './',
   './index.html',
