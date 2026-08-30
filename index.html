@@ -39,11 +39,7 @@ html{
     scrollbar-width:thin;
     scrollbar-color:rgba(255,255,255,0.2) #000000;
 }
-body{
-    transform:translate3d(0,0,0);
-    backface-visibility:hidden;
-    perspective:1000px;
-}
+
 
 ::-webkit-scrollbar{width:6px;height:6px;background:#000000;}
 ::-webkit-scrollbar-track{background:#000000;}
@@ -124,8 +120,21 @@ body{
     border:2.5px solid rgba(255,255,255,0.12);
     box-shadow:0 4px 20px rgba(0,0,0,0.6),0 0 18px rgba(96,165,250,0.18);
 }
-.avatar-slide{position:absolute;inset:0;border-radius:50%;background-size:cover;background-position:center;opacity:0;}
-.avatar-slide.active{opacity:1;}
+.avatar-slide{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    transform:scale(1.03);
+    transition:opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change:opacity, transform;
+}
+.avatar-slide.active{
+    opacity:1;
+    transform:scale(1);
+}
 .profile-info{display:flex;flex-direction:column;align-items:center;gap:4px;}
 .profile-info h1{font-size:48px;color:#ffffff;line-height:1.15;letter-spacing:-0.5px;font-weight:700;}
 .profile-info .sub{font-size:19px;color:#94a3b8;}
@@ -144,6 +153,8 @@ body{
     justify-content:center;
     cursor:pointer;
     text-decoration:none;
+    user-select:none;
+    -webkit-user-select:none;
 }
 .social-link img{width:24px;height:24px;object-fit:contain;}
 
@@ -195,32 +206,46 @@ body{
 
 /* SOCIAL STATS */
 .social-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;align-items:center;}
+.social-stats-grid .item{transition:transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease;cursor:pointer;user-select:none;-webkit-user-select:none;}
+.social-stats-grid .item:hover{transform:translateY(-3px);opacity:0.95;}
+.social-stats-grid .item:active{transform:translateY(1px);}
 .stat-row{display:flex;flex-direction:column;align-items:center;width:100%;}
 .stat-big{font-size:38px;font-weight:700;color:#ffffff;line-height:1.1;}
 .stat-big .unit{font-size:16px;font-weight:600;color:#94a3b8;margin-left:5px;letter-spacing:0.5px;}
 .stat-sub{font-size:15.5px;color:#64748b;margin-top:4px;}
 
 /* DOWNLOADS */
-.btn-group{display:flex;gap:16px;justify-content:center;width:100%;max-width:600px;}
+.btn-group{display:flex;gap:14px;justify-content:center;width:100%;max-width:850px;flex-wrap:wrap;}
 .btn{
     background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 45%,#e2e8f0 55%,#ffffff 100%);
     color:#09090b;
     border-radius:9999px;
-    padding:13px 28px;
-    font-size:18px;
+    padding:8.5px 22px;
+    font-size:16.5px;
+    user-select:none;
+    -webkit-user-select:none;
     font-weight:600;
     letter-spacing:0.3px;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:9px;
+    gap:8px;
     cursor:pointer;
     text-decoration:none;
-    box-shadow:inset 0 1px 2px #fff,inset 0 -2px 4px rgba(0,0,0,0.12),0 4px 16px rgba(255,255,255,0.22);
+    white-space:nowrap;
+    box-shadow:inset 0 1px 1px #fff,inset 0 -1px 2px rgba(0,0,0,0.1),0 2px 10px rgba(255,255,255,0.18);
     border:none;
+    transition:transform 0.15s ease,box-shadow 0.15s ease;
 }
-.btn img,.btn svg{width:22px;height:22px;object-fit:contain;}
-.btn .hint{color:#475569;font-size:15.5px;font-weight:500;}
+.btn:hover{
+    transform:translateY(-1px);
+    box-shadow:inset 0 1px 1px #fff,inset 0 -1px 2px rgba(0,0,0,0.1),0 4px 14px rgba(255,255,255,0.28);
+}
+.btn:active{
+    transform:translateY(1px);
+}
+.btn img,.btn svg{width:18px;height:18px;object-fit:contain;}
+.btn .hint{color:#475569;font-size:14.5px;font-weight:500;}
 
 /* NOTE & STORY */
 .note-card{align-items:flex-start;text-align:left;padding:26px;width:100%;content-visibility:auto;contain-intrinsic-size:0 240px;}
@@ -245,7 +270,8 @@ body{
     grid-column:span 4;
     display:flex;
     justify-content:center;
-    padding:28px 0 12px;
+    padding:4px 0 12px;
+    margin-top:-10px;
     font-size:17.5px;
     color:#64748b;
     width:100%;
@@ -258,9 +284,224 @@ body{
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;z-index:999999;}
 .modal-box{background:#0f172a;border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:28px;max-width:420px;width:90%;text-align:center;position:relative;}
 .modal-close{position:absolute;top:14px;right:18px;font-size:24px;color:#94a3b8;cursor:pointer;}
-.modal-avatar{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:999999;}
-.modal-avatar.active{display:flex;}
-.avatar-full-img{width:80vw;max-width:440px;height:80vw;max-height:440px;border-radius:50%;background-size:cover;background-position:center;}
+.modal-avatar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    width:100vw!important;
+    width:100dvw!important;
+    height:100vh!important;
+    height:100dvh!important;
+    background:rgba(0,0,0,0.94);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    display:none;
+    align-items:center!important;
+    justify-content:center!important;
+    z-index:2147483647!important;
+    cursor:pointer;
+    overflow:hidden!important;
+    margin:0!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+}
+.modal-avatar.active{
+    display:flex!important;
+}
+.avatar-full-img{
+    position:absolute!important;
+    top:50%!important;
+    left:50%!important;
+    transform:translate(-50%, -50%)!important;
+    width:min(80vw, 80vh, 460px)!important;
+    height:min(80vw, 80vh, 460px)!important;
+    border-radius:50%!important;
+    background-size:cover!important;
+    background-position:center!important;
+    border:3px solid rgba(255,255,255,0.22)!important;
+    box-shadow:0 0 50px rgba(0,0,0,0.95), 0 0 35px rgba(96,165,250,0.4)!important;
+    margin:0!important;
+}
+
+
+/* DONATE MODAL */
+.modal-donate{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    width:100vw!important;
+    width:100dvw!important;
+    height:100vh!important;
+    height:100dvh!important;
+    background:rgba(0,0,0,0.88);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    display:none;
+    align-items:center!important;
+    justify-content:center!important;
+    z-index:2147483647!important;
+    padding:16px;
+    box-sizing:border-box!important;
+    overflow-y:auto;
+}
+.modal-donate.active{
+    display:flex!important;
+    animation:donateFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes donateFadeIn{
+    from{opacity:0;transform:scale(0.95);}
+    to{opacity:1;transform:scale(1);}
+}
+.donate-box{
+    background:#000000;
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:24px;
+    padding:28px 24px;
+    max-width:440px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    box-shadow:0 16px 60px #000000, 0 0 40px rgba(0,0,0,0.95);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:auto;
+}
+.donate-close{
+    position:absolute;
+    top:14px;
+    right:18px;
+    font-size:26px;
+    color:#64748b;
+    cursor:pointer;
+    line-height:1;
+    transition:color 0.15s ease;
+    user-select:none;
+}
+.donate-close:hover{color:#ffffff;}
+.donate-main-title{
+    font-size:28px;
+    font-weight:700;
+    color:#ffffff;
+    margin:0 0 6px 0;
+    letter-spacing:-0.4px;
+    line-height:1.2;
+}
+.donate-subtitle{
+    font-size:18px;
+    font-weight:600;
+    color:#94a3b8;
+    margin:0 0 10px 0;
+}
+.donate-header p{
+    font-size:15px;
+    color:#94a3b8;
+    line-height:1.55;
+    margin:0 0 16px 0;
+}
+.donate-qr-wrap{
+    background:#000000;
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:18px;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    box-sizing:border-box;
+    margin-bottom:14px;
+}
+.donate-qr-img{
+    max-width:200px;
+    width:100%;
+    height:auto;
+    border-radius:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.6);
+}
+.qr-sub{
+    font-size:13px;
+    color:#64748b;
+    margin-top:10px;
+}
+.promptpay-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    box-sizing:border-box;
+    background:#000000;
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:14px;
+    padding:10px 16px;
+    cursor:pointer;
+    transition:background 0.15s ease, border-color 0.15s ease;
+    margin-bottom:0;
+    user-select:none;
+}
+.promptpay-bar:hover{
+    background:rgba(255,255,255,0.04);
+    border-color:#ffffff;
+    box-shadow:0 0 16px rgba(255,255,255,0.22);
+}
+.pp-info{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+}
+.pp-label{
+    font-size:12px;
+    color:#0f3561;
+    background:#0f3561;
+    color:#ffffff;
+    padding:2px 8px;
+    border-radius:5px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    display:inline-block;
+}
+.pp-number{
+    font-size:19.5px;
+    font-weight:700;
+    color:#ffffff;
+    letter-spacing:1px;
+}
+.btn-copy-pp{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:linear-gradient(180deg,#ffffff 0%,#e2e8f0 100%);
+    color:#09090b;
+    border:none;
+    border-radius:8px;
+    padding:7px 14px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform 0.1s ease;
+}
+.btn-copy-pp:active{transform:scale(0.95);}
+.donate-btn-done{
+    width:100%;
+    padding:11px 0;
+    border-radius:12px;
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#e2e8f0;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background 0.15s ease;
+}
+.donate-btn-done:hover{
+    background:rgba(255,255,255,0.12);
+    color:#ffffff;
+}
 
 /* RESPONSIVE MOBILE */
 @media(max-width:900px){
@@ -278,8 +519,8 @@ body{
     .timer-label{font-size:12px;}
     .social-stats-grid{display:flex;flex-direction:column;gap:18px;width:100%;}
     .stat-big{font-size:34px;}
-    .btn-group{display:flex;flex-direction:column;gap:12px;width:100%;}
-    .btn{width:100%;display:flex;align-items:center;justify-content:center;padding:14px 20px;font-size:17px;}
+    .btn-group{display:flex;flex-direction:column;gap:10px;width:100%;}
+    .btn{width:100%;display:flex;align-items:center;justify-content:center;padding:8px 18px;font-size:16px;}
     .specs-grid{display:flex;flex-direction:column;gap:14px;width:100%;}
     .spec-box{width:100%;background:transparent!important;border:none!important;box-shadow:none!important;padding:8px 0;}
     .note-card{padding:20px 18px;}
@@ -327,13 +568,13 @@ body{
 </div>
 <div class="social-strip">
 <div class="social-row">
-<a class="social-link" href="https://www.youtube.com/@seen1236_yt" target="_blank" title="YouTube"><img src="youtube.webp" alt="YouTube" width="24" height="24" decoding="async"></a>
-<a class="social-link" href="https://www.tiktok.com/@seen1236_s" target="_blank" title="TikTok"><img src="tiktok.webp" alt="TikTok" width="24" height="24" decoding="async"></a>
-<a class="social-link" href="https://www.instagram.com/seen1236_ig/" target="_blank" title="Instagram"><img src="Instagram.webp" alt="Instagram" width="24" height="24" decoding="async"></a>
+<div class="social-link" role="button" tabindex="0" onclick="openLink('https://www.youtube.com/@seen1236_yt')" onkeydown="if(event.key==='Enter')openLink('https://www.youtube.com/@seen1236_yt')" title="YouTube"><img src="youtube.webp" alt="YouTube" width="24" height="24" decoding="async"></div>
+<div class="social-link" role="button" tabindex="0" onclick="openLink('https://www.tiktok.com/@seen1236_s')" onkeydown="if(event.key==='Enter')openLink('https://www.tiktok.com/@seen1236_s')" title="TikTok"><img src="tiktok.webp" alt="TikTok" width="24" height="24" decoding="async"></div>
+<div class="social-link" role="button" tabindex="0" onclick="openLink('https://www.instagram.com/seen1236_ig/')" onkeydown="if(event.key==='Enter')openLink('https://www.instagram.com/seen1236_ig/')" title="Instagram"><img src="Instagram.webp" alt="Instagram" width="24" height="24" decoding="async"></div>
 </div>
 <div class="social-row">
-<a class="social-link" href="https://github.com/SEEN1236" target="_blank" title="GitHub"><img src="github.webp" alt="GitHub" width="24" height="24" decoding="async"></a>
-<a class="social-link" href="https://www.facebook.com/seen1236" target="_blank" title="Facebook"><img src="facebook.webp" alt="Facebook" width="24" height="24" decoding="async"></a>
+<div class="social-link" role="button" tabindex="0" onclick="openLink('https://github.com/SEEN1236')" onkeydown="if(event.key==='Enter')openLink('https://github.com/SEEN1236')" title="GitHub"><img src="github.webp" alt="GitHub" width="24" height="24" decoding="async"></div>
+<div class="social-link" role="button" tabindex="0" onclick="openLink('https://www.facebook.com/seen1236')" onkeydown="if(event.key==='Enter')openLink('https://www.facebook.com/seen1236')" title="Facebook"><img src="facebook.webp" alt="Facebook" width="24" height="24" decoding="async"></div>
 </div>
 </div>
 </div>
@@ -352,7 +593,16 @@ INFO & STATUS
 <div class="bio-list">
 <div class="bio-item">
 <span class="bio-key">
-<svg viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"></path><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5-2 4-2 2.5-2 4-2 2-1 2-1"></path><path d="M2 21h20"></path><path d="M12 8v3"></path></svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 21h18v-7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v7z"/>
+<path d="M3 16c2 1 3.5-1 5.5 0s3.5-1 5.5 0 3.5-1 5.5 0 3.5-1 4.5 0"/>
+<line x1="7" y1="12" x2="7" y2="7"/>
+<line x1="12" y1="12" x2="12" y2="6"/>
+<line x1="17" y1="12" x2="17" y2="7"/>
+<path d="M7 4.5c.5 0 .8.3.8.8 0 .8-.8 1.4-.8 1.4s-.8-.6-.8-1.4c0-.5.3-.8.8-.8z" fill="#f43f5e"/>
+<path d="M12 3.5c.5 0 .8.3.8.8 0 .8-.8 1.4-.8 1.4s-.8-.6-.8-1.4c0-.5.3-.8.8-.8z" fill="#f43f5e"/>
+<path d="M17 4.5c.5 0 .8.3.8.8 0 .8-.8 1.4-.8 1.4s-.8-.6-.8-1.4c0-.5.3-.8.8-.8z" fill="#f43f5e"/>
+</svg>
 Age
 </span>
 <span class="val" id="my-age">16y</span>
@@ -370,7 +620,7 @@ Food
 Present
 </span>
 <span class="val status-val">
-โรงเรียน บางปะอิน "ราชานุเคราะห์ ๑"
+พระนครศรีอยุธยา
 </span>
 </div>
 </div>
@@ -400,12 +650,15 @@ UPTIME
 
 <div class="timer-block">
 <div class="item-label" style="justify-content:center;margin-bottom:8px;">
-<svg class="bday-icon" viewBox="0 0 24 24" fill="none" stroke="url(#bday-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-<path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"></path>
-<path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5-2 4-2 2.5-2 4-2 2-1 2-1"></path>
-<path d="M2 21h20"></path>
-<path d="M7 8v3"></path><path d="M12 8v3"></path><path d="M17 8v3"></path>
-<path d="M7 4h.01"></path><path d="M12 4h.01"></path><path d="M17 4h.01"></path>
+<svg class="bday-icon" viewBox="0 0 24 24" fill="none" stroke="url(#bday-grad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 21h18v-7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v7z"/>
+<path d="M3 16c2 1 3.5-1 5.5 0s3.5-1 5.5 0 3.5-1 5.5 0 3.5-1 4.5 0"/>
+<line x1="7" y1="12" x2="7" y2="7"/>
+<line x1="12" y1="12" x2="12" y2="6"/>
+<line x1="17" y1="12" x2="17" y2="7"/>
+<path d="M7 4.5c.5 0 .8.3.8.8 0 .8-.8 1.4-.8 1.4s-.8-.6-.8-1.4c0-.5.3-.8.8-.8z" fill="url(#bday-grad)"/>
+<path d="M12 3.5c.5 0 .8.3.8.8 0 .8-.8 1.4-.8 1.4s-.8-.6-.8-1.4c0-.5.3-.8.8-.8z" fill="url(#bday-grad)"/>
+<path d="M17 4.5c.5 0 .8.3.8.8 0 .8-.8 1.4-.8 1.4s-.8-.6-.8-1.4c0-.5.3-.8.8-.8z" fill="url(#bday-grad)"/>
 </svg>
 NEXT BIRTHDAY
 </div>
@@ -465,7 +718,7 @@ Lua
 <!-- 5. SOCIAL STATS ROW -->
 <div class="col-4">
 <div class="social-stats-grid">
-<div class="item" style="padding:18px 12px;">
+<div class="item" style="padding:18px 12px;" role="button" tabindex="0" onclick="openLink('https://www.youtube.com/@seen1236_yt')" onkeydown="if(event.key==='Enter')openLink('https://www.youtube.com/@seen1236_yt')" title="ไปที่ YouTube @seen1236_yt">
 <div class="stat-row">
 <div class="item-label" style="justify-content:center;margin-bottom:8px;">
 <svg width="22" height="17" viewBox="0 0 24 18" style="filter:drop-shadow(0 0 3px #FF0000) drop-shadow(0 0 8px rgba(255,0,0,0.6));"><rect width="24" height="18" rx="4.5" fill="#FF0000"/><polygon points="9.5,4.5 16.5,9 9.5,13.5" fill="#FFFFFF"/></svg>
@@ -476,7 +729,7 @@ YOUTUBE
 </div>
 </div>
 
-<div class="item" style="padding:18px 12px;">
+<div class="item" style="padding:18px 12px;" role="button" tabindex="0" onclick="openLink('https://www.tiktok.com/@seen1236_s')" onkeydown="if(event.key==='Enter')openLink('https://www.tiktok.com/@seen1236_s')" title="ไปที่ TikTok @seen1236_s">
 <div class="stat-row">
 <div class="item-label" style="justify-content:center;margin-bottom:8px;">
 <svg width="22" height="22" viewBox="0 0 24 24" style="filter:drop-shadow(-1px -1px 2px #25F4EE) drop-shadow(1px 1px 2px #FE2C55) drop-shadow(0 0 8px rgba(254,44,85,0.6));">
@@ -486,12 +739,12 @@ YOUTUBE
 </svg>
 TIKTOK
 </div>
-<div class="stat-big">1<span class="unit">FOLLOWER</span></div>
+<div class="stat-big">3<span class="unit">FOLLOWERS</span></div>
 <div class="stat-sub">New Account</div>
 </div>
 </div>
 
-<div class="item" style="padding:18px 12px;">
+<div class="item" style="padding:18px 12px;" role="button" tabindex="0" onclick="openLink('https://www.instagram.com/seen1236_ig/')" onkeydown="if(event.key==='Enter')openLink('https://www.instagram.com/seen1236_ig/')" title="ไปที่ Instagram seen1236_ig">
 <div class="stat-row">
 <div class="item-label" style="justify-content:center;margin-bottom:8px;">
 <svg width="22" height="22" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 3px #E1306C) drop-shadow(0 0 8px rgba(225,48,108,0.6));">
@@ -571,7 +824,7 @@ PC SPECIFICATIONS (คอมประกอบเอง ม.3)
 </div>
 
 <!-- 8. DOWNLOADS HUB -->
-<div class="item col-4" style="align-items:center;text-align:center;padding:26px 18px;">
+<div class="item col-4" style="align-items:center;text-align:center;padding:26px 18px 8px;">
 <div class="item-label" style="justify-content:center;margin-bottom:18px;">
 <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
 <path d="M12 3v10m-4-4 4 4 4-4" stroke="#fff" stroke-width="2.2"/>
@@ -580,33 +833,62 @@ PC SPECIFICATIONS (คอมประกอบเอง ม.3)
 DOWNLOADS
 </div>
 <div class="btn-group">
-<a href="Speed Detection.apk" download class="btn">
+<div class="btn" role="button" tabindex="0" onclick="triggerDownload('Speed Detection.apk')" onkeydown="if(event.key==='Enter')triggerDownload('Speed Detection.apk')">
 <img src="apk.webp" alt="Speed Detection" style="border-radius:4px;" width="22" height="22" decoding="async">
 SPEED DETECTION
 <span class="hint">.apk</span>
-</a>
-<a href="AutoSystem.exe" download class="btn">
+</div>
+<div class="btn" role="button" tabindex="0" onclick="triggerDownload('AutoSystem.exe')" onkeydown="if(event.key==='Enter')triggerDownload('AutoSystem.exe')">
 <img src="exe.webp" alt="AutoSystem" width="22" height="22" decoding="async">
 AUTOSYSTEM
 <span class="hint">.exe</span>
-</a>
-<a href="PaintApp.exe" download class="btn">
-<img src="exe.webp" alt="PaintApp" width="22" height="22" decoding="async">
+</div>
+<div class="btn" role="button" tabindex="0" onclick="triggerDownload('PaintApp.exe')" onkeydown="if(event.key==='Enter')triggerDownload('PaintApp.exe')">
+<img src="paintapp.webp" alt="PaintApp" width="22" height="22" decoding="async">
 PAINTAPP
 <span class="hint">.exe</span>
-</a>
+</div>
 </div>
 </div>
 
 <!-- 9. FOOTER -->
 <div class="footer">
-<span class="footer-gmail-wrap" onclick="copyEmail()">
+<span class="footer-gmail-wrap" onclick="copyEmail(event)">
 <svg class="gmail-icon" viewBox="0 0 24 24" fill="none">
 <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6Z" fill="#EA4335" fill-opacity="0.2"/>
 <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6ZM20 6L12 11L4 6H20ZM20 18H4V8L12 13L20 8V18Z" fill="#EA4335"/>
 </svg>
-nattanantreetos@gmail.com — Gmail
+<span id="footer-email-text">nattanantreetos@gmail.com</span>
+<span id="footer-email-copied" style="display:none;color:#ffffff;font-weight:600;margin-left:8px;">คัดลอกแล้ว! ✓</span>
 </span>
+</div>
+</div>
+
+
+<div id="donate-modal" class="modal-donate" onclick="closeDonateModal()">
+<div class="donate-box" onclick="event.stopPropagation()">
+<div class="donate-header">
+<div class="donate-main-title">Downloading file...</div>
+<div class="donate-subtitle">สนับสนุนผลงาน / ค่าขนม</div>
+<p>ขอบคุณที่สนใจผลงานของผมครับ! หากชื่นชอบสามารถร่วมสนับสนุนเพื่อเป็นกำลังใจและพัฒนาโปรเจกต์ต่อไปได้ที่</p>
+</div>
+<div class="donate-qr-wrap">
+<img src="Donet.webp" alt="PromptPay QR Code" class="donate-qr-img" width="200" height="auto" loading="eager" decoding="async">
+<div class="qr-sub">สแกน QR Code ผ่านแอปธนาคารได้ทุกธนาคาร</div>
+</div>
+<div class="promptpay-bar" onclick="copyPromptPay(event)" title="คลิกเพื่อคัดลอกเบอร์ PromptPay">
+<div class="pp-info">
+<span class="pp-label">PromptPay (พร้อมเพย์)</span>
+<span class="pp-number" id="pp-num-text">061-2584-303</span>
+</div>
+<button type="button" class="btn-copy-pp" id="btn-copy-pp">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+</svg>
+<span id="copy-btn-label">คัดลอก</span>
+</button>
+</div>
 </div>
 </div>
 
@@ -615,6 +897,56 @@ nattanantreetos@gmail.com — Gmail
 </div>
 
 <script>
+function openLink(url){window.open(url,'_blank','noopener,noreferrer');}
+function triggerDownload(url){
+    var a=document.createElement('a');
+    a.href=url;
+    a.download=url;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    if(window.openDonateModal){
+        setTimeout(window.openDonateModal, 350);
+    }
+}
+var donateModalEl=null;
+window.openDonateModal=function(){
+    if(!donateModalEl) donateModalEl=document.getElementById('donate-modal');
+    if(donateModalEl){
+        donateModalEl.classList.add('active');
+        document.documentElement.style.overflow='hidden';
+        document.body.style.overflow='hidden';
+    }
+};
+window.closeDonateModal=function(){
+    if(!donateModalEl) donateModalEl=document.getElementById('donate-modal');
+    if(donateModalEl){
+        donateModalEl.classList.remove('active');
+        document.documentElement.style.overflow='';
+        document.body.style.overflow='';
+    }
+};
+window.copyPromptPay=function(e){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    var num='0612584303';
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(num);
+    }else{
+        var ta=document.createElement('textarea');
+        ta.value=num;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
+    var btnLbl=document.getElementById('copy-btn-label');
+    if(btnLbl){
+        btnLbl.textContent='คัดลอกแล้ว! ✓';
+        setTimeout(function(){
+            if(btnLbl) btnLbl.textContent='คัดลอก';
+        },2000);
+    }
+};
 (function(){
 'use strict';
 var elUDays=document.getElementById('u-days'),
@@ -666,8 +998,20 @@ tick();
 
 var avatarModalEl=document.getElementById('avatar-modal');
 
-window.openAvatar=function(){if(avatarModalEl)avatarModalEl.classList.add('active');};
-window.closeAvatar=function(){if(avatarModalEl)avatarModalEl.classList.remove('active');};
+window.openAvatar=function(){
+    if(avatarModalEl){
+        avatarModalEl.classList.add('active');
+        document.documentElement.style.overflow='hidden';
+        document.body.style.overflow='hidden';
+    }
+};
+window.closeAvatar=function(){
+    if(avatarModalEl){
+        avatarModalEl.classList.remove('active');
+        document.documentElement.style.overflow='';
+        document.body.style.overflow='';
+    }
+};
 
 var slides=document.querySelectorAll('.avatar-slide'),
     full=document.getElementById('avatar-full'),
@@ -683,8 +1027,9 @@ function nextSlide(){
     }
     if(full)full.style.backgroundImage="url('"+avatarImages[currentSlide]+"')";
 }
-setInterval(nextSlide,3000);
+setInterval(nextSlide,2000);
 
+var emailCopyTimer = null;
 window.copyEmail=function(e){
     if(e&&e.preventDefault)e.preventDefault();
     var email='nattanantreetos@gmail.com';
@@ -697,6 +1042,14 @@ window.copyEmail=function(e){
         temp.select();
         document.execCommand('copy');
         document.body.removeChild(temp);
+    }
+    var copiedEl=document.getElementById('footer-email-copied');
+    if(copiedEl){
+        copiedEl.style.display='inline';
+        if(emailCopyTimer) clearTimeout(emailCopyTimer);
+        emailCopyTimer = setTimeout(function(){
+            if(copiedEl) copiedEl.style.display='none';
+        }, 1000);
     }
 };
 
