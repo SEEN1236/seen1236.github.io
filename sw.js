@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seen-v46';
+const CACHE_NAME = 'seen-v70';
 const ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,8 @@ const ASSETS = [
   './apk.webp',
   './exe.webp',
   './paintapp.webp',
-  './Donet.webp',
+  './MyDrawing.svg',
+  './bitdefender.webp',
   './facebook.webp',
   './github.webp',
   './Instagram.webp',

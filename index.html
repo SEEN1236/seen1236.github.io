@@ -33,7 +33,7 @@ html{
     text-rendering:optimizeLegibility;
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
-    scroll-behavior:smooth;
+    scroll-behavior:auto;
     -webkit-overflow-scrolling:touch;
     overscroll-behavior-y:none;
     scrollbar-width:thin;
@@ -55,16 +55,17 @@ body{
     flex-direction:column;
     align-items:center;
     padding:44px 18px 24px;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
-        radial-gradient(circle at center, rgba(255,255,255,0.22) 1.5px, transparent 0);
-    background-size:38px 38px;
-    background-position:0 0;
 }
+
+
+
+
+
 
 /* BENTO CONTAINER */
 .bento{
+    position:relative;
+    z-index:10;
     width:100%;
     max-width:1120px;
     display:grid;
@@ -505,7 +506,7 @@ body{
 
 /* RESPONSIVE MOBILE */
 @media(max-width:900px){
-    body{padding:26px 14px;background-size:32px 32px;}
+    body{padding:26px 14px;}
     .bento{display:flex;flex-direction:column;align-items:center;width:100%;gap:20px;}
     .col-1,.col-2,.col-4,.item{width:100%;display:flex;flex-direction:column;align-items:center;background:transparent!important;border:none!important;box-shadow:none!important;padding:8px 0;}
     .bio-list{max-width:100%;width:100%;}
@@ -539,6 +540,7 @@ body{
 </style>
 </head>
 <body>
+<canvas id="space-stars-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;" aria-hidden="true"></canvas>
 <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
 <defs>
 <linearGradient id="uptime-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00f2fe"/><stop offset="100%" stop-color="#4facfe"/></linearGradient>
@@ -678,8 +680,8 @@ NEXT BIRTHDAY
 <!-- 4. SKILLS & EXPERTISE -->
 <div class="item col-4">
 <div class="item-label">
-<svg class="skills-icon" viewBox="0 0 24 24" fill="none" stroke="url(#skills-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+<svg class="skills-icon" viewBox="5.5 -0.5 72.5 72.5" fill="none" style="width:19px;height:19px;">
+<path fill="url(#skills-grad)" fill-rule="evenodd" d="M 54.50,41.00 L 53.00,40.75 L 51.50,40.00 L 50.75,40.00 L 50.25,40.25 L 49.75,41.25 L 48.50,42.50 L 47.75,43.00 L 47.00,43.25 L 46.50,43.25 L 45.75,43.00 L 44.50,42.25 L 44.50,42.75 L 44.00,43.75 L 43.50,45.75 L 42.50,47.00 L 42.50,48.75 L 42.75,52.00 L 42.50,58.50 L 43.00,59.00 L 43.50,58.50 L 43.25,49.25 L 43.50,48.50 L 44.25,47.00 L 44.50,46.75 L 44.75,46.75 L 46.50,45.50 L 48.25,43.75 L 49.50,43.50 L 50.00,43.25 L 50.75,42.50 L 51.75,42.25 L 55.00,42.25 L 55.00,41.50 Z M 45.25,38.00 L 44.25,38.00 L 43.75,38.75 L 44.00,40.25 L 44.25,40.50 L 44.25,41.00 L 45.00,40.75 L 45.00,40.00 L 45.50,39.00 Z M 52.75,36.25 L 51.75,36.50 L 51.50,37.25 L 52.00,39.00 L 52.50,38.50 L 53.00,37.25 Z M 23.75,33.50 L 23.25,33.75 L 23.50,40.00 L 23.00,40.50 L 21.75,41.00 L 16.25,41.25 L 16.25,42.25 L 16.75,42.75 L 17.50,42.75 L 18.50,42.25 L 22.25,42.25 L 23.50,42.50 L 24.50,43.25 L 25.00,43.25 L 25.50,43.50 L 27.00,44.75 L 27.75,46.00 L 26.75,46.75 L 24.25,46.75 L 23.25,46.25 L 22.25,46.50 L 22.25,47.00 L 22.50,47.25 L 22.75,48.25 L 28.75,48.00 L 29.75,48.25 L 31.00,49.25 L 31.25,49.75 L 30.75,57.00 L 31.75,58.50 L 32.25,58.00 L 32.00,55.00 L 32.25,50.75 L 31.75,49.75 L 31.75,49.00 L 32.25,48.00 L 32.25,47.50 L 31.50,46.25 L 31.00,45.75 L 27.75,43.75 L 25.25,41.50 L 24.50,40.00 L 24.50,36.50 L 25.00,35.75 L 25.00,34.75 L 24.75,34.25 Z M 58.25,28.75 L 58.50,29.25 L 59.50,29.00 L 59.00,28.75 Z M 50.25,19.75 L 49.00,20.00 L 49.50,23.00 L 49.50,26.25 L 48.75,28.00 L 44.50,31.25 L 42.75,32.00 L 40.50,34.25 L 39.50,34.25 L 38.50,33.50 L 38.25,28.00 L 40.25,26.50 L 42.50,26.25 L 42.50,25.75 L 41.00,24.50 L 40.00,24.75 L 38.75,24.00 L 38.25,21.25 L 37.00,21.25 L 36.75,22.25 L 37.25,23.00 L 37.00,26.25 L 37.75,27.75 L 37.75,28.75 L 37.25,29.25 L 35.25,29.25 L 33.50,28.25 L 33.00,27.25 L 32.00,26.75 L 28.50,27.50 L 29.00,28.00 L 31.50,28.50 L 32.75,29.50 L 34.50,30.25 L 36.75,32.00 L 37.75,33.50 L 37.25,34.75 L 37.25,36.50 L 38.00,38.75 L 38.00,39.75 L 37.50,40.25 L 35.00,40.50 L 34.25,39.50 L 32.25,39.25 L 31.00,39.50 L 30.50,40.00 L 33.75,41.00 L 37.75,44.50 L 37.25,62.25 L 37.75,62.75 L 38.50,62.50 L 38.50,45.50 L 38.25,43.75 L 38.50,41.00 L 38.00,39.50 L 38.75,37.00 L 43.50,33.25 L 44.75,32.75 L 47.75,30.25 L 49.50,29.50 L 50.75,28.50 L 57.75,28.50 L 58.00,27.00 L 59.50,26.75 L 59.50,26.25 L 58.50,26.25 L 57.75,27.00 L 51.75,27.00 L 51.00,26.75 L 50.25,26.00 L 50.25,23.25 L 50.75,21.75 L 50.75,20.25 Z M 37.00,18.50 L 37.00,19.00 L 38.00,18.75 Z M 72.25,22.25 L 69.50,19.75 L 64.50,17.25 L 59.50,12.25 L 55.00,10.75 L 46.75,11.75 L 41.75,9.25 L 39.25,8.75 L 28.00,9.25 L 27.00,10.25 L 25.25,10.50 L 21.50,12.50 L 18.25,15.25 L 14.00,20.75 L 11.25,23.25 L 9.00,27.50 L 8.50,32.50 L 10.25,37.50 L 10.25,39.75 L 9.25,42.50 L 9.50,46.50 L 11.50,50.00 L 14.50,52.50 L 17.00,53.25 L 21.25,58.75 L 24.00,60.25 L 27.50,60.25 L 27.75,59.25 L 24.75,59.00 L 21.75,57.50 L 18.25,52.00 L 15.00,51.25 L 11.75,48.50 L 10.00,44.75 L 10.25,40.75 L 11.75,38.25 L 10.25,36.25 L 9.50,30.00 L 10.25,26.50 L 15.25,21.25 L 18.25,17.00 L 22.25,13.50 L 29.00,10.25 L 40.25,10.25 L 46.75,13.25 L 49.75,13.00 L 52.25,12.00 L 58.50,13.25 L 64.50,19.25 L 66.00,19.50 L 70.50,22.25 L 72.75,24.50 L 73.75,26.75 L 73.75,30.75 L 72.50,34.50 L 69.25,37.75 L 67.75,38.25 L 65.00,43.50 L 57.25,49.50 L 54.00,50.25 L 53.00,51.25 L 47.25,51.50 L 47.50,52.50 L 53.00,52.50 L 54.25,51.50 L 56.25,51.25 L 59.75,49.50 L 65.25,44.50 L 68.00,39.75 L 72.25,36.75 L 74.00,34.00 L 74.25,31.50 L 75.00,30.50 L 74.00,25.25 Z"/>
 </svg>
 SKILLS & EXPERTISE
 </div>
@@ -689,7 +691,31 @@ SKILLS & EXPERTISE
 ADB & Android
 </div>
 <div class="tag">
-<svg viewBox="0 0 24 24" fill="none" stroke="url(#vfx-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+<svg viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 0 4px rgba(217,70,239,0.5));">
+<defs>
+<linearGradient id="clapper-body-grad" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#d946ef"/>
+<stop offset="100%" stop-color="#9333ea"/>
+</linearGradient>
+<linearGradient id="clapper-arm-grad" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#c026d3"/>
+<stop offset="100%" stop-color="#e879f9"/>
+</linearGradient>
+</defs>
+<rect x="3.5" y="10" width="17" height="11.5" rx="2" fill="url(#clapper-body-grad)" stroke="#f0abfc" stroke-width="0.8"/>
+<line x1="6" y1="13" x2="10" y2="13" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"/>
+<line x1="12" y1="13" x2="18" y2="13" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"/>
+<line x1="6" y1="15.8" x2="11" y2="15.8" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"/>
+<line x1="13" y1="15.8" x2="18" y2="15.8" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"/>
+<line x1="6" y1="18.6" x2="18" y2="18.6" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"/>
+<rect x="3" y="7.8" width="18" height="3" rx="0.8" fill="#9333ea" stroke="#f0abfc" stroke-width="0.6"/>
+<path d="M7.5 7.8l-2 3M11.5 7.8l-2 3M15.5 7.8l-2 3M19.5 7.8l-2 3" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+<g transform="rotate(-18 3.5 7.8)">
+<rect x="3" y="4.8" width="18" height="3" rx="0.8" fill="url(#clapper-arm-grad)" stroke="#f0abfc" stroke-width="0.6"/>
+<path d="M7.5 4.8l-2 3M11.5 4.8l-2 3M15.5 4.8l-2 3M19.5 4.8l-2 3" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="4.5" cy="6.3" r="0.7" fill="#ffffff"/>
+</g>
+</svg>
 Video Effects
 </div>
 <div class="tag">
@@ -825,12 +851,19 @@ PC SPECIFICATIONS (คอมประกอบเอง ม.3)
 
 <!-- 8. DOWNLOADS HUB -->
 <div class="item col-4" style="align-items:center;text-align:center;padding:26px 18px 8px;">
-<div class="item-label" style="justify-content:center;margin-bottom:18px;">
+<div class="item-label" style="justify-content:center;margin-bottom:18px;gap:8px;">
 <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
 <path d="M12 3v10m-4-4 4 4 4-4" stroke="#fff" stroke-width="2.2"/>
 <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="url(#dl-hdr-grad)" stroke-width="2.2"/>
 </svg>
 DOWNLOADS
+<span style="display:inline-flex;align-items:center;gap:6px;margin-left:4px;font-size:15px;color:#94a3b8;font-weight:600;">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="border-radius:3px;box-shadow:0 0 8px rgba(237,28,36,0.6);">
+<rect width="24" height="24" rx="4" fill="#ED1C24"/>
+<path d="M5.5 5C6.8 6.5 7.1 8 7.1 9.2V20H13.2C17.2 20 19.5 17.8 19.5 15C19.5 13.2 18.3 11.9 16.6 11.3C18 10.7 18.9 9.6 18.9 8C18.9 5.5 16.8 5 13.6 5H5.5ZM9.6 7.4H12.8C14.2 7.4 15.2 8 15.2 9.2C15.2 10.4 14.2 11 12.8 11H9.6V7.4ZM9.6 13.4H13.2C14.8 13.4 15.8 14.1 15.8 15.4C15.8 16.7 14.8 17.6 13.2 17.6H9.6V13.4Z" fill="#FFFFFF"/>
+</svg>
+Security 100%
+</span>
 </div>
 <div class="btn-group">
 <div class="btn" role="button" tabindex="0" onclick="triggerDownload('Speed Detection.apk')" onkeydown="if(event.key==='Enter')triggerDownload('Speed Detection.apk')">
@@ -853,14 +886,13 @@ PAINTAPP
 
 <!-- 9. FOOTER -->
 <div class="footer">
-<span class="footer-gmail-wrap" onclick="copyEmail(event)">
+<a href="https://mail.google.com/mail/?view=cm&fs=1&to=nattanantreetos@gmail.com" target="_blank" rel="noopener noreferrer" class="footer-gmail-wrap" style="text-decoration:none;color:inherit;" onclick="handleEmailClick(event)" title="ส่งอีเมลถึง nattanantreetos@gmail.com">
 <svg class="gmail-icon" viewBox="0 0 24 24" fill="none">
 <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6Z" fill="#EA4335" fill-opacity="0.2"/>
 <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6ZM20 6L12 11L4 6H20ZM20 18H4V8L12 13L20 8V18Z" fill="#EA4335"/>
 </svg>
 <span id="footer-email-text">nattanantreetos@gmail.com</span>
-<span id="footer-email-copied" style="display:none;color:#ffffff;font-weight:600;margin-left:8px;">คัดลอกแล้ว! ✓</span>
-</span>
+</a>
 </div>
 </div>
 
@@ -873,7 +905,7 @@ PAINTAPP
 <p>ขอบคุณที่สนใจผลงานของผมครับ! หากชื่นชอบสามารถร่วมสนับสนุนเพื่อเป็นกำลังใจและพัฒนาโปรเจกต์ต่อไปได้ที่</p>
 </div>
 <div class="donate-qr-wrap">
-<img src="Donet.webp" alt="PromptPay QR Code" class="donate-qr-img" width="200" height="auto" loading="eager" decoding="async">
+<img src="MyDrawing.svg" alt="PromptPay QR Code" class="donate-qr-img" width="200" height="200" style="border-radius:12px;display:block;margin:0 auto;box-shadow:0 0 24px rgba(255,255,255,0.06);" loading="lazy" decoding="async">
 <div class="qr-sub">สแกน QR Code ผ่านแอปธนาคารได้ทุกธนาคาร</div>
 </div>
 <div class="promptpay-bar" onclick="copyPromptPay(event)" title="คลิกเพื่อคัดลอกเบอร์ PromptPay">
@@ -897,6 +929,13 @@ PAINTAPP
 </div>
 
 <script>
+function handleEmailClick(e){
+    var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if(isMobile){
+        e.preventDefault();
+        window.location.href = 'mailto:nattanantreetos@gmail.com';
+    }
+}
 function openLink(url){window.open(url,'_blank','noopener,noreferrer');}
 function triggerDownload(url){
     var a=document.createElement('a');
@@ -994,6 +1033,11 @@ function tick(){
     if(elBSecs)elBSecs.textContent=bs<10?'0'+bs:bs;
 }
 setInterval(tick,1000);
+document.addEventListener('visibilitychange',function(){
+    if(!document.hidden){
+        tick();
+    }
+});
 tick();
 
 var avatarModalEl=document.getElementById('avatar-modal');
@@ -1029,29 +1073,7 @@ function nextSlide(){
 }
 setInterval(nextSlide,2000);
 
-var emailCopyTimer = null;
-window.copyEmail=function(e){
-    if(e&&e.preventDefault)e.preventDefault();
-    var email='nattanantreetos@gmail.com';
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-        navigator.clipboard.writeText(email);
-    }else{
-        var temp=document.createElement('input');
-        temp.value=email;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand('copy');
-        document.body.removeChild(temp);
-    }
-    var copiedEl=document.getElementById('footer-email-copied');
-    if(copiedEl){
-        copiedEl.style.display='inline';
-        if(emailCopyTimer) clearTimeout(emailCopyTimer);
-        emailCopyTimer = setTimeout(function(){
-            if(copiedEl) copiedEl.style.display='none';
-        }, 1000);
-    }
-};
+
 
 window.addEventListener('paste',function(e){
     if(!e.clipboardData)return;
@@ -1103,60 +1125,238 @@ window.addEventListener('paste',function(e){
     }
 });
 
-// 100% ROCK-SOLID SILKY SMOOTH BUTTERY MOMENTUM SCROLL
+
+
+
+// THE GOLD STANDARD ULTIMATE INERTIAL SMOOTH SCROLL ENGINE (LENIS PHYSICS)
 (function(){
-    var currentY = window.pageYOffset || document.documentElement.scrollTop;
-    var targetY = currentY;
+    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    var targetY = scrollY;
+    var velocity = 0;
     var isRunning = false;
-    var ease = 0.085; // Pure buttery smooth gliding feel
+    var rafId = null;
+    var lastTime = performance.now();
 
-    function renderScroll(){
+    // Damping factor: 0.10 gives pure weightless velvet glide
+    var damping = 0.10;
+
+    function getMaxScroll(){
+        return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    }
+
+    function onFrame(now){
         if(!isRunning) return;
-        currentY += (targetY - currentY) * ease;
-        window.scrollTo(0, Math.round(currentY));
+        var dt = Math.min((now - lastTime) / 1000, 0.1);
+        lastTime = now;
 
-        if(Math.abs(targetY - currentY) > 0.5){
-            requestAnimationFrame(renderScroll);
-        }else{
-            currentY = targetY;
-            window.scrollTo(0, targetY);
+        var maxScroll = getMaxScroll();
+        targetY = Math.max(0, Math.min(targetY, maxScroll));
+
+        // Exponential smoothing independent of monitor refresh rate (60Hz / 144Hz / 240Hz)
+        var factor = 1 - Math.pow(1 - damping, dt * 60);
+        scrollY += (targetY - scrollY) * factor;
+
+        var delta = Math.abs(targetY - scrollY);
+        if(delta < 0.25){
+            scrollY = targetY;
+            window.scrollTo(0, Math.round(targetY));
             isRunning = false;
+        }else{
+            window.scrollTo(0, scrollY);
+            rafId = requestAnimationFrame(onFrame);
         }
     }
 
-    function stopScroll(){
-        isRunning = false;
-        currentY = window.pageYOffset || document.documentElement.scrollTop;
-        targetY = currentY;
+    function start(){
+        if(!isRunning){
+            isRunning = true;
+            lastTime = performance.now();
+            scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            rafId = requestAnimationFrame(onFrame);
+        }
+    }
+
+    function stop(){
+        if(isRunning){
+            isRunning = false;
+            if(rafId) cancelAnimationFrame(rafId);
+        }
+        scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        targetY = scrollY;
     }
 
     window.addEventListener('wheel', function(e){
         if(e.ctrlKey || e.metaKey || e.altKey) return;
-        var maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        var maxScroll = getMaxScroll();
         if(maxScroll <= 0) return;
 
-        e.preventDefault();
+        var vh = window.innerHeight || 900;
+        // Optimal travel distance proportional to display resolution (4K / 2K / 1080p)
+        var step = Math.max(140, vh * 0.16);
         var delta = e.deltaY;
-        if(e.deltaMode === 1) delta *= 36;
-        else if(e.deltaMode === 2) delta *= window.innerHeight;
 
-        targetY = Math.max(0, Math.min(targetY + delta, maxScroll));
-        if(!isRunning){
-            isRunning = true;
-            currentY = window.pageYOffset || document.documentElement.scrollTop;
-            requestAnimationFrame(renderScroll);
+        if(e.deltaMode === 1) delta *= 36;
+        else if(e.deltaMode === 2) delta *= vh;
+        else {
+            if(Math.abs(delta) >= 50){
+                delta = (delta / 100) * step;
+            }else{
+                // Trackpad fluid glide
+                delta *= 1.8;
+            }
         }
+
+        e.preventDefault();
+        targetY = Math.max(0, Math.min(targetY + delta, maxScroll));
+        start();
     }, {passive: false});
 
-    // Zero-lag sync on Touch, Scrollbar Drag & Resize
-    window.addEventListener('touchstart', stopScroll, {passive: true});
-    window.addEventListener('pointerdown', stopScroll, {passive: true});
+    window.addEventListener('touchstart', stop, {passive: true});
+    window.addEventListener('pointerdown', stop, {passive: true});
+
+    window.addEventListener('keydown', function(e){
+        var maxScroll = getMaxScroll();
+        var vh = window.innerHeight || 900;
+        var keyDelta = 0;
+        if(e.key === 'ArrowDown') keyDelta = 100;
+        else if(e.key === 'ArrowUp') keyDelta = -100;
+        else if(e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) keyDelta = vh * 0.8;
+        else if(e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) keyDelta = -vh * 0.8;
+        else if(e.key === 'Home') keyDelta = -targetY;
+        else if(e.key === 'End') keyDelta = maxScroll - targetY;
+
+        if(keyDelta !== 0 && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){
+            e.preventDefault();
+            targetY = Math.max(0, Math.min(targetY + keyDelta, maxScroll));
+            start();
+        }
+    });
+
     window.addEventListener('scroll', function(){
         if(!isRunning){
-            currentY = window.pageYOffset || document.documentElement.scrollTop;
-            targetY = currentY;
+            scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            targetY = scrollY;
         }
     }, {passive: true});
+})();
+
+
+// RAZOR-SHARP DETERMINISTIC 4K DEEP SPACE STARFIELD (100% VISIBLE & HARDWARE ACCELERATED)
+(function(){
+    var canvas = document.getElementById('space-stars-canvas');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d', {alpha: true});
+    if(!ctx) return;
+
+    var stars = [];
+    var totalStars = 280;
+
+    // Deterministic Mulberry32 seeded RNG (100% identical positions on every load)
+    function mulberry32(a){
+        return function(){
+            var t = a += 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+    }
+
+    var rng = mulberry32(88812345);
+
+    function initStars(){
+        stars = [];
+        for(var i = 0; i < totalStars; i++){
+            var type = rng();
+            var r = 1.0;
+            var alpha = 0.85;
+            var glow = 0;
+            var speed = 0.5 + rng() * 1.5;
+
+            if(type < 0.60){
+                // Small distant crisp stars (another -20% size)
+                r = 0.64 + rng() * 0.38;
+                alpha = 0.70 + rng() * 0.25;
+            }else if(type < 0.90){
+                // Medium bright stars (another -20% size)
+                r = 1.15 + rng() * 0.51;
+                alpha = 0.90 + rng() * 0.10;
+                glow = 1.8;
+            }else{
+                // Prominent brilliant stars (another -20% size)
+                r = 1.79 + rng() * 0.76;
+                alpha = 1.0;
+                glow = 4.2;
+            }
+
+            stars.push({
+                x: rng(), // Normalized 0..1
+                y: rng(), // Normalized 0..1
+                baseR: r,
+                baseAlpha: alpha,
+                glow: glow,
+                phase: rng() * Math.PI * 2,
+                speed: speed
+            });
+        }
+    }
+
+    function resize(){
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var w = window.innerWidth || document.documentElement.clientWidth || 1920;
+        var h = window.innerHeight || document.documentElement.clientHeight || 1080;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.scale(dpr, dpr);
+        draw(performance.now());
+    }
+
+    function draw(now){
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        ctx.clearRect(0, 0, w, h);
+
+        var timeSec = now * 0.001;
+
+        for(var i = 0; i < stars.length; i++){
+            var s = stars[i];
+            var px = s.x * w;
+            var py = s.y * h;
+
+            // Subtle gentle cosmic shimmer
+            var shimmer = 0.85 + 0.15 * Math.sin(timeSec * s.speed + s.phase);
+            var currentAlpha = s.baseAlpha * shimmer;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(px, py, s.baseR, 0, Math.PI * 2);
+
+            if(s.glow > 0){
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = s.glow;
+            }
+
+            ctx.fillStyle = 'rgba(255, 255, 255, ' + currentAlpha + ')';
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    var animId = null;
+    function loop(now){
+        if(document.hidden){
+            animId = requestAnimationFrame(loop);
+            return;
+        }
+        draw(now);
+        animId = requestAnimationFrame(loop);
+    }
+
+    initStars();
+    resize();
+    window.addEventListener('resize', resize, {passive: true});
+    animId = requestAnimationFrame(loop);
 })();
 
 if('serviceWorker' in navigator){
