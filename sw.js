@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seen-v96';
+const CACHE_NAME = 'seen-v99';
 const CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
 const CACHE_TIME_HEADER = 'x-seen-cached-at';
 const SCOPE_URL = new URL(self.registration.scope);
@@ -7,6 +7,7 @@ const SHELL_PATH = new URL(SHELL_URL).pathname;
 const STATIC_URLS = new Set([
   'manifest.json',
   'icon-192.webp',
+  'header-logo-white.webp',
   'icon-512.webp',
   '1778995068748.webp',
   '1781878817675.webp',
@@ -44,8 +45,8 @@ async function saveResponse(url, response) {
 }
 
 self.addEventListener('install', (event) => {
-  // Only the small HTML shell is required offline; assets are fetched as used.
-  // A transient network failure must not prevent a fixed worker from installing.
+  // Cache only the small page shell up front. Other assets remain lazy and
+  // are cached only after the visitor actually needs them.
   event.waitUntil(
     fetch(SHELL_URL, {cache: 'no-cache'})
       .then((response) => saveResponse(SHELL_URL, response))
@@ -116,7 +117,7 @@ self.addEventListener('fetch', (event) => {
       (url.pathname === SCOPE_URL.pathname || url.pathname === SHELL_PATH)) {
     event.respondWith(navigationResponse(event));
   } else if (STATIC_URLS.has(url.href)) {
-    // Executables, APKs, arbitrary URLs, and cross-origin requests bypass this worker.
+    // Installers, arbitrary URLs, and cross-origin requests bypass this worker.
     event.respondWith(staticResponse(event));
   }
 });

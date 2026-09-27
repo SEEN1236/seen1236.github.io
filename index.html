@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<script>
+document.documentElement.classList.add('page-loading');
+if('scrollRestoration' in history) history.scrollRestoration = 'manual';
+</script>
 <title>ณัฐนันท์ ตรีทศ (SEEN / seen1236) | ผลงานและดาวน์โหลด</title>
-<meta name="description" content="รู้จัก ณัฐนันท์ ตรีทศ (ซีน / SEEN / seen1236) หรือ Nathanan Treetos ชมผลงานเขียนโปรแกรม เรื่องราว คอมพิวเตอร์ประกอบเอง และดาวน์โหลดแอปที่พัฒนาขึ้น">
-<meta name="author" content="ณัฐนันท์ ตรีทศ (Nathanan Treetos / SEEN)">
+<meta name="description" content="รู้จัก ณัฐนันท์ ตรีทศ (ซีน / SEEN / seen1236) หรือ Natthanan Treetos ชมผลงานเขียนโปรแกรม เรื่องราว คอมพิวเตอร์ประกอบเอง และดาวน์โหลดแอปที่พัฒนาขึ้น">
+<meta name="author" content="ณัฐนันท์ ตรีทศ (Natthanan Treetos / SEEN)">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#000000">
 <link rel="canonical" href="https://seen.jirayu.net/">
@@ -13,13 +17,13 @@
 <meta property="og:url" content="https://seen.jirayu.net/">
 <meta property="og:locale" content="th_TH">
 <meta property="og:title" content="ณัฐนันท์ ตรีทศ (SEEN / seen1236) | ผลงานและดาวน์โหลด">
-<meta property="og:description" content="รู้จัก ณัฐนันท์ ตรีทศ (ซีน / SEEN / seen1236) หรือ Nathanan Treetos ชมผลงานเขียนโปรแกรม เรื่องราว คอมพิวเตอร์ประกอบเอง และดาวน์โหลดแอปที่พัฒนาขึ้น">
+<meta property="og:description" content="รู้จัก ณัฐนันท์ ตรีทศ (ซีน / SEEN / seen1236) หรือ Natthanan Treetos ชมผลงานเขียนโปรแกรม เรื่องราว คอมพิวเตอร์ประกอบเอง และดาวน์โหลดแอปที่พัฒนาขึ้น">
 <meta property="og:image" content="https://seen.jirayu.net/1778995068748.webp">
 <meta property="og:image:alt" content="ณัฐนันท์ ตรีทศ (SEEN)">
 <meta property="og:site_name" content="SEEN">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ณัฐนันท์ ตรีทศ (SEEN / seen1236) | ผลงานและดาวน์โหลด">
-<meta name="twitter:description" content="รู้จัก ณัฐนันท์ ตรีทศ (ซีน / SEEN / seen1236) หรือ Nathanan Treetos ชมผลงานเขียนโปรแกรม เรื่องราว คอมพิวเตอร์ประกอบเอง และดาวน์โหลดแอปที่พัฒนาขึ้น">
+<meta name="twitter:description" content="รู้จัก ณัฐนันท์ ตรีทศ (ซีน / SEEN / seen1236) หรือ Natthanan Treetos ชมผลงานเขียนโปรแกรม เรื่องราว คอมพิวเตอร์ประกอบเอง และดาวน์โหลดแอปที่พัฒนาขึ้น">
 <meta name="twitter:image" content="https://seen.jirayu.net/1778995068748.webp">
 <meta name="twitter:image:alt" content="ณัฐนันท์ ตรีทศ (SEEN)">
 <script type="application/ld+json">
@@ -51,7 +55,7 @@
       "name": "ณัฐนันท์ ตรีทศ",
       "givenName": "ณัฐนันท์",
       "familyName": "ตรีทศ",
-      "alternateName": ["Nathanan Treetos", "ซีน", "SEEN", "seen1236"],
+      "alternateName": ["Natthanan Treetos", "ซีน", "SEEN", "seen1236"],
       "url": "https://seen.jirayu.net/",
       "image": "https://seen.jirayu.net/1778995068748.webp",
       "description": "ผู้สร้างผลงานเขียนโปรแกรมและแอปออฟไลน์ สนใจการประกอบคอมพิวเตอร์และเทคโนโลยี",
@@ -64,7 +68,7 @@
       "sameAs": [
         "https://github.com/SEEN1236",
         "https://www.youtube.com/@seen1236_yt",
-        "https://www.tiktok.com/@seen1236_s",
+        "https://www.tiktok.com/@seen1236_tt",
         "https://www.instagram.com/seen1236_ig/",
         "https://www.facebook.com/seen1236"
       ]
@@ -121,8 +125,19 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:44px 18px 24px;
+    /* Keep the first profile card comfortably below the fixed header controls. */
+    padding:84px 18px 24px;
     position:relative;
+}
+#space-stars-canvas{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    width:var(--starfield-width,100vw)!important;
+    height:var(--starfield-height,100vh)!important;
+    pointer-events:none!important;
+    transform:translateZ(0);
+    contain:strict;
 }
 
 
@@ -303,6 +318,27 @@ body{
 .stat-sub{font-size:15.5px;color:#64748b;margin-top:4px;}
 
 /* DOWNLOADS */
+.download-platforms{display:grid;gap:18px;width:100%;max-width:600px;text-align:left;}
+.download-platform{padding:22px;border:1px solid #202a37;border-radius:22px;background:linear-gradient(135deg,rgba(56,189,248,.055),rgba(15,23,42,.3));}
+.download-platform.android{background:linear-gradient(135deg,rgba(61,220,132,.055),rgba(15,23,42,.3));}
+.download-platform-title{display:flex;align-items:center;gap:13px;margin-bottom:18px;font-size:20px;font-weight:600;color:#f1f5f9;letter-spacing:.2px;}
+.platform-logo{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:rgba(56,189,248,.1);color:#38bdf8;flex-shrink:0;}
+.platform-logo svg{width:26px;height:26px;}
+.android .platform-logo{background:rgba(61,220,132,.1);color:#3ddc84;}
+.platform-arch{font-size:14px;font-weight:400;color:#94a3b8;}
+.download-platform .btn-group{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;}
+.download-platform .btn{justify-content:flex-start;min-width:0;padding:13px 16px;border-radius:13px;font-size:16px;gap:11px;}
+.download-platform .btn .hint{margin-left:auto;padding-left:8px;}
+.download-platform .btn:focus-visible{outline:2px solid #38bdf8;outline-offset:4px;}
+.download-platform.android .btn:focus-visible{outline-color:#3ddc84;}
+#downloads-section > .item-label{flex-wrap:wrap;}
+@media(max-width:480px){
+    .download-platform{padding:16px;border-radius:18px;}
+    .download-platform-title{font-size:18px;gap:10px;}
+    .download-platform .btn{padding:12px;font-size:14px;gap:8px;}
+    .platform-arch{font-size:13px;}
+}
+
 .btn-group{display:flex;gap:14px;justify-content:center;width:100%;max-width:850px;flex-wrap:wrap;}
 .btn{
     background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 45%,#e2e8f0 55%,#ffffff 100%);
@@ -335,6 +371,45 @@ body{
 .btn img,.btn svg{width:18px;height:18px;object-fit:contain;}
 .btn .hint{color:#475569;font-size:14.5px;font-weight:500;}
 
+
+/* Downloads share the monochrome, open starfield theme. */
+#downloads-section > .item-label{margin-bottom:8px!important;color:#e2e8f0;letter-spacing:2px;}
+#downloads-section .dl-icon{filter:none;animation:none;}
+.download-intro{font-size:14px;color:#a3a3a3;margin-bottom:26px;line-height:1.7;}
+.download-intro > span{padding:0 8px;color:#737373;}
+.download-platforms{
+    grid-template-columns:minmax(0,1.25fr) minmax(260px,.85fr);
+    align-items:start;
+    gap:28px 26px;
+    max-width:1000px;
+}
+.download-platform,.download-platform.android{padding:0;background:transparent;border:0;border-radius:0;}
+.download-platform-title{font-size:19px;margin:0 0 14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.14);}
+.platform-logo{width:38px;height:38px;border-radius:10px;background:rgba(0,120,215,.12);color:#38a9ff;box-shadow:inset 0 0 0 1px rgba(78,168,255,.18),0 0 18px rgba(0,120,215,.12);}
+.platform-logo svg{width:25px;height:25px;filter:drop-shadow(0 2px 6px rgba(0,120,215,.35));}
+.android .platform-logo{background:rgba(61,220,132,.12);color:#3ddc84;box-shadow:inset 0 0 0 1px rgba(61,220,132,.2),0 0 18px rgba(61,220,132,.1);}
+.android .platform-logo svg{filter:drop-shadow(0 2px 6px rgba(61,220,132,.3));}
+.platform-arch{display:inline-block;margin-left:5px;padding:3px 8px;border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:12px;vertical-align:middle;}
+.download-platform .btn{background:rgba(0,0,0,.28);color:#f5f5f5;border:1px solid rgba(255,255,255,.2);border-radius:22px;box-shadow:none;white-space:normal;padding:14px 16px;gap:14px;text-align:left;transition:background .15s,border-color .15s,transform .15s;}
+.download-platform .btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.55);box-shadow:none;transform:translateY(-1px);}
+.download-platform .btn:active{background:rgba(255,255,255,.12);transform:none;}
+.download-platform .btn > img{width:28px;height:28px;flex-shrink:0;}
+.download-file{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px;}
+.download-name{font-size:16px;font-weight:600;line-height:1.35;overflow-wrap:anywhere;}
+.download-meta{font-size:12px;color:#a3a3a3;font-weight:400;letter-spacing:.2px;line-height:1.5;}
+.download-platform .btn .download-arrow{width:19px;height:19px;color:#d4d4d4;flex-shrink:0;margin-left:auto;}
+.download-source{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 2px;font-size:12px;color:#a3a3a3;}
+.download-source a{color:#d4d4d4;text-decoration:underline;text-underline-offset:4px;}
+.download-source a:hover{color:#fff;}
+@media(max-width:700px){
+    .download-platforms{grid-template-columns:1fr;gap:28px;max-width:640px;}
+    .download-source{grid-column:auto;}
+}
+@media(max-width:480px){.download-platform,.download-platform.android{padding:0;}.download-platform-title{font-size:17px;}.platform-arch{margin-left:2px;font-size:11px;padding:3px 5px;}.download-platform .btn{padding:12px;gap:10px;}.download-name{font-size:14px;}}
+
+#downloads-section .download-platform .btn:focus-visible{outline:2px solid #fff;outline-offset:4px;}
+@media(prefers-reduced-motion:reduce){#downloads-section .btn{transition:none;transform:none;}}
+
 /* NOTE & STORY */
 .note-card{align-items:flex-start;text-align:left;padding:26px;width:100%;}
 .note-card div{font-size:19px;color:#cbd5e1;line-height:1.8;width:100%;}
@@ -352,10 +427,89 @@ body{
     height:100%;
     width:100%;
 }
+/* Reveal the existing layout progressively once, then leave it completely static. */
+html.page-loading .bento > .item,
+html.page-loading .bento > .footer{
+    opacity:0;
+    transform:translateY(14px);
+    pointer-events:none;
+}
+html.page-loading .bento > .item.load-ready,
+html.page-loading .bento > .footer.load-ready{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+    transition:opacity 380ms cubic-bezier(.16,1,.3,1),transform 380ms cubic-bezier(.16,1,.3,1);
+}
+.bento > .item.load-ready.scroll-passed,
+.bento > .item.load-ready.scroll-passed-bottom,
+.bento > .footer.load-ready.scroll-passed,
+.bento > .footer.load-ready.scroll-passed-bottom{
+    opacity:.11;
+    transform:translateY(-10px);
+    filter:blur(5px) saturate(.4);
+    will-change:opacity,transform,filter;
+    transition:opacity 420ms ease,transform 420ms ease,filter 420ms ease;
+}
+.bento > .item.load-ready.scroll-passed::after,
+.bento > .item.load-ready.scroll-passed-bottom::after,
+.bento > .footer.load-ready.scroll-passed::after,
+.bento > .footer.load-ready.scroll-passed-bottom::after{
+    content:"";
+    position:absolute;
+    inset:-3px;
+    z-index:3;
+    pointer-events:none;
+    opacity:.55;
+    background-image:
+        linear-gradient(90deg,rgba(0,0,0,.62) 50%,transparent 50%),
+        linear-gradient(rgba(0,0,0,.62) 50%,transparent 50%);
+    background-size:6px 6px;
+}
+.scroll-progress-track{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1001;
+    width:100%;
+    height:3px;
+    pointer-events:none;
+    background:rgba(255,255,255,.10);
+    transition:opacity 360ms ease;
+}
+.scroll-progress-track.is-complete{opacity:0;}
+.scroll-progress-bar{
+    display:block;
+    width:100%;
+    height:100%;
+    transform:scaleX(0);
+    transform-origin:left center;
+    background:#fff;
+    box-shadow:0 0 8px rgba(255,255,255,.75);
+    transition:transform 420ms cubic-bezier(.16,1,.3,1);
+}
+.spec-purchase-date{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    width:max-content;
+    max-width:100%;
+    margin-bottom:10px;
+    padding:5px 9px;
+    border:1px solid color-mix(in srgb,currentColor 28%,transparent);
+    border-radius:999px;
+    background:color-mix(in srgb,currentColor 8%,transparent);
+    color:#94a3b8;
+    font-size:13px;
+    line-height:1.35;
+    letter-spacing:.15px;
+}
+.spec-purchase-date time{color:#e2e8f0;font-variant-numeric:tabular-nums;white-space:nowrap;}
 
 /* FOOTER */
 .footer{
     grid-column:span 4;
+    position:relative;
     display:flex;
     justify-content:center;
     padding:4px 0 12px;
@@ -589,7 +743,7 @@ body{
 
 /* RESPONSIVE MOBILE */
 @media(max-width:900px){
-    body{padding:26px 14px;}
+    body{padding:70px 14px 26px;}
     .bento{display:flex;flex-direction:column;align-items:center;width:100%;gap:20px;}
     .col-1,.col-2,.col-4,.item{width:100%;display:flex;flex-direction:column;align-items:center;background:transparent!important;border:none!important;box-shadow:none!important;padding:8px 0;}
     .bio-list{max-width:100%;width:100%;}
@@ -632,10 +786,12 @@ body{
     align-items:center;
     background:#080808;
     border:1px solid rgba(255,255,255,0.25);
-    border-radius:9999px;
+    border-radius:10px;
     padding:3px;
     box-shadow:0 4px 20px rgba(0,0,0,0.6);
-    transition:border-color 0.2s ease;
+    transition:border-color 0.2s ease,box-shadow 0.2s ease;
+    overflow:hidden;
+    isolation:isolate;
 }
 .lang-switch-wrap:hover{
     border-color:rgba(255,255,255,0.6);
@@ -643,7 +799,7 @@ body{
 }
 .lang-btn{
     position:relative;
-    z-index:2;
+    z-index:3;
     background:transparent;
     border:none;
     color:#737373;
@@ -651,7 +807,7 @@ body{
     font-weight:700;
     letter-spacing:1px;
     padding:5px 14px;
-    border-radius:9999px;
+    border-radius:7px;
     cursor:pointer;
     transition:color 0.2s ease;
     user-select:none;
@@ -672,11 +828,11 @@ body{
     left:3px;
     width:calc(50% - 3px);
     height:calc(100% - 6px);
-    border-radius:9999px;
+    border-radius:7px;
     pointer-events:none;
     transition:transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:none!important;
-    z-index:1;
+    z-index:2;
 }
 .lang-switch-wrap.en-active .lang-slider{
     transform:translateX(100%);
@@ -744,16 +900,19 @@ body{
     gap:4px;
     background:#080808;
     border:1px solid rgba(255,255,255,0.25);
-    border-radius:9999px;
+    border-radius:10px;
     padding:3px 4px;
     box-shadow:0 4px 20px rgba(0,0,0,0.6);
-    transition:border-color 0.2s ease;
+    transition:border-color 0.2s ease,box-shadow 0.2s ease;
+    overflow:hidden;
+    isolation:isolate;
 }
 .nav-pill-wrap:hover{
     border-color:rgba(255,255,255,0.6);
 }
 .nav-btn{
     position:relative;
+    z-index:2;
     background:transparent;
     border:none;
     color:#737373;
@@ -761,7 +920,7 @@ body{
     font-weight:700;
     letter-spacing:1px;
     padding:5px 13px;
-    border-radius:9999px;
+    border-radius:7px;
     cursor:pointer;
     user-select:none;
     -webkit-user-select:none;
@@ -791,10 +950,49 @@ body{
     cursor:pointer;
     opacity:1;
 }
+.nav-pill-wrap::after,
+.lang-switch-wrap::after{
+    content:"";
+    position:absolute;
+    top:-45%;
+    left:0;
+    width:28%;
+    height:190%;
+    pointer-events:none;
+    z-index:1;
+    opacity:0;
+    transform:translateX(-180%) skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.05) 20%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.05) 80%,transparent);
+    animation:glassSweep 1s linear infinite;
+}
+@keyframes glassSweep{
+    0%,30%{opacity:0;transform:translateX(-180%) skewX(-18deg);}
+    42%{opacity:.82;}
+    70%{opacity:0;transform:translateX(520%) skewX(-18deg);}
+    100%{opacity:0;transform:translateX(520%) skewX(-18deg);}
+}
+.nav-pill-wrap.control-tap{
+    animation:navWrapTap 360ms cubic-bezier(.22,1,.36,1);
+}
+.lang-switch-wrap.control-tap{
+    animation:langWrapTap 360ms cubic-bezier(.22,1,.36,1);
+}
+@keyframes navWrapTap{
+    0%{transform:translateX(-50%) scale(1);}
+    35%{transform:translateX(-50%) scale(.94);}
+    70%{transform:translateX(-50%) scale(1.025);}
+    100%{transform:translateX(-50%) scale(1);}
+}
+@keyframes langWrapTap{
+    0%{transform:scale(1);}
+    35%{transform:scale(.94);}
+    70%{transform:scale(1.025);}
+    100%{transform:scale(1);}
+}
 .nav-btn.control-tap,
 .lang-btn.control-tap,
 .lang-slider-fill.control-tap{
-    animation:controlTap 300ms cubic-bezier(0.22,1,0.36,1);
+    animation:controlTap 360ms cubic-bezier(0.22,1,0.36,1);
 }
 @keyframes controlTap{
     0%{transform:scale(1);}
@@ -900,16 +1098,167 @@ body{
     }
 }
 
+/* Full-width site header: brand left, navigation center, language right. */
+.site-header{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:999;
+    width:100%;
+    min-height:66px;
+    display:flex;
+    align-items:center;
+    background:rgba(0,0,0,.82);
+    border-bottom:0;
+    box-shadow:0 5px 22px rgba(0,0,0,.45);
+}
+.site-header-inner{
+    width:min(1120px,calc(100% - 36px));
+    min-height:66px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:22px;
+}
+.header-brand{
+    justify-self:start;
+    width:32px;
+    height:32px;
+    padding:3px;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.header-brand img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 5px rgba(255,255,255,.2));}
+.site-header .nav-pill-wrap{
+    position:absolute;
+    top:50%;
+    left:50%;
+    z-index:auto;
+    justify-self:auto;
+    transform:translate(-50%,-50%);
+    padding:0;
+    gap:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    overflow:visible;
+}
+.site-header .nav-pill-wrap::after{display:none;}
+.site-header .nav-btn{
+    border-radius:0;
+    padding:8px 12px 7px;
+    font-size:13px;
+    color:#b7b7b7;
+    background:transparent!important;
+    box-shadow:inset 0 -2px transparent;
+}
+.site-header .nav-btn:hover{background:transparent;color:#fff;}
+.site-header .nav-btn.active{background:transparent!important;color:#fff!important;box-shadow:inset 0 -2px #fff;}
+.site-header .nav-btn.active svg{stroke:#fff!important;}
+.site-header .nav-btn:focus,
+.site-header .nav-btn:focus-visible{outline:none;}
+.site-header .nav-pill-wrap.control-tap{animation:headerNavWrapTap 360ms cubic-bezier(.22,1,.36,1);}
+@keyframes headerNavWrapTap{
+    0%{transform:translate(-50%,-50%) scale(1);}
+    35%{transform:translate(-50%,-50%) scale(.94);}
+    70%{transform:translate(-50%,-50%) scale(1.025);}
+    100%{transform:translate(-50%,-50%) scale(1);}
+}
+.site-header .lang-switch-wrap{
+    position:relative;
+    top:auto;
+    right:auto;
+    left:auto;
+    z-index:auto;
+    justify-self:end;
+    transform:none;
+    padding:0;
+    gap:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    overflow:visible;
+}
+.site-header .lang-switch-wrap::after{display:none;}
+.site-header .lang-slider{display:none;}
+.site-header .lang-btn{
+    min-width:42px;
+    padding:8px 9px 7px;
+    border-radius:0;
+    font-size:12px;
+    color:#929292;
+    background:transparent!important;
+    box-shadow:inset 0 -2px transparent;
+}
+.site-header .lang-btn:hover{background:transparent!important;color:#fff;}
+.site-header .lang-btn.active{background:transparent!important;color:#fff!important;box-shadow:inset 0 -2px #fff;}
+.site-header .lang-btn:focus,
+.site-header .lang-btn:focus-visible{outline:none;}
+@media(max-width:900px){
+    .site-header{min-height:54px;}
+    .site-header-inner{width:calc(100% - 28px);min-height:54px;gap:10px;}
+    .header-brand{width:29px;height:29px;}
+    .site-header .nav-pill-wrap{top:50%;left:50%;padding:0;gap:0;}
+    .site-header .lang-switch-wrap{top:auto;right:auto;padding:0;}
+}
+@media(max-width:640px){
+    .site-header{min-height:52px;}
+    .site-header-inner{width:calc(100% - 16px);min-height:52px;gap:5px;}
+    .header-brand{width:25px;height:25px;}
+    .site-header .nav-pill-wrap{left:50%;top:50%;}
+    .site-header .lang-switch-wrap{top:auto;right:auto;}
+    .site-header .nav-btn{padding:6px 6px 5px;}
+    .site-header .lang-btn{min-width:30px;padding:6px 4px 5px;}
+}
+@media(max-width:400px){
+    .site-header-inner{gap:3px;}
+    .site-header .nav-pill-wrap{gap:0;}
+    .site-header .nav-btn{padding:6px 3px 5px;font-size:10px;gap:2px;letter-spacing:0;}
+    .site-header .nav-btn-cert{padding-left:3px;padding-right:3px;}
+    .site-header .lang-switch-wrap{padding:0;}
+    .site-header .lang-btn{min-width:30px;padding:6px 4px 5px;font-size:10px;}
+}
+@media(max-width:360px){
+    .site-header-inner{gap:3px;}
+    .header-brand{width:22px;height:22px;}
+}
+
 @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto;}
     *,*::before,*::after{animation:none!important;transition:none!important;}
+    /* Header controls are explicitly requested to keep their tap feedback. */
+    .nav-pill-wrap.control-tap{animation:navWrapTap 360ms cubic-bezier(.22,1,.36,1)!important;}
+    .lang-switch-wrap.control-tap{animation:langWrapTap 360ms cubic-bezier(.22,1,.36,1)!important;}
+    .nav-btn.control-tap,.lang-btn.control-tap,.lang-slider-fill.control-tap{animation:controlTap 360ms cubic-bezier(.22,1,.36,1)!important;}
+    .nav-pill-wrap::after,.lang-switch-wrap::after{animation:glassSweep 1s linear infinite!important;}
+    html.page-loading .bento > .item.load-ready,
+    html.page-loading .bento > .footer.load-ready{transition:opacity 380ms cubic-bezier(.16,1,.3,1),transform 380ms cubic-bezier(.16,1,.3,1)!important;}
+    .bento > .item.load-ready.scroll-passed,
+    .bento > .item.load-ready.scroll-passed-bottom,
+    .bento > .footer.load-ready.scroll-passed,
+    .bento > .footer.load-ready.scroll-passed-bottom{transition:opacity 420ms ease,transform 420ms ease,filter 420ms ease!important;}
+    .scroll-progress-track{transition:opacity 360ms ease!important;}
+    .scroll-progress-bar{transition:transform 420ms cubic-bezier(.16,1,.3,1)!important;}
+    .site-header .nav-pill-wrap.control-tap{animation:headerNavWrapTap 360ms cubic-bezier(.22,1,.36,1)!important;}
 }
 
 </style>
 </head>
 <body>
 
+<div class="scroll-progress-track" aria-hidden="true"><span class="scroll-progress-bar" id="scroll-progress-bar"></span></div>
+
 <!-- LEFT NAVIGATION BAR (HOME, STORY, DOWNLOADS) -->
+<header class="site-header">
+<div class="site-header-inner">
+<button type="button" class="header-brand" onclick="scrollToSection('hero-section')" aria-label="SEEN home"><img src="header-logo-white.webp" alt="SEEN" width="26" height="26"></button>
 <nav class="nav-pill-wrap" id="nav-pill-wrap" aria-label="Main Navigation">
   <button type="button" class="nav-btn active" id="btn-nav-home" onclick="scrollToSection('hero-section')" title="หน้าหลัก">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -931,10 +1280,12 @@ body{
 
 <!-- LANGUAGE TOGGLE SWITCH (TH / ENG) -->
 <div class="lang-switch-wrap" id="lang-switch" role="group" aria-label="Language Selector">
-  <button type="button" class="lang-btn active" id="btn-lang-th" onpointerdown="playLanguageTween(this)" onclick="setLanguage('th')">TH</button>
-  <button type="button" class="lang-btn" id="btn-lang-en" onpointerdown="playLanguageTween(this)" onclick="setLanguage('en')">ENG</button>
+  <button type="button" class="lang-btn active" id="btn-lang-th" onclick="playLanguageTween(this);setLanguage('th')">TH</button>
+  <button type="button" class="lang-btn" id="btn-lang-en" onclick="playLanguageTween(this);setLanguage('en')">ENG</button>
   <div class="lang-slider" aria-hidden="true"><span class="lang-slider-fill"></span></div>
 </div>
+</div>
+</header>
 <canvas id="space-stars-canvas" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;pointer-events:none;z-index:1;" aria-hidden="true"></canvas>
 <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
 <defs>
@@ -956,18 +1307,18 @@ body{
 <div class="item col-2 profile-card" id="hero-section">
 <div class="profile-wrap">
 <div class="avatar" onclick="openAvatar()">
-<img class="avatar-slide active" src="1778995068748.webp" alt="ณัฐนันท์ ตรีทศ (SEEN / seen1236) — Nathanan Treetos" width="360" height="480" fetchpriority="high" decoding="async">
+<img class="avatar-slide active" src="1778995068748.webp" alt="ณัฐนันท์ ตรีทศ (SEEN / seen1236) — Natthanan Treetos" width="360" height="480" fetchpriority="high" decoding="async">
 <img class="avatar-slide" src="1781878817675.webp" alt="ภาพโปรไฟล์อีกภาพของ ณัฐนันท์ ตรีทศ (ซีน)" width="360" height="480" decoding="async">
 </div>
 <div class="profile-info">
 <h1>SEEN <span class="profile-name" lang="th">ณัฐนันท์ ตรีทศ</span></h1>
-<div class="sub" lang="en">Nathanan <span>Treetos</span></div>
+<div class="sub" lang="en">Natthanan <span>Treetos</span></div>
 <p class="profile-handle">@seen1236</p>
 </div>
 <div class="social-strip">
 <div class="social-row">
 <a class="social-link" href="https://www.youtube.com/@seen1236_yt" target="_blank" rel="me noopener noreferrer" title="YouTube @seen1236_yt"><img src="youtube.webp" alt="YouTube @seen1236_yt" width="24" height="24" decoding="async"></a>
-<a class="social-link" href="https://www.tiktok.com/@seen1236_s" target="_blank" rel="me noopener noreferrer" title="TikTok @seen1236_s"><img src="tiktok.webp" alt="TikTok @seen1236_s" width="24" height="24" decoding="async"></a>
+<a class="social-link" href="https://www.tiktok.com/@seen1236_tt" target="_blank" rel="me noopener noreferrer" title="TikTok @seen1236_tt"><img src="tiktok.webp" alt="TikTok @seen1236_tt" width="24" height="24" decoding="async"></a>
 <a class="social-link" href="https://www.instagram.com/seen1236_ig/" target="_blank" rel="me noopener noreferrer" title="Instagram @seen1236_ig"><img src="Instagram.webp" alt="Instagram @seen1236_ig" width="24" height="24" decoding="async"></a>
 </div>
 <div class="social-row">
@@ -1151,7 +1502,7 @@ YOUTUBE
 </div>
 </div>
 
-<div class="item" style="padding:18px 12px;" role="button" tabindex="0" onclick="openLink('https://www.tiktok.com/@seen1236_s')" onkeydown="if(event.key==='Enter')openLink('https://www.tiktok.com/@seen1236_s')" title="ไปที่ TikTok @seen1236_s">
+<div class="item" style="padding:18px 12px;" role="button" tabindex="0" onclick="openLink('https://www.tiktok.com/@seen1236_tt')" onkeydown="if(event.key==='Enter')openLink('https://www.tiktok.com/@seen1236_tt')" title="ไปที่ TikTok @seen1236_tt">
 <div class="stat-row">
 <div class="item-label" style="justify-content:center;margin-bottom:8px;">
 <svg width="22" height="22" viewBox="0 0 24 24" style="filter:drop-shadow(-1px -1px 2px #25F4EE) drop-shadow(1px 1px 2px #FE2C55) drop-shadow(0 0 8px rgba(254,44,85,0.6));">
@@ -1203,13 +1554,13 @@ INSTAGRAM
 <h2 class="item-label" id="profile-details-heading" data-i18n="profileDetailsHeading">ความสนใจ ผลงาน และช่องทางของ SEEN</h2>
 <div class="profile-summary">
 <h3 data-i18n="profileSkillsHeading">ความสนใจและทักษะ</h3>
-<p data-i18n="profileSkillsText">ณัฐนันท์ ตรีทศ (Nathanan Treetos) สนใจการประกอบคอมพิวเตอร์ และมีทักษะด้าน ADB และ Android, Video Effects, การตัดต่อ, AI Integration, การสร้างโมเดล 3D, Kotlin และ Lua โดยประกอบคอมพิวเตอร์ใช้เองตั้งแต่ ม.3 และมีความฝันอยากเป็นครู</p>
+<p data-i18n="profileSkillsText">ณัฐนันท์ ตรีทศ (Natthanan Treetos) สนใจการประกอบคอมพิวเตอร์ และมีทักษะด้าน ADB และ Android, Video Effects, การตัดต่อ, AI Integration, การสร้างโมเดล 3D, Kotlin และ Lua โดยประกอบคอมพิวเตอร์ใช้เองตั้งแต่ ม.3 และมีความฝันอยากเป็นครู</p>
 <h3 data-i18n="profileWorksHeading">ผลงานที่เปิดให้ดาวน์โหลด</h3>
 <p data-i18n="profileWorksText">ผลงานในเว็บไซต์นี้ประกอบด้วย Speed Detection สำหรับ Android และ AutoSystem, PaintApp, ChatTranslate สำหรับ Windows เลือกดาวน์โหลดได้จากส่วนผลงานด้านล่าง</p>
 <p><a href="#downloads-section" data-i18n="profileWorksLink">ดูผลงานและไฟล์ดาวน์โหลด</a></p>
 <h3 data-i18n="profileAccountsHeading">บัญชีโซเชียลและซอร์สโค้ด</h3>
 <p data-i18n="profileAccountsText">ซีนใช้ชื่อ SEEN หรือ seen1236 บนโลกออนไลน์ ติดตามผลงานและเรื่องราวผ่านบัญชีต่อไปนี้</p>
-<p><a href="https://github.com/SEEN1236" rel="me noopener noreferrer" target="_blank">GitHub: SEEN1236</a> · <a href="https://www.youtube.com/@seen1236_yt" rel="me noopener noreferrer" target="_blank">YouTube: @seen1236_yt</a> · <a href="https://www.tiktok.com/@seen1236_s" rel="me noopener noreferrer" target="_blank">TikTok: @seen1236_s</a> · <a href="https://www.instagram.com/seen1236_ig/" rel="me noopener noreferrer" target="_blank">Instagram: @seen1236_ig</a> · <a href="https://www.facebook.com/seen1236" rel="me noopener noreferrer" target="_blank">Facebook: seen1236</a></p>
+<p><a href="https://github.com/SEEN1236" rel="me noopener noreferrer" target="_blank">GitHub: SEEN1236</a> · <a href="https://www.youtube.com/@seen1236_yt" rel="me noopener noreferrer" target="_blank">YouTube: @seen1236_yt</a> · <a href="https://www.tiktok.com/@seen1236_tt" rel="me noopener noreferrer" target="_blank">TikTok: @seen1236_tt</a> · <a href="https://www.instagram.com/seen1236_ig/" rel="me noopener noreferrer" target="_blank">Instagram: @seen1236_ig</a> · <a href="https://www.facebook.com/seen1236" rel="me noopener noreferrer" target="_blank">Facebook: seen1236</a></p>
 </div>
 </section>
 
@@ -1247,6 +1598,7 @@ INSTAGRAM
 </h2>
 <div class="specs-grid">
 <div class="spec-box">
+<div class="spec-purchase-date" style="color:#60a5fa;"><span data-i18n="purchasedOn">ซื้อเมื่อ</span><time datetime="2024-09-26T09:29">26/09/2024 09:29</time></div>
 <div style="font-size:16.5px;font-weight:600;color:#60a5fa;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
 <span>BASE SPEC</span>
 <span style="font-size:13px;background:rgba(96,165,250,0.12);padding:3px 8px;border-radius:5px;">SYSTEM</span>
@@ -1262,6 +1614,7 @@ INSTAGRAM
 </div>
 
 <div class="spec-box">
+<div class="spec-purchase-date" style="color:#c084fc;"><span data-i18n="purchasedOn">ซื้อเมื่อ</span><time datetime="2024-11-20T11:42">20/11/24 11:42</time></div>
 <div style="font-size:16.5px;font-weight:600;color:#c084fc;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
 <span>GRAPHICS CARD</span>
 <span style="font-size:13px;background:rgba(168,85,247,0.12);padding:3px 8px;border-radius:5px;">GPU</span>
@@ -1273,6 +1626,7 @@ INSTAGRAM
 </div>
 
 <div class="spec-box">
+<div class="spec-purchase-date" style="color:#34d399;"><span data-i18n="purchasedOn">ซื้อเมื่อ</span><time datetime="2024-09-29T01:33">29/09/2024 01:33</time></div>
 <div style="font-size:16.5px;font-weight:600;color:#34d399;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
 <span>RAM UPGRADE</span>
 <span style="font-size:13px;background:rgba(52,211,153,0.12);padding:3px 8px;border-radius:5px;">MEMORY</span>
@@ -1293,35 +1647,47 @@ INSTAGRAM
 <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="url(#dl-hdr-grad)" stroke-width="2.2"/>
 </svg>
 <span id="t-dl-hdr">DOWNLOADS</span>
-<span style="display:inline-flex;align-items:center;gap:6px;margin-left:4px;font-size:15px;color:#94a3b8;font-weight:600;">
-<svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="border-radius:3px;box-shadow:0 0 8px rgba(237,28,36,0.6);">
-<rect width="24" height="24" rx="4" fill="#ED1C24"/>
-<path d="M5.5 5C6.8 6.5 7.1 8 7.1 9.2V20H13.2C17.2 20 19.5 17.8 19.5 15C19.5 13.2 18.3 11.9 16.6 11.3C18 10.7 18.9 9.6 18.9 8C18.9 5.5 16.8 5 13.6 5H5.5ZM9.6 7.4H12.8C14.2 7.4 15.2 8 15.2 9.2C15.2 10.4 14.2 11 12.8 11H9.6V7.4ZM9.6 13.4H13.2C14.8 13.4 15.8 14.1 15.8 15.4C15.8 16.7 14.8 17.6 13.2 17.6H9.6V13.4Z" fill="#FFFFFF"/>
-</svg>
-Security 100%
-</span>
+
 </h2>
+<p class="download-intro">Apps by SEEN <span aria-hidden="true">/</span> Windows &amp; Android</p>
+<div class="download-platforms">
+<section class="download-platform" aria-labelledby="windows-downloads-title">
+<h3 class="download-platform-title" id="windows-downloads-title">
+<span class="platform-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><defs><linearGradient id="win11-blue" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse"><stop stop-color="#60cdff"/><stop offset=".48" stop-color="#1e9bff"/><stop offset="1" stop-color="#086bd8"/></linearGradient></defs><path fill="url(#win11-blue)" d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z"/></svg></span>
+<span>Windows <span class="platform-arch">(x64)</span></span>
+</h3>
 <div class="btn-group">
-<a class="btn" id="speed-detection" href="Speed%20Detection.apk" download="Speed Detection.apk" onclick="event.preventDefault();triggerDownload('Speed Detection.apk')">
-<img src="apk.webp" alt="Speed Detection" style="border-radius:4px;" width="22" height="22" loading="lazy" decoding="async">
-SPEED DETECTION
-<span class="hint">.apk</span>
-</a>
 <a class="btn" id="autosystem" href="AutoSystem.exe" download onclick="event.preventDefault();triggerDownload('AutoSystem.exe')">
 <img src="exe.webp" alt="AutoSystem" width="22" height="22" loading="lazy" decoding="async">
-AUTOSYSTEM
-<span class="hint">.exe</span>
+<span class="download-file"><span class="download-name">AutoSystem</span><span class="download-meta">EXE · 68.43 MB</span></span>
+<svg class="download-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M5 17v4h14v-4"/></svg>
 </a>
 <a class="btn" id="paintapp" href="PaintApp.exe" download onclick="event.preventDefault();triggerDownload('PaintApp.exe')">
 <img src="paintapp-icon.webp" alt="PaintApp" width="22" height="22" loading="lazy" decoding="async">
-PAINTAPP
-<span class="hint">.exe</span>
+<span class="download-file"><span class="download-name">PaintApp</span><span class="download-meta">EXE · 0.90 MB</span></span>
+<svg class="download-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M5 17v4h14v-4"/></svg>
 </a>
 <a class="btn" id="chattranslate" href="https://github.com/SEEN1236/ChatTranslate/releases/download/v1.0.0/ChatTranslate.exe" download onclick="event.preventDefault();triggerDownload(this.href)">
 <img src="chattranslate-icon.webp" alt="ChatTranslate" width="22" height="22" loading="lazy" decoding="async">
-CHATTRANSLATE
-<span class="hint">.exe</span>
+<span class="download-file"><span class="download-name">ChatTranslate</span><span class="download-meta">EXE · 455.50 MB</span></span>
+<svg class="download-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M5 17v4h14v-4"/></svg>
 </a>
+</div>
+</section>
+<section class="download-platform android" aria-labelledby="android-downloads-title">
+<h3 class="download-platform-title" id="android-downloads-title">
+<span class="platform-logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m17.6 6.7 1.8-3.1a.6.6 0 0 0-1-.6l-1.9 3.2a11.4 11.4 0 0 0-9 0L5.6 3a.6.6 0 0 0-1 .6l1.8 3.1A10.4 10.4 0 0 0 1 16h22a10.4 10.4 0 0 0-5.4-9.3ZM7 12.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg></span>
+<span>Android <span class="platform-arch">arm64-v8a</span></span>
+</h3>
+<div class="btn-group">
+<a class="btn" id="speed-detection" href="Speed%20Detection.apk" download="Speed Detection.apk" onclick="event.preventDefault();triggerDownload('Speed Detection.apk')">
+<img src="apk.webp" alt="Speed Detection" style="border-radius:4px;" width="22" height="22" loading="lazy" decoding="async">
+<span class="download-file"><span class="download-name">Speed Detection</span><span class="download-meta">APK · 11.44 MB</span></span>
+<svg class="download-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4 4 4 4-4M5 17v4h14v-4"/></svg>
+</a>
+</div>
+</section>
+<p class="download-source">SEEN / seen1236 <a href="https://github.com/SEEN1236" target="_blank" rel="noopener noreferrer">GitHub ↗</a></p>
 </div>
 </div>
 
@@ -1401,7 +1767,7 @@ var i18nData = {
         noteHdr: 'เกี่ยวกับ ณัฐนันท์ ตรีทศ (SEEN)',
         profileDetailsHeading: 'ความสนใจ ผลงาน และช่องทางของ SEEN',
         profileSkillsHeading: 'ความสนใจและทักษะ',
-        profileSkillsText: 'ณัฐนันท์ ตรีทศ (Nathanan Treetos) สนใจการประกอบคอมพิวเตอร์ และมีทักษะด้าน ADB และ Android, Video Effects, การตัดต่อ, AI Integration, การสร้างโมเดล 3D, Kotlin และ Lua โดยประกอบคอมพิวเตอร์ใช้เองตั้งแต่ ม.3 และมีความฝันอยากเป็นครู',
+        profileSkillsText: 'ณัฐนันท์ ตรีทศ (Natthanan Treetos) สนใจการประกอบคอมพิวเตอร์ และมีทักษะด้าน ADB และ Android, Video Effects, การตัดต่อ, AI Integration, การสร้างโมเดล 3D, Kotlin และ Lua โดยประกอบคอมพิวเตอร์ใช้เองตั้งแต่ ม.3 และมีความฝันอยากเป็นครู',
         profileWorksHeading: 'ผลงานที่เปิดให้ดาวน์โหลด',
         profileWorksText: 'ผลงานในเว็บไซต์นี้ประกอบด้วย Speed Detection สำหรับ Android และ AutoSystem, PaintApp, ChatTranslate สำหรับ Windows เลือกดาวน์โหลดได้จากส่วนผลงานด้านล่าง',
         profileWorksLink: 'ดูผลงานและไฟล์ดาวน์โหลด',
@@ -1424,6 +1790,7 @@ var i18nData = {
         donateP: 'ขอบคุณที่สนใจผลงานของผมครับ! หากชื่นชอบสามารถร่วมสนับสนุนเพื่อเป็นกำลังใจและพัฒนาโปรเจกต์ต่อไปได้ที่',
         donateQrSub: 'สแกน QR Code ผ่านแอปธนาคารได้ทุกธนาคาร',
         subtotal: 'รวม',
+        purchasedOn: 'ซื้อเมื่อ',
         copyBtn: 'คัดลอก',
         copiedBtn: 'คัดลอกแล้ว! ✓',
         navHome: 'หน้าหลัก',
@@ -1448,10 +1815,10 @@ var i18nData = {
         followers: 'FOLLOWERS',
         ttSub: 'New Account',
         igSub: 'Joined Jul 2022',
-        noteHdr: 'About Nathanan Treetos (SEEN)',
+        noteHdr: 'About Natthanan Treetos (SEEN)',
         profileDetailsHeading: 'SEEN: interests, projects and profiles',
         profileSkillsHeading: 'Interests and skills',
-        profileSkillsText: 'Nathanan Treetos (ณัฐนันท์ ตรีทศ) is interested in building computers, with skills in ADB and Android, video effects, editing, AI integration, 3D modeling, Kotlin and Lua. He assembled his own computer in Grade 9 (M.3) and hopes to become a teacher.',
+        profileSkillsText: 'Natthanan Treetos (ณัฐนันท์ ตรีทศ) is interested in building computers, with skills in ADB and Android, video effects, editing, AI integration, 3D modeling, Kotlin and Lua. He assembled his own computer in Grade 9 (M.3) and hopes to become a teacher.',
         profileWorksHeading: 'Projects available to download',
         profileWorksText: 'Projects on this website include Speed Detection for Android and AutoSystem, PaintApp and ChatTranslate for Windows. Download links are available in the projects section below.',
         profileWorksLink: 'View projects and downloads',
@@ -1463,7 +1830,7 @@ var i18nData = {
         certificateScratchTitle: 'Scratch Creative Computer Game Competition',
         certificateScratchMeta: 'First-place award, lower secondary level · August 18, 2022',
         certificateOpen: 'Tap to view full-size image',
-        noteP0: 'Hello, I\'m Nathanan Treetos (<span lang="th">ณัฐนันท์ ตรีทศ</span>), nicknamed <span style="color:#60a5fa;">SEEN</span> and known online as seen1236.',
+        noteP0: 'Hello, I\'m Natthanan Treetos (<span lang="th">ณัฐนันท์ ตรีทศ</span>), nicknamed <span style="color:#60a5fa;">SEEN</span> and known online as seen1236.',
         noteP1: 'Did you visit this site to download something? The download buttons are right below — <span style="color:#4ade80;font-weight:500;text-shadow:0 0 6px rgba(74,222,128,0.35);">100% virus-free</span>, offline apps I wrote for my own use. Feel free to download and try them!',
         noteP2: 'In the future, I want to become a <span style="color:#ffffff;font-weight:600;">Teacher</span>. Growing up, I don\'t know if I will, but I really hope I do.',
         noteP3: 'I bought and assembled this computer myself back in <span style="color:#60a5fa;font-weight:600;text-shadow:0 0 8px rgba(96,165,250,0.4);">Grade 9 (M.3)</span>.',
@@ -1474,6 +1841,7 @@ var i18nData = {
         donateP: 'Thank you for checking out my work! If you enjoy my projects, feel free to support and motivate future developments:',
         donateQrSub: 'Scan QR Code with any mobile banking app',
         subtotal: 'SUBTOTAL',
+        purchasedOn: 'Purchased',
         copyBtn: 'Copy',
         copiedBtn: 'Copied! ✓',
         navHome: 'Home',
@@ -1562,7 +1930,7 @@ var navUpdateFrame = null;
 var navGeometry = { story: Infinity, certificates: Infinity, downloads: Infinity, maxScroll: 0, height: 0 };
 
 function playControlTween(button, group){
-    var targets = [button];
+    var targets = [group, button];
     if(group.id === 'lang-switch'){
         var fill = group.querySelector('.lang-slider-fill');
         if(fill) targets.push(fill);
@@ -1792,6 +2160,152 @@ if('ResizeObserver' in window){
 }
 if(document.fonts) document.fonts.ready.then(scheduleNavMeasure);
 measureNavGeometry();
+
+// Reveal each section only when it approaches the viewport. This keeps lower
+// content visually unloaded until the visitor scrolls to it, without a loop.
+(function setupLazySectionReveal(){
+    var root = document.documentElement;
+    if(!root.classList.contains('page-loading')) return;
+    var parts = Array.prototype.slice.call(document.querySelectorAll('.bento > .item, .bento > .footer'));
+    var revealed = 0;
+    var queued = [];
+    var revealing = false;
+
+    function revealQueued(){
+        if(revealing || queued.length === 0) return;
+        revealing = true;
+        var part = queued.shift();
+        part.classList.add('load-ready');
+        revealed++;
+        window.setTimeout(function(){
+            revealing = false;
+            if(revealed === parts.length){
+                root.classList.remove('page-loading');
+                scheduleNavMeasure();
+            }
+            revealQueued();
+        }, 82);
+    }
+
+    function queuePart(part){
+        if(part.dataset.revealQueued) return;
+        part.dataset.revealQueued = '1';
+        queued.push(part);
+        revealQueued();
+    }
+
+    // Once a section has fully left the screen, put it back into its initial
+    // state.  Returning to it then gets the same lightweight reveal again;
+    // browser-cached assets are not requested a second time.
+    function resetPart(part){
+        if(part.dataset.revealQueued && !part.classList.contains('load-ready')){
+            queued = queued.filter(function(queuedPart){ return queuedPart !== part; });
+        }
+        if(part.classList.contains('load-ready')) revealed = Math.max(0, revealed - 1);
+        part.classList.remove('load-ready', 'scroll-passed', 'scroll-passed-bottom');
+        delete part.dataset.revealQueued;
+    }
+
+    // Only release cards that are actually on screen.  This also makes the
+    // return-to-top entry animation reliable: when it ends, the first viewport
+    // is explicitly checked instead of waiting for another scroll event.
+    function revealVisibleParts(){
+        var viewportBottom = window.innerHeight;
+        parts.forEach(function(part){
+            if(part.classList.contains('load-ready') || part.dataset.revealQueued) return;
+            var bounds = part.getBoundingClientRect();
+            if(bounds.bottom > 0 && bounds.top < viewportBottom) queuePart(part);
+        });
+    }
+
+    if(!parts.length){
+        root.classList.remove('page-loading');
+        return;
+    }
+    if('IntersectionObserver' in window){
+        var revealObserver = new IntersectionObserver(function(entries){
+            entries.forEach(function(entry){
+                if(entry.isIntersecting && !window.__seenIntroTourActive){
+                    queuePart(entry.target);
+                }else if(!entry.isIntersecting && !window.__seenIntroTourActive){
+                    resetPart(entry.target);
+                }
+            });
+        }, {rootMargin:'0px 0px -12% 0px', threshold:0.01});
+        parts.forEach(function(part){ revealObserver.observe(part); });
+        window.addEventListener('seen:introcomplete', function(){
+            // Re-observe after the automated tour so only real user scrolling
+            // decides when lower sections become visible.
+            parts.forEach(function(part){
+                if(!part.classList.contains('load-ready') && !part.dataset.revealQueued){
+                    revealObserver.observe(part);
+                }
+            });
+            revealVisibleParts();
+        });
+    }else{
+        // Lightweight fallback for older browsers: still load only the cards
+        // that have entered the current viewport.
+        revealVisibleParts();
+        window.addEventListener('scroll', revealVisibleParts, {passive:true});
+    }
+
+    var fadeFrame = null;
+    function updatePassedSections(){
+        fadeFrame = null;
+        // Start the pixel-blur lower in the viewport so the whole departing
+        // section is visibly softened before it fully leaves the screen.
+        var boundary = window.innerHeight * 0.27;
+        var bottomBoundary = window.innerHeight * 0.73;
+        parts.forEach(function(part){
+            if(!part.classList.contains('load-ready')) return;
+            var bounds = part.getBoundingClientRect();
+            part.classList.toggle('scroll-passed', bounds.bottom < boundary);
+            // The footer is the email contact. Keep it readable immediately
+            // on entry while all other sections retain the lower pixel blur.
+            var partBottomBoundary = part.classList.contains('footer') ? window.innerHeight * 0.98 : bottomBoundary;
+            part.classList.toggle('scroll-passed-bottom', bounds.top > partBottomBoundary);
+        });
+    }
+    window.addEventListener('scroll', function(){
+        if(fadeFrame === null) fadeFrame = window.requestAnimationFrame(updatePassedSections);
+    }, {passive:true});
+    updatePassedSections();
+})();
+
+// The white line is an entry-only page loader, never a scroll indicator.
+(function setupEntryLoadBar(){
+    var track = document.querySelector('.scroll-progress-track');
+    var bar = document.getElementById('scroll-progress-bar');
+    if(!track || !bar) return;
+    var finished = false;
+    var startedAt = performance.now();
+    var minimumFillDelay = 560;
+    track.classList.remove('is-complete');
+    bar.style.transform = 'scaleX(.04)';
+
+    function completeToFull(){
+        if(finished) return;
+        finished = true;
+        bar.style.transform = 'scaleX(1)';
+        // Keep the completed line on screen briefly so 100% is always visible.
+        window.setTimeout(function(){ track.classList.add('is-complete'); }, 620);
+    }
+    function finish(){
+        var remaining = Math.max(0, minimumFillDelay - (performance.now() - startedAt));
+        window.setTimeout(completeToFull, remaining);
+    }
+    // Give the first transition one rendered frame before moving to its loading state.
+    window.requestAnimationFrame(function(){
+        window.setTimeout(function(){
+            if(!finished) bar.style.transform = 'scaleX(.78)';
+        }, 40);
+    });
+    if(document.readyState === 'complete') finish();
+    else window.addEventListener('load', finish, {once:true});
+    // A failed third-party image must never leave the page loader on screen.
+    window.setTimeout(finish, 8000);
+})();
 
 function handleEmailClick(e){
     var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -2079,17 +2593,22 @@ window.addEventListener('paste',function(e){
 // Wheel, touch and keyboard scrolling use the browser's native input handling.
 
 
-// Static starfield: viewport-sized backing store; no animation loop.
-(function(){
+// Dynamic Starfield with Comet Trails on Scroll Down.
+// Ultra-Low Overhead: 0.00% CPU & GPU when idle (RAF completely halts when not scrolling).
+(function initInteractiveStarfield(){
     var canvas = document.getElementById('space-stars-canvas');
     if(!canvas) return;
     var ctx = canvas.getContext('2d', {alpha: true});
     if(!ctx) return;
 
+    var stars = [];
+    var velocity = 0;
+    var rafId = null;
+    var lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var w = 0, h = 0, dpr = 1;
     var resizeTimer = null;
-    var lastWidth = 0;
-    var lastHeight = 0;
 
+    // Fast PRNG for consistent initial placement
     function mulberry32(a){
         return function(){
             var t = a += 0x6D2B79F5;
@@ -2099,69 +2618,201 @@ window.addEventListener('paste',function(e){
         };
     }
 
-    function drawStaticStars(){
-        var rng = mulberry32(88812345);
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        if(w === lastWidth && h === lastHeight) return;
-        lastWidth = w;
-        lastHeight = h;
-        // Tiny, soft stars need no high-DPI texture. Bound memory even on 4K screens.
-        var dpr = Math.min(1, 1920 / w, 1080 / h);
-        var totalStars = Math.max(45, Math.min(280, Math.round(w * h / 7400)));
+    function createStar(width, height, rng, startAtBottom){
+        var roll = rng();
+        var r, alpha, speedMult, tailMult;
 
-        canvas.width = Math.round(w * dpr);
-        canvas.height = Math.round(h * dpr);
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-
-        ctx.save();
-        ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, w, h);
-
-        for(var i = 0; i < totalStars; i++){
-            var type = rng();
-            var r = 1.0;
-            var alpha = 0.85;
-            var glow = 0;
-
-            if(type < 0.60){
-                r = 0.64 + rng() * 0.38;
-                alpha = 0.70 + rng() * 0.25;
-            }else if(type < 0.90){
-                r = 1.15 + rng() * 0.51;
-                alpha = 0.90 + rng() * 0.10;
-                glow = 1.8;
-            }else{
-                r = 1.79 + rng() * 0.76;
-                alpha = 1.0;
-                glow = 4.2;
-            }
-
-            var px = rng() * w;
-            var py = rng() * h;
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(px, py, r, 0, Math.PI * 2);
-
-            if(glow > 0){
-                ctx.shadowColor = '#ffffff';
-                ctx.shadowBlur = glow;
-            }
-
-            ctx.fillStyle = 'rgba(255, 255, 255, ' + alpha + ')';
-            ctx.fill();
-            ctx.restore();
+        // 3 depth tiers: distant (60%), mid-depth (30%), foreground (10%)
+        if(roll < 0.60){
+            r = 0.65 + rng() * 0.35;
+            alpha = 0.50 + rng() * 0.25;
+            speedMult = 0.55 + rng() * 0.35;
+            tailMult = 1.4 + rng() * 0.8;
+        } else if(roll < 0.90){
+            r = 1.05 + rng() * 0.40;
+            alpha = 0.72 + rng() * 0.20;
+            speedMult = 0.95 + rng() * 0.40;
+            tailMult = 2.1 + rng() * 0.9;
+        } else {
+            r = 1.55 + rng() * 0.55;
+            alpha = 0.92 + rng() * 0.08;
+            speedMult = 1.40 + rng() * 0.50;
+            tailMult = 2.9 + rng() * 1.1;
         }
-        ctx.restore();
+
+        // Color tints matching the website theme:
+        // Mostly diamond white, with subtle cyan and soft lavender
+        var colorRoll = rng();
+        var rgb = '255, 255, 255';
+        if(colorRoll < 0.16){
+            rgb = '186, 230, 253'; // subtle cyan tint (#bae6fd)
+        } else if(colorRoll < 0.26){
+            rgb = '221, 214, 254'; // subtle violet tint (#ddd6fe)
+        }
+
+        return {
+            x: rng() * width,
+            y: startAtBottom ? (height + 5 + rng() * 35) : (rng() * height),
+            r: r,
+            alpha: alpha,
+            speedMult: speedMult,
+            tailMult: tailMult,
+            rgb: rgb
+        };
     }
 
-    drawStaticStars();
+    function initStars(){
+        var rng = mulberry32(88812345);
+        var count = Math.max(45, Math.min(160, Math.round(w * h / 12000)));
+        stars = [];
+        for(var i = 0; i < count; i++){
+            stars.push(createStar(w, h, rng, false));
+        }
+    }
+
+    function resizeCanvas(){
+        var oldW = w;
+        var oldH = h;
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.style.setProperty('--starfield-width', w + 'px');
+        canvas.style.setProperty('--starfield-height', h + 'px');
+        // Cap DPR to 1.25 for peak performance and low memory footprint on all GPUs
+        dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        if(stars.length === 0){
+            initStars();
+        } else if(oldW > 0 && oldH > 0){
+            var scaleX = w / oldW;
+            var scaleY = h / oldH;
+            for(var i = 0; i < stars.length; i++){
+                stars[i].x *= scaleX;
+                stars[i].y *= scaleY;
+            }
+            var targetCount = Math.max(45, Math.min(160, Math.round(w * h / 12000)));
+            var rng = Math.random;
+            while(stars.length < targetCount){
+                stars.push(createStar(w, h, rng, false));
+            }
+            if(stars.length > targetCount){
+                stars.length = targetCount;
+            }
+        }
+        render(true);
+    }
+
+    function render(isStatic){
+        ctx.clearRect(0, 0, w, h);
+
+        if(isStatic || velocity <= 0.08){
+            // Ultra-fast static render: batch draw circles
+            for(var i = 0; i < stars.length; i++){
+                var s = stars[i];
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + s.rgb + ', ' + s.alpha.toFixed(2) + ')';
+                ctx.fill();
+            }
+            return;
+        }
+
+        // Active motion: stars move upward with tapered glowing comet tails
+        for(var i = 0; i < stars.length; i++){
+            var s = stars[i];
+            var speed = velocity * s.speedMult;
+            s.y -= speed;
+
+            var tailLen = Math.min(75, speed * s.tailMult);
+
+            // Once the entire tail exits past the top of the screen:
+            // recycle the star to the bottom edge seamlessly
+            if(s.y + tailLen < -10){
+                s.y = h + 10 + Math.random() * 25;
+                s.x = Math.random() * w;
+                continue;
+            }
+
+            // Draw comet tail if noticeable
+            if(tailLen >= 1.2){
+                var tailY = s.y + tailLen;
+                var grad = ctx.createLinearGradient(s.x, s.y, s.x, tailY);
+                grad.addColorStop(0, 'rgba(' + s.rgb + ', ' + s.alpha.toFixed(2) + ')');
+                grad.addColorStop(0.35, 'rgba(' + s.rgb + ', ' + (s.alpha * 0.45).toFixed(2) + ')');
+                grad.addColorStop(1, 'rgba(' + s.rgb + ', 0)');
+
+                ctx.beginPath();
+                ctx.moveTo(s.x, s.y);
+                ctx.lineTo(s.x, tailY);
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = Math.max(1, s.r * 1.4);
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+
+            // Draw bright star head
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, ' + Math.min(1, s.alpha + 0.15).toFixed(2) + ')';
+            ctx.fill();
+        }
+    }
+
+    function loop(){
+        // Smooth physics deceleration
+        velocity *= 0.91;
+
+        if(velocity <= 0.08){
+            velocity = 0;
+            render(true);
+            rafId = null; // Completely halt RAF -> 0% CPU & GPU
+            return;
+        }
+
+        render(false);
+        rafId = requestAnimationFrame(loop);
+    }
+
+    function onScroll(){
+        if(window.__seenIntroTourActive) return;
+
+        var currentY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var deltaY = currentY - lastScrollY;
+        lastScrollY = currentY;
+
+        // Trigger tails and upward flight only on scroll DOWN
+        if(deltaY > 0){
+            velocity = Math.min(velocity + deltaY * 0.14, 28);
+            if(!rafId){
+                rafId = requestAnimationFrame(loop);
+            }
+        } else if(deltaY < 0){
+            // Scrolling up: dampen velocity immediately
+            velocity = Math.max(0, velocity - Math.abs(deltaY) * 0.2);
+        }
+    }
+
+    resizeCanvas();
     window.addEventListener('resize', function(){
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(drawStaticStars, 150);
+        resizeTimer = setTimeout(resizeCanvas, 150);
     }, {passive: true});
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+
+    // Auto pause immediately when tab is in background
+    document.addEventListener('visibilitychange', function(){
+        if(document.hidden){
+            velocity = 0;
+            if(rafId){
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+            render(true);
+        }
+    });
 })();
 
 if('serviceWorker' in navigator){
@@ -2169,6 +2820,59 @@ if('serviceWorker' in navigator){
         navigator.serviceWorker.register('./sw.js').catch(function(){});
     });
 }
+// A quick entry tour on every page open: begin at the bottom and return home.
+(function playFirstEntryTour(){
+    var frame = null;
+    var active = false;
+    var cancelled = false;
+    function endTour(){
+        active = false;
+        window.__seenIntroTourActive = false;
+        window.dispatchEvent(new Event('seen:introcomplete'));
+    }
+    function cancelTour(){
+        cancelled = true;
+        if(frame !== null) cancelAnimationFrame(frame);
+        frame = null;
+        endTour();
+    }
+    function tweenScroll(from, to, duration, done){
+        var began = performance.now();
+        function step(now){
+            if(!active) return;
+            var p = Math.min(1, (now - began) / duration);
+            var eased = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+            window.scrollTo(0, from + (to - from) * eased);
+            if(p < 1) frame = requestAnimationFrame(step);
+            else { frame = null; done(); }
+        }
+        frame = requestAnimationFrame(step);
+    }
+    function bottomPosition(){
+        return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    }
+    function startTour(){
+        if(cancelled) return;
+        window.__seenIntroTourActive = true;
+        var bottom = bottomPosition();
+        if(bottom < 80 || document.hidden){ endTour(); return; }
+        active = true;
+        window.scrollTo(0, bottom);
+        tweenScroll(bottom, 0, 258, endTour);
+    }
+    // Set the first painted position near the bottom before the page load completes.
+    window.__seenIntroTourActive = true;
+    window.scrollTo(0, bottomPosition());
+    ['pointerdown','touchstart','wheel','keydown'].forEach(function(type){
+        window.addEventListener(type, cancelTour, {passive:true});
+    });
+    window.addEventListener('load', function(){
+        window.setTimeout(startTour, 456);
+    }, {once:true});
+    window.addEventListener('pageshow', function(event){
+        if(event.persisted) window.setTimeout(startTour, 0);
+    });
+})();
 })();
 </script>
 </body>
